@@ -1,9 +1,25 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "SigmaTrade",
   "description": "Blockchain Transaction Monitoring Interface",
   "lastUpdate": "2025-10-05",
   "changes": [
+    {
+      "version": "1.1.0",
+      "date": "2025-10-05",
+      "changes": [
+        "Fixed cache invalidation conflict with WebSocket updates",
+        "Added BEP-20 token transaction monitoring",
+        "Implemented rate limiting protection for API calls",
+        "Enhanced WebSocket reconnection with exponential backoff",
+        "Improved error handling and user feedback",
+        "Added loading indicators",
+        "Secured logging without exposing sensitive data",
+        "Merged regular and token transactions display",
+        "Visual distinction for transaction types (BNB vs Tokens)",
+        "Optimized update frequency (every 10 blocks instead of every block)"
+      ]
+    },
     {
       "version": "1.0.0",
       "date": "2025-10-05",

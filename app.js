@@ -1,18 +1,23 @@
-// SigmaTrade Application
+// SigmaTrade Application - Enhanced Version
 class SigmaTrade {
     constructor() {
         this.ws = null;
         this.transactions = [];
+        this.tokenTransactions = [];
         this.currentBlock = null;
         this.balance = '0';
         this.isConnected = false;
         this.cache = new Map();
+        this.lastApiCall = 0;
+        this.apiCallDelay = 5000; // 5 seconds between API calls
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
         
         this.init();
     }
     
     async init() {
-        console.log('🚀 Initializing SigmaTrade...');
+        this.log('Initializing SigmaTrade...', 'info');
         
         // Initialize UI
         this.initializeUI();
@@ -25,6 +30,18 @@ class SigmaTrade {
         
         // Set up event listeners
         this.setupEventListeners();
+    }
+    
+    // Safe logging without exposing sensitive data
+    log(message, type = 'info') {
+        const emoji = {
+            info: '🚀',
+            success: '✅',
+            warning: '⚠️',
+            error: '❌',
+            network: '🔌'
+        };
+        console.log(`${emoji[type]} ${message}`);
     }
     
     initializeUI() {
@@ -40,24 +57,37 @@ class SigmaTrade {
         if (networkName) {
             networkName.textContent = CONFIG.NETWORK.NAME;
         }
+        
+        // Show loading state
+        this.showLoading();
+    }
+    
+    showLoading() {
+        const listElement = document.getElementById('transactionList');
+        if (listElement) {
+            listElement.innerHTML = `
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Загрузка транзакций...</p>
+                </div>
+            `;
+        }
     }
     
     async connectWebSocket() {
         try {
-            console.log('🔌 Connecting to QuickNode WebSocket...');
+            this.log('Connecting to WebSocket...', 'network');
             
             this.ws = new WebSocket(CONFIG.QUICKNODE.WSS);
             
             this.ws.onopen = () => {
-                console.log('✅ WebSocket connected');
+                this.log('WebSocket connected', 'success');
                 this.isConnected = true;
+                this.reconnectAttempts = 0;
                 this.updateNetworkStatus(true);
                 
                 // Subscribe to new blocks
                 this.subscribeToBlocks();
-                
-                // Subscribe to pending transactions for our wallet
-                this.subscribeToPendingTx();
             };
             
             this.ws.onmessage = (event) => {
@@ -65,21 +95,26 @@ class SigmaTrade {
             };
             
             this.ws.onerror = (error) => {
-                console.error('❌ WebSocket error:', error);
+                this.log('WebSocket error', 'error');
                 this.updateNetworkStatus(false);
             };
             
             this.ws.onclose = () => {
-                console.log('🔌 WebSocket disconnected');
+                this.log('WebSocket disconnected', 'warning');
                 this.isConnected = false;
                 this.updateNetworkStatus(false);
                 
-                // Reconnect after 5 seconds
-                setTimeout(() => this.connectWebSocket(), 5000);
+                // Reconnect with exponential backoff
+                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                    const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+                    this.reconnectAttempts++;
+                    this.log(`Reconnecting in ${delay/1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`, 'warning');
+                    setTimeout(() => this.connectWebSocket(), delay);
+                }
             };
             
         } catch (error) {
-            console.error('❌ Failed to connect WebSocket:', error);
+            this.log('Failed to connect WebSocket', 'error');
             this.updateNetworkStatus(false);
         }
     }
@@ -95,23 +130,7 @@ class SigmaTrade {
         };
         
         this.ws.send(JSON.stringify(subscription));
-        console.log('📡 Subscribed to new blocks');
-    }
-    
-    subscribeToPendingTx() {
-        if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
-        
-        const subscription = {
-            jsonrpc: '2.0',
-            id: 2,
-            method: 'eth_subscribe',
-            params: ['logs', {
-                address: CONFIG.WALLET_ADDRESS
-            }]
-        };
-        
-        this.ws.send(JSON.stringify(subscription));
-        console.log('📡 Subscribed to wallet events');
+        this.log('Subscribed to new blocks', 'success');
     }
     
     handleWebSocketMessage(event) {
@@ -124,25 +143,27 @@ class SigmaTrade {
                 this.currentBlock = blockNumber;
                 this.updateBlockNumber(blockNumber);
                 
-                // Fetch new transactions when new block arrives
-                this.fetchRecentTransactions();
-            }
-            
-            // Handle wallet events
-            if (data.method === 'eth_subscription' && data.params?.result?.topics) {
-                console.log('📨 New wallet event detected');
-                this.fetchRecentTransactions();
+                // Check for new transactions periodically (every 10 blocks ~30 sec)
+                if (blockNumber % 10 === 0) {
+                    this.invalidateCache();
+                    this.fetchAllTransactions();
+                }
             }
             
         } catch (error) {
-            console.error('❌ Error handling WebSocket message:', error);
+            this.log('Error handling WebSocket message', 'error');
         }
+    }
+    
+    invalidateCache() {
+        this.cache.clear();
+        this.log('Cache invalidated', 'info');
     }
     
     async startMonitoring() {
         // Get initial data
         await this.updateBalance();
-        await this.fetchRecentTransactions();
+        await this.fetchAllTransactions();
         
         // Set up periodic updates
         setInterval(() => this.updateBalance(), CONFIG.INTERVALS.BALANCE_UPDATE);
@@ -154,7 +175,7 @@ class SigmaTrade {
                 jsonrpc: '2.0',
                 method: 'eth_getBalance',
                 params: [CONFIG.WALLET_ADDRESS, 'latest'],
-                id: 1
+                id: Date.now()
             });
             
             if (response && response.result) {
@@ -168,45 +189,118 @@ class SigmaTrade {
                 }
             }
         } catch (error) {
-            console.error('❌ Error updating balance:', error);
+            this.log('Error updating balance', 'error');
         }
     }
     
-    async fetchRecentTransactions() {
+    // Rate limiting wrapper for API calls
+    async rateLimitedFetch(url) {
+        const now = Date.now();
+        const timeSinceLastCall = now - this.lastApiCall;
+        
+        if (timeSinceLastCall < this.apiCallDelay) {
+            const waitTime = this.apiCallDelay - timeSinceLastCall;
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+        
+        this.lastApiCall = Date.now();
+        return fetch(url);
+    }
+    
+    async fetchAllTransactions() {
+        // Fetch both regular and token transactions
+        await Promise.all([
+            this.fetchRegularTransactions(),
+            this.fetchTokenTransactions()
+        ]);
+        
+        // Merge and display
+        this.mergeAndDisplayTransactions();
+    }
+    
+    async fetchRegularTransactions() {
         try {
-            // Check cache first
-            const cacheKey = 'recent_tx';
+            const cacheKey = 'regular_tx';
             const cached = this.getFromCache(cacheKey);
             if (cached) {
-                console.log('📦 Using cached transactions');
-                this.displayTransactions(cached);
+                this.log('Using cached regular transactions', 'info');
+                this.transactions = cached;
                 return;
             }
             
-            console.log('🔍 Fetching recent transactions...');
+            this.log('Fetching regular transactions...', 'info');
             
-            // Use Etherscan V2 API for transaction history
-            const url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=txlist&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=${CONFIG.PAGINATION.PAGE_SIZE}&sort=desc`;
+            // Build URL with API key if available
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=txlist&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=${CONFIG.PAGINATION.PAGE_SIZE}&sort=desc`;
             
-            const response = await fetch(url);
+            if (CONFIG.ETHERSCAN.API_KEY) {
+                url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
+            }
+            
+            const response = await this.rateLimitedFetch(url);
             const data = await response.json();
             
             if (data.status === '1' && data.result) {
                 this.transactions = data.result;
                 this.setCache(cacheKey, data.result);
-                this.displayTransactions(data.result);
-                
-                // Update stats
-                this.updateStats();
-            } else {
-                console.warn('⚠️ No transactions found or API error');
-                this.displayNoTransactions();
+                this.log(`Loaded ${data.result.length} regular transactions`, 'success');
+            } else if (data.message === 'NOTOK') {
+                this.log(`API Error: ${data.result}`, 'warning');
             }
             
         } catch (error) {
-            console.error('❌ Error fetching transactions:', error);
-            this.displayError();
+            this.log('Error fetching regular transactions', 'error');
         }
+    }
+    
+    async fetchTokenTransactions() {
+        try {
+            const cacheKey = 'token_tx';
+            const cached = this.getFromCache(cacheKey);
+            if (cached) {
+                this.log('Using cached token transactions', 'info');
+                this.tokenTransactions = cached;
+                return;
+            }
+            
+            this.log('Fetching token transactions...', 'info');
+            
+            // Build URL for BEP-20 token transfers
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=tokentx&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=${CONFIG.PAGINATION.PAGE_SIZE}&sort=desc`;
+            
+            if (CONFIG.ETHERSCAN.API_KEY) {
+                url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
+            }
+            
+            const response = await this.rateLimitedFetch(url);
+            const data = await response.json();
+            
+            if (data.status === '1' && data.result) {
+                this.tokenTransactions = data.result;
+                this.setCache(cacheKey, data.result);
+                this.log(`Loaded ${data.result.length} token transactions`, 'success');
+            }
+            
+        } catch (error) {
+            this.log('Error fetching token transactions', 'error');
+        }
+    }
+    
+    mergeAndDisplayTransactions() {
+        // Merge both types of transactions
+        const allTransactions = [
+            ...this.transactions.map(tx => ({...tx, txType: 'regular'})),
+            ...this.tokenTransactions.map(tx => ({...tx, txType: 'token'}))
+        ];
+        
+        // Sort by timestamp descending
+        allTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
+        
+        // Take only the most recent ones
+        const recent = allTransactions.slice(0, CONFIG.PAGINATION.PAGE_SIZE);
+        
+        this.displayTransactions(recent);
+        this.updateStats(allTransactions.length);
     }
     
     displayTransactions(transactions) {
@@ -222,8 +316,20 @@ class SigmaTrade {
             const isIncoming = tx.to.toLowerCase() === CONFIG.WALLET_ADDRESS.toLowerCase();
             const type = isIncoming ? 'in' : 'out';
             const typeLabel = isIncoming ? 'Входящая' : 'Исходящая';
-            const value = (parseInt(tx.value) / 1e18).toFixed(6);
+            
+            // Handle both regular and token transactions
+            let value, symbol;
+            if (tx.txType === 'token') {
+                const decimals = parseInt(tx.tokenDecimal) || 18;
+                value = (parseInt(tx.value) / Math.pow(10, decimals)).toFixed(6);
+                symbol = tx.tokenSymbol || 'TOKEN';
+            } else {
+                value = (parseInt(tx.value) / 1e18).toFixed(6);
+                symbol = CONFIG.NETWORK.SYMBOL;
+            }
+            
             const date = new Date(tx.timeStamp * 1000).toLocaleString('ru-RU');
+            const txTypeLabel = tx.txType === 'token' ? '🪙 Токен' : '💰 BNB';
             
             return `
                 <div class="tx-item" onclick="app.openTxInExplorer('${tx.hash}')">
@@ -233,8 +339,12 @@ class SigmaTrade {
                     </div>
                     <div class="tx-details">
                         <div class="tx-detail">
+                            <span class="tx-detail-label">Тип</span>
+                            <span class="tx-detail-value">${txTypeLabel}</span>
+                        </div>
+                        <div class="tx-detail">
                             <span class="tx-detail-label">Сумма</span>
-                            <span class="tx-detail-value">${value} ${CONFIG.NETWORK.SYMBOL}</span>
+                            <span class="tx-detail-value">${value} ${symbol}</span>
                         </div>
                         <div class="tx-detail">
                             <span class="tx-detail-label">От/Кому</span>
@@ -273,16 +383,17 @@ class SigmaTrade {
             listElement.innerHTML = `
                 <div class="loading-state">
                     <p>Ошибка загрузки транзакций</p>
-                    <button class="btn-control" onclick="app.fetchRecentTransactions()">Повторить</button>
+                    <button class="btn-control" onclick="app.fetchAllTransactions()">Повторить</button>
                 </div>
             `;
         }
     }
     
-    updateStats() {
+    updateStats(totalCount = null) {
         const totalTxElement = document.getElementById('totalTx');
         if (totalTxElement) {
-            totalTxElement.textContent = this.transactions.length;
+            const count = totalCount || (this.transactions.length + this.tokenTransactions.length);
+            totalTxElement.textContent = count;
         }
         
         const apiStatusElement = document.getElementById('apiStatus');
@@ -326,7 +437,7 @@ class SigmaTrade {
             
             return await response.json();
         } catch (error) {
-            console.error('❌ RPC call error:', error);
+            this.log('RPC call error', 'error');
             return null;
         }
     }
@@ -365,8 +476,9 @@ class SigmaTrade {
         const refreshBtn = document.getElementById('refreshBtn');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
-                this.cache.clear();
-                this.fetchRecentTransactions();
+                this.invalidateCache();
+                this.showLoading();
+                this.fetchAllTransactions();
             });
         }
         
@@ -395,15 +507,19 @@ class SigmaTrade {
         const txType = document.getElementById('txTypeFilter')?.value || 'all';
         const period = document.getElementById('periodFilter')?.value || 'all';
         
-        let filtered = [...this.transactions];
+        // Merge all transactions
+        let allTransactions = [
+            ...this.transactions.map(tx => ({...tx, txType: 'regular'})),
+            ...this.tokenTransactions.map(tx => ({...tx, txType: 'token'}))
+        ];
         
         // Filter by type
         if (txType !== 'all') {
-            filtered = filtered.filter(tx => {
+            allTransactions = allTransactions.filter(tx => {
                 const isIncoming = tx.to.toLowerCase() === CONFIG.WALLET_ADDRESS.toLowerCase();
                 if (txType === 'in') return isIncoming;
                 if (txType === 'out') return !isIncoming;
-                if (txType === 'token') return tx.tokenSymbol; // Token transfers
+                if (txType === 'token') return tx.txType === 'token';
                 return true;
             });
         }
@@ -418,10 +534,13 @@ class SigmaTrade {
             };
             
             const threshold = now - periods[period];
-            filtered = filtered.filter(tx => tx.timeStamp >= threshold);
+            allTransactions = allTransactions.filter(tx => tx.timeStamp >= threshold);
         }
         
-        this.displayTransactions(filtered);
+        // Sort by timestamp
+        allTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
+        
+        this.displayTransactions(allTransactions);
     }
 }
 
@@ -435,11 +554,10 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         console.log('⏸️ Page hidden - reducing updates');
-        // Could reduce update frequency here
     } else {
-        console.log('▶️ Page visible - resuming normal updates');
+        console.log('▶️ Page visible - resuming updates');
         if (app) {
-            app.fetchRecentTransactions();
+            app.fetchAllTransactions();
         }
     }
 });
