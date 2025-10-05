@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate OG Image 1200x630</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        canvas {
+            border: 2px solid #00d4ff;
+            margin: 20px;
+            max-width: 90vw;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            margin: 20px;
+            text-align: center;
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Open Graph Image 1200x630 Generator</h1>
+    <div class="info">Размер: 1200x630 пикселей (для превью в соцсетях)</div>
+    <canvas id="canvas" width="1200" height="630"></canvas>
+    <button onclick="downloadImage()">Скачать og-image.jpg</button>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Создаем градиентный фон
+        const bgGradient = ctx.createLinearGradient(0, 0, 1200, 630);
+        bgGradient.addColorStop(0, '#0a0a0a');
+        bgGradient.addColorStop(0.5, '#121212');
+        bgGradient.addColorStop(1, '#0a0a0a');
+        ctx.fillStyle = bgGradient;
+        ctx.fillRect(0, 0, 1200, 630);
+
+        // Добавляем паттерн в виде линий для tech-эффекта
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.05)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 1200; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, 630);
+            ctx.stroke();
+        }
+        for (let i = 0; i < 630; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(1200, i);
+            ctx.stroke();
+        }
+
+        // Рисуем большой символ Σ слева
+        const gradient = ctx.createLinearGradient(0, 0, 500, 630);
+        gradient.addColorStop(0, '#00d4ff');
+        gradient.addColorStop(0.5, '#4facfe');
+        gradient.addColorStop(1, '#7c3aed');
+
+        ctx.fillStyle = gradient;
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 35;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        // Верхняя горизонтальная линия
+        ctx.fillRect(80, 150, 340, 50);
+        
+        // Диагональная линия вниз-влево
+        ctx.beginPath();
+        ctx.moveTo(400, 200);
+        ctx.lineTo(120, 315);
+        ctx.stroke();
+        
+        // Диагональная линия вниз-вправо
+        ctx.beginPath();
+        ctx.moveTo(120, 315);
+        ctx.lineTo(400, 430);
+        ctx.stroke();
+        
+        // Нижняя горизонтальная линия
+        ctx.fillRect(80, 430, 340, 50);
+
+        // Добавляем свечение вокруг символа
+        ctx.shadowBlur = 30;
+        ctx.shadowColor = 'rgba(0, 212, 255, 0.5)';
+        ctx.fillRect(80, 150, 1, 1); // Фиктивная точка для применения эффекта
+        ctx.shadowBlur = 0;
+
+        // Текст справа - "SigmaTrade"
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 110px Arial';
+        ctx.fillText('SigmaTrade', 550, 280);
+
+        // Подзаголовок
+        ctx.fillStyle = '#00d4ff';
+        ctx.font = '42px Arial';
+        ctx.fillText('Real-time Blockchain Monitoring', 550, 360);
+
+        // Дополнительная информация мелким шрифтом
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.font = '28px Arial';
+        ctx.fillText('Professional BSC Transaction Tracking', 550, 420);
+
+        // Декоративные элементы - точки
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.3)';
+        for (let i = 0; i < 10; i++) {
+            const x = 550 + Math.random() * 600;
+            const y = 100 + Math.random() * 450;
+            const size = 2 + Math.random() * 4;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Добавляем тонкую рамку
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.2)';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(30, 30, 1140, 570);
+
+        // Угловые акценты
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
+        ctx.lineWidth = 4;
+        const cornerSize = 40;
+        
+        // Верхний левый
+        ctx.beginPath();
+        ctx.moveTo(30, 30);
+        ctx.lineTo(30, 30 + cornerSize);
+        ctx.moveTo(30, 30);
+        ctx.lineTo(30 + cornerSize, 30);
+        ctx.stroke();
+        
+        // Верхний правый
+        ctx.beginPath();
+        ctx.moveTo(1170, 30);
+        ctx.lineTo(1170, 30 + cornerSize);
+        ctx.moveTo(1170, 30);
+        ctx.lineTo(1170 - cornerSize, 30);
+        ctx.stroke();
+        
+        // Нижний левый
+        ctx.beginPath();
+        ctx.moveTo(30, 600);
+        ctx.lineTo(30, 600 - cornerSize);
+        ctx.moveTo(30, 600);
+        ctx.lineTo(30 + cornerSize, 600);
+        ctx.stroke();
+        
+        // Нижний правый
+        ctx.beginPath();
+        ctx.moveTo(1170, 600);
+        ctx.lineTo(1170, 600 - cornerSize);
+        ctx.moveTo(1170, 600);
+        ctx.lineTo(1170 - cornerSize, 600);
+        ctx.stroke();
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'og-image.jpg';
+            link.href = canvas.toDataURL('image/jpeg', 0.95);
+            link.click();
+        }
+    </script>
+</body>
+</html>

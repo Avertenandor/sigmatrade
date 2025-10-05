@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate PWA Icon 512x512</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        canvas {
+            border: 2px solid #00d4ff;
+            margin: 20px;
+            max-width: 90vw;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            margin: 20px;
+            text-align: center;
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>PWA Icon 512x512 Generator</h1>
+    <div class="info">Размер: 512x512 пикселей</div>
+    <canvas id="canvas" width="512" height="512"></canvas>
+    <button onclick="downloadImage()">Скачать icon-512x512.png</button>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Заливка фона с градиентом
+        const bgGradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 400);
+        bgGradient.addColorStop(0, '#121212');
+        bgGradient.addColorStop(1, '#0a0a0a');
+        ctx.fillStyle = bgGradient;
+        ctx.fillRect(0, 0, 512, 512);
+
+        // Создаем градиент для символа Σ
+        const gradient = ctx.createLinearGradient(0, 0, 512, 512);
+        gradient.addColorStop(0, '#00d4ff');
+        gradient.addColorStop(0.5, '#4facfe');
+        gradient.addColorStop(1, '#7c3aed');
+
+        // Рисуем символ Σ (сигма) крупно
+        ctx.fillStyle = gradient;
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 35;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        // Верхняя горизонтальная линия
+        ctx.fillRect(128, 100, 256, 42);
+        
+        // Диагональная линия вниз-влево
+        ctx.beginPath();
+        ctx.moveTo(370, 142);
+        ctx.lineTo(155, 256);
+        ctx.stroke();
+        
+        // Диагональная линия вниз-вправо
+        ctx.beginPath();
+        ctx.moveTo(155, 256);
+        ctx.lineTo(370, 370);
+        ctx.stroke();
+        
+        // Нижняя горизонтальная линия
+        ctx.fillRect(128, 370, 256, 42);
+
+        // Добавляем декоративные элементы в стиле tech
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.15)';
+        ctx.lineWidth = 3;
+        
+        // Угловые акценты
+        const cornerSize = 60;
+        const margin = 60;
+        
+        // Верхний левый
+        ctx.beginPath();
+        ctx.moveTo(margin, margin);
+        ctx.lineTo(margin, margin + cornerSize);
+        ctx.moveTo(margin, margin);
+        ctx.lineTo(margin + cornerSize, margin);
+        ctx.stroke();
+        
+        // Верхний правый
+        ctx.beginPath();
+        ctx.moveTo(512 - margin, margin);
+        ctx.lineTo(512 - margin, margin + cornerSize);
+        ctx.moveTo(512 - margin, margin);
+        ctx.lineTo(512 - margin - cornerSize, margin);
+        ctx.stroke();
+        
+        // Нижний левый
+        ctx.beginPath();
+        ctx.moveTo(margin, 512 - margin);
+        ctx.lineTo(margin, 512 - margin - cornerSize);
+        ctx.moveTo(margin, 512 - margin);
+        ctx.lineTo(margin + cornerSize, 512 - margin);
+        ctx.stroke();
+        
+        // Нижний правый
+        ctx.beginPath();
+        ctx.moveTo(512 - margin, 512 - margin);
+        ctx.lineTo(512 - margin, 512 - margin - cornerSize);
+        ctx.moveTo(512 - margin, 512 - margin);
+        ctx.lineTo(512 - margin - cornerSize, 512 - margin);
+        ctx.stroke();
+
+        // Добавляем точки в углах
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.3)';
+        ctx.beginPath();
+        ctx.arc(margin, margin, 4, 0, Math.PI * 2);
+        ctx.arc(512 - margin, margin, 4, 0, Math.PI * 2);
+        ctx.arc(margin, 512 - margin, 4, 0, Math.PI * 2);
+        ctx.arc(512 - margin, 512 - margin, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'icon-512x512.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

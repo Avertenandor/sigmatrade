@@ -487,7 +487,7 @@ class SigmaTrade {
         const filterPanel = document.getElementById('filterPanel');
         if (filterBtn && filterPanel) {
             filterBtn.addEventListener('click', () => {
-                filterPanel.style.display = filterPanel.style.display === 'none' ? 'flex' : 'none';
+                filterPanel.classList.toggle('hidden');
             });
         }
         

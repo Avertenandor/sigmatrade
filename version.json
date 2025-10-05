@@ -1,9 +1,30 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "SigmaTrade",
   "description": "Blockchain Transaction Monitoring Interface",
   "lastUpdate": "2025-10-05",
   "changes": [
+    {
+      "version": "1.2.0",
+      "date": "2025-10-05",
+      "changes": [
+        "BREAKING: Removed ALL inline styles (style attribute)",
+        "Added .hidden CSS utility class",
+        "Updated JavaScript to use classList.toggle() instead of inline styles",
+        "Expanded meta tags from 12 to 35+ for full compatibility",
+        "Added all Open Graph fields (og:site_name, og:image:secure_url, og:image:type, og:image:alt, og:locale)",
+        "Added all Twitter Card fields (twitter:site, twitter:creator, twitter:image:alt)",
+        "Added iOS-specific meta tags (apple-mobile-web-app-title, format-detection)",
+        "Added Android/Chrome meta tags (mobile-web-app-capable, application-name)",
+        "Added Safari-specific settings (format-detection for phone/date/address/email)",
+        "Added theme colors for all platforms (msapplication-TileColor, msapplication-navbutton-color)",
+        "Added DNS prefetch and preconnect for performance optimization",
+        "Added canonical URL",
+        "Created RULES.md - comprehensive development guidelines",
+        "Established code quality standards and pre-commit checklist",
+        "Full compatibility achieved: iPhone, iPad, Android, Desktop, All social networks"
+      ]
+    },
     {
       "version": "1.1.0",
       "date": "2025-10-05",

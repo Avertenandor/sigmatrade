@@ -2,38 +2,87 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SigmaTrade - профессиональный мониторинг блокчейн транзакций">
-    <meta name="keywords" content="blockchain, криптовалюта, мониторинг, транзакции, BSC">
-    <meta name="author" content="SigmaTrade">
-    <title>SigmaTrade | Мониторинг транзакций</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <!-- Open Graph / Facebook -->
+    <!-- Basic Meta -->
+    <meta name="description" content="SigmaTrade - профессиональный мониторинг блокчейн транзакций в реальном времени. Отслеживайте BNB и BEP-20 токены на Binance Smart Chain.">
+    <meta name="keywords" content="blockchain, криптовалюта, мониторинг, транзакции, BSC, BNB, BEP-20, Binance Smart Chain, real-time, криптовалютный кошелек">
+    <meta name="author" content="SigmaTrade">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Russian">
+    <meta name="revisit-after" content="7 days">
+    <title>SigmaTrade | Мониторинг транзакций Binance Smart Chain</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://sigmatrade.org/">
+    
+    <!-- Open Graph / Facebook / VK / Telegram -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sigmatrade.org/">
+    <meta property="og:site_name" content="SigmaTrade">
     <meta property="og:title" content="SigmaTrade - Профессиональный мониторинг блокчейн транзакций">
     <meta property="og:description" content="Real-time мониторинг транзакций Binance Smart Chain. Отслеживайте движение средств, анализируйте операции и получайте актуальную информацию о блокчейн активности.">
     <meta property="og:image" content="https://sigmatrade.org/og-image.jpg">
+    <meta property="og:image:secure_url" content="https://sigmatrade.org/og-image.jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="SigmaTrade - Real-time Blockchain Monitoring">
+    <meta property="og:locale" content="ru_RU">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@sigmatrade">
+    <meta name="twitter:creator" content="@sigmatrade">
     <meta name="twitter:url" content="https://sigmatrade.org/">
     <meta name="twitter:title" content="SigmaTrade - Профессиональный мониторинг блокчейн транзакций">
     <meta name="twitter:description" content="Real-time мониторинг транзакций Binance Smart Chain. Отслеживайте движение средств, анализируйте операции и получайте актуальную информацию о блокчейн активности.">
     <meta name="twitter:image" content="https://sigmatrade.org/og-image.jpg">
+    <meta name="twitter:image:alt" content="SigmaTrade - Real-time Blockchain Monitoring">
     
     <!-- Favicon and Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon-32x32.png">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- Theme Color for mobile browsers -->
-    <meta name="theme-color" content="#0a0a0a">
+    <!-- iOS Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SigmaTrade">
+    
+    <!-- Android / Chrome -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="SigmaTrade">
+    
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="msapplication-TileColor" content="#0a0a0a">
+    <meta name="msapplication-navbutton-color" content="#0a0a0a">
+    
+    <!-- Safari Specific -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="date=no">
+    <meta name="format-detection" content="address=no">
+    <meta name="format-detection" content="email=no">
+    
+    <!-- Prevent automatic text size adjustment -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- DNS Prefetch for performance -->
+    <link rel="dns-prefetch" href="https://api.etherscan.io">
+    <link rel="dns-prefetch" href="https://old-patient-butterfly.bsc.quiknode.pro">
+    
+    <!-- Preconnect for faster loading -->
+    <link rel="preconnect" href="https://api.etherscan.io">
+    <link rel="preconnect" href="https://old-patient-butterfly.bsc.quiknode.pro">
     
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -98,7 +147,7 @@
                     </div>
                 </div>
                 
-                <div class="filters" id="filterPanel" style="display: none;">
+                <div class="filters hidden" id="filterPanel">
                     <div class="filter-group">
                         <label>Тип транзакции:</label>
                         <select id="txTypeFilter">

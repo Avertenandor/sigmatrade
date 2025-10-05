@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Favicon 32x32</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        canvas {
+            border: 2px solid #00d4ff;
+            margin: 20px;
+            transform: scale(3);
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            margin: 20px;
+            text-align: center;
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Favicon 32x32 Generator</h1>
+    <div class="info">Размер: 32x32 пикселей (увеличено для просмотра)</div>
+    <canvas id="canvas" width="32" height="32"></canvas>
+    <button onclick="downloadImage()">Скачать favicon-32x32.png</button>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Заливка фона
+        ctx.fillStyle = '#0a0a0a';
+        ctx.fillRect(0, 0, 32, 32);
+
+        // Создаем градиент для символа Σ
+        const gradient = ctx.createLinearGradient(0, 0, 32, 32);
+        gradient.addColorStop(0, '#00d4ff');
+        gradient.addColorStop(1, '#7c3aed');
+
+        // Рисуем символ Σ (сигма)
+        ctx.fillStyle = gradient;
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        // Верхняя горизонтальная линия
+        ctx.fillRect(8, 6, 16, 3);
+        
+        // Диагональная линия вниз-влево
+        ctx.beginPath();
+        ctx.moveTo(23, 9);
+        ctx.lineTo(10, 16);
+        ctx.stroke();
+        
+        // Диагональная линия вниз-вправо
+        ctx.beginPath();
+        ctx.moveTo(10, 16);
+        ctx.lineTo(23, 23);
+        ctx.stroke();
+        
+        // Нижняя горизонтальная линия
+        ctx.fillRect(8, 23, 16, 3);
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'favicon-32x32.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

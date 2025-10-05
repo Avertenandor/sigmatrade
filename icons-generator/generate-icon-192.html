@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate PWA Icon 192x192</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        canvas {
+            border: 2px solid #00d4ff;
+            margin: 20px;
+            max-width: 90vw;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            margin: 20px;
+            text-align: center;
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>PWA Icon 192x192 Generator</h1>
+    <div class="info">Размер: 192x192 пикселей</div>
+    <canvas id="canvas" width="192" height="192"></canvas>
+    <button onclick="downloadImage()">Скачать icon-192x192.png</button>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Заливка фона
+        ctx.fillStyle = '#0a0a0a';
+        ctx.fillRect(0, 0, 192, 192);
+
+        // Создаем градиент для символа Σ
+        const gradient = ctx.createLinearGradient(0, 0, 192, 192);
+        gradient.addColorStop(0, '#00d4ff');
+        gradient.addColorStop(1, '#7c3aed');
+
+        // Рисуем символ Σ (сигма)
+        ctx.fillStyle = gradient;
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 14;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        // Верхняя горизонтальная линия
+        ctx.fillRect(48, 38, 96, 16);
+        
+        // Диагональная линия вниз-влево
+        ctx.beginPath();
+        ctx.moveTo(138, 54);
+        ctx.lineTo(58, 96);
+        ctx.stroke();
+        
+        // Диагональная линия вниз-вправо
+        ctx.beginPath();
+        ctx.moveTo(58, 96);
+        ctx.lineTo(138, 138);
+        ctx.stroke();
+        
+        // Нижняя горизонтальная линия
+        ctx.fillRect(48, 138, 96, 16);
+
+        // Добавляем декоративные элементы
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.2)';
+        ctx.lineWidth = 2;
+        
+        // Угловые акценты
+        ctx.beginPath();
+        ctx.moveTo(30, 30);
+        ctx.lineTo(30, 50);
+        ctx.moveTo(30, 30);
+        ctx.lineTo(50, 30);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(162, 30);
+        ctx.lineTo(162, 50);
+        ctx.moveTo(162, 30);
+        ctx.lineTo(142, 30);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(30, 162);
+        ctx.lineTo(30, 142);
+        ctx.moveTo(30, 162);
+        ctx.lineTo(50, 162);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(162, 162);
+        ctx.lineTo(162, 142);
+        ctx.moveTo(162, 162);
+        ctx.lineTo(142, 162);
+        ctx.stroke();
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'icon-192x192.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
