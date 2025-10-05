@@ -55,4 +55,4 @@ if ($movedCount -eq 6) {
 
 Write-Host ""
 Write-Host "Нажмите любую клавишу для выхода..." -ForegroundColor Gray
-$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
