@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "name": "SigmaTrade",
+  "description": "Blockchain Transaction Monitoring Interface",
+  "lastUpdate": "2025-10-05",
+  "changes": [
+    {
+      "version": "1.0.0",
+      "date": "2025-10-05",
+      "changes": [
+        "Initial project setup",
+        "Real-time transaction monitoring via QuickNode WebSocket",
+        "Etherscan V2 API integration (BSC chainid=56)",
+        "Dark theme UI with multi-layer design",
+        "Mobile adaptation for iOS/Android",
+        "SEO optimization with Open Graph and Twitter Card tags",
+        "PWA support with manifest.json",
+        "Request optimization with caching",
+        "Filter and search functionality",
+        "Complete documentation"
+      ]
+    }
+  ]
+}

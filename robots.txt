@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://sigmatrade.org/sitemap.xml
+
+# Disallow admin paths (if any in future)
+Disallow: /admin/
+Disallow: /api/
+
+# Allow all content for indexing
+Allow: /*.css
+Allow: /*.js

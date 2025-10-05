@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SigmaTrade - профессиональный мониторинг блокчейн транзакций">
+    <meta name="keywords" content="blockchain, криптовалюта, мониторинг, транзакции, BSC">
+    <meta name="author" content="SigmaTrade">
+    <title>SigmaTrade | Мониторинг транзакций</title>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sigmatrade.org/">
+    <meta property="og:title" content="SigmaTrade - Профессиональный мониторинг блокчейн транзакций">
+    <meta property="og:description" content="Real-time мониторинг транзакций Binance Smart Chain. Отслеживайте движение средств, анализируйте операции и получайте актуальную информацию о блокчейн активности.">
+    <meta property="og:image" content="https://sigmatrade.org/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://sigmatrade.org/">
+    <meta name="twitter:title" content="SigmaTrade - Профессиональный мониторинг блокчейн транзакций">
+    <meta name="twitter:description" content="Real-time мониторинг транзакций Binance Smart Chain. Отслеживайте движение средств, анализируйте операции и получайте актуальную информацию о блокчейн активности.">
+    <meta name="twitter:image" content="https://sigmatrade.org/og-image.jpg">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Theme Color for mobile browsers -->
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">Σ</span>
+                <span class="logo-text">SIGMA<span class="logo-accent">TRADE</span></span>
+            </div>
+            <div class="header-info">
+                <div class="network-status">
+                    <span class="status-dot" id="networkStatus"></span>
+                    <span id="networkName">Подключение...</span>
+                </div>
+                <div class="wallet-short">
+                    <span class="wallet-label">Кошелек:</span>
+                    <span class="wallet-address" id="walletShort">0xB685...895b</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <div class="stat-label">Всего транзакций</div>
+                    <div class="stat-value" id="totalTx">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Последний блок</div>
+                    <div class="stat-value" id="lastBlock">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Баланс BNB</div>
+                    <div class="stat-value" id="balance">0.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Статус API</div>
+                    <div class="stat-value" id="apiStatus">-</div>
+                </div>
+            </div>
+
+            <!-- Main Transaction Window -->
+            <div class="transaction-window">
+                <div class="window-header">
+                    <h2>
+                        <span class="icon">📊</span>
+                        История транзакций
+                    </h2>
+                    <div class="window-controls">
+                        <button class="btn-control" id="refreshBtn" title="Обновить">
+                            <span class="icon">🔄</span>
+                        </button>
+                        <button class="btn-control" id="filterBtn" title="Фильтры">
+                            <span class="icon">🔍</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters" id="filterPanel" style="display: none;">
+                    <div class="filter-group">
+                        <label>Тип транзакции:</label>
+                        <select id="txTypeFilter">
+                            <option value="all">Все</option>
+                            <option value="in">Входящие</option>
+                            <option value="out">Исходящие</option>
+                            <option value="token">Токены</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Период:</label>
+                        <select id="periodFilter">
+                            <option value="24h">24 часа</option>
+                            <option value="7d">7 дней</option>
+                            <option value="30d">30 дней</option>
+                            <option value="all">Все время</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="transaction-list" id="transactionList">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Загрузка транзакций...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 SigmaTrade. Мониторинг блокчейн транзакций</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Документация</a>
+                    <a href="#" class="footer-link">API</a>
+                    <a href="#" class="footer-link">Поддержка</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
