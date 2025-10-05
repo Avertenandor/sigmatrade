@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
     <!-- Basic Meta -->
-    <meta name="description" content="SigmaTrade - профессиональный мониторинг блокчейн транзакций в реальном времени. Отслеживайте BNB и BEP-20 токены на Binance Smart Chain.">
-    <meta name="keywords" content="blockchain, криптовалюта, мониторинг, транзакции, BSC, BNB, BEP-20, Binance Smart Chain, real-time, криптовалютный кошелек">
+    <meta name="description" content="SigmaTrade - профессиональный мониторинг семейства торговых ботов. Отслеживайте работу ботов обмена, арбитража и МЭФ-деятельности в реальном времени на Binance Smart Chain.">
+    <meta name="keywords" content="sigma trade, торговый бот, арбитраж, обмен криптовалют, МЭФ, blockchain, мониторинг, транзакции, BSC, BNB, BEP-20, Binance Smart Chain, real-time">
     <meta name="author" content="SigmaTrade">
     <meta name="robots" content="index, follow">
     <meta name="language" content="Russian">
     <meta name="revisit-after" content="7 days">
-    <title>SigmaTrade | Мониторинг транзакций Binance Smart Chain</title>
+    <title>SigmaTrade | Мониторинг семейства торговых ботов</title>
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://sigmatrade.org/">
@@ -21,8 +21,8 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sigmatrade.org/">
     <meta property="og:site_name" content="SigmaTrade">
-    <meta property="og:title" content="SigmaTrade - Профессиональный мониторинг блокчейн транзакций">
-    <meta property="og:description" content="Real-time мониторинг транзакций Binance Smart Chain. Отслеживайте движение средств, анализируйте операции и получайте актуальную информацию о блокчейн активности.">
+    <meta property="og:title" content="SigmaTrade - Мониторинг семейства торговых ботов">
+    <meta property="og:description" content="Мониторинг работы семейства торговых ботов Sigma Trade. Боты обмена, арбитража и МЭФ-деятельности. Real-time отслеживание транзакций и балансов на BSC.">
     <meta property="og:image" content="https://sigmatrade.org/og-image.jpg">
     <meta property="og:image:secure_url" content="https://sigmatrade.org/og-image.jpg">
     <meta property="og:image:type" content="image/jpeg">
@@ -36,8 +36,8 @@
     <meta name="twitter:site" content="@sigmatrade">
     <meta name="twitter:creator" content="@sigmatrade">
     <meta name="twitter:url" content="https://sigmatrade.org/">
-    <meta name="twitter:title" content="SigmaTrade - Профессиональный мониторинг блокчейн транзакций">
-    <meta name="twitter:description" content="Real-time мониторинг транзакций Binance Smart Chain. Отслеживайте движение средств, анализируйте операции и получайте актуальную информацию о блокчейн активности.">
+    <meta name="twitter:title" content="SigmaTrade - Мониторинг семейства торговых ботов">
+    <meta name="twitter:description" content="Мониторинг работы семейства торговых ботов Sigma Trade. Боты обмена, арбитража и МЭФ-деятельности. Real-time отслеживание транзакций и балансов на BSC.">
     <meta name="twitter:image" content="https://sigmatrade.org/og-image.jpg">
     <meta name="twitter:image:alt" content="SigmaTrade - Real-time Blockchain Monitoring">
     
@@ -110,6 +110,56 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
+            <!-- Bots Section -->
+            <div class="bots-section">
+                <h2 class="section-title">
+                    <span class="icon">🤖</span>
+                    Семейство ботов Sigma Trade
+                </h2>
+                <div class="bots-grid">
+                    <div class="bot-card" data-bot="exchange">
+                        <div class="bot-icon">🔄</div>
+                        <h3 class="bot-name">Робот обмена</h3>
+                        <p class="bot-description">Автоматический обмен криптовалют</p>
+                        <div class="bot-status">
+                            <span class="status-indicator active"></span>
+                            <span class="status-text">Active</span>
+                        </div>
+                    </div>
+                    <div class="bot-card" data-bot="arbitrage">
+                        <div class="bot-icon">📊</div>
+                        <h3 class="bot-name">Робот арбитража</h3>
+                        <p class="bot-description">Арбитраж между биржами</p>
+                        <div class="bot-status">
+                            <span class="status-indicator active"></span>
+                            <span class="status-text">Active</span>
+                        </div>
+                    </div>
+                    <div class="bot-card" data-bot="mef">
+                        <div class="bot-icon">💼</div>
+                        <h3 class="bot-name">МЭФ Робот</h3>
+                        <p class="bot-description">МЭФ-деятельность</p>
+                        <div class="bot-status">
+                            <span class="status-indicator active"></span>
+                            <span class="status-text">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token Balances Section -->
+            <div class="balances-section">
+                <h2 class="section-title">
+                    <span class="icon">💰</span>
+                    Текущие балансы кошелька
+                </h2>
+                <div class="balances-grid" id="balancesGrid">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Загрузка балансов...</p>
+                    </div>
+                </div>
+            </div>
             <!-- Stats Bar -->
             <div class="stats-bar">
                 <div class="stat-card">
@@ -193,6 +243,7 @@
     </footer>
 
     <script src="config.js"></script>
+    <script src="toast.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

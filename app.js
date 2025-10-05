@@ -1,11 +1,14 @@
-// SigmaTrade Application - Enhanced Version
+// SigmaTrade Application v2.0.0 - Enhanced with Token Balances & Infinite Scroll
 class SigmaTrade {
     constructor() {
         this.ws = null;
         this.transactions = [];
         this.tokenTransactions = [];
+        this.allTransactions = []; // Merged list for display
         this.currentBlock = null;
         this.balance = '0';
+        this.tokenBalances = {};
+        this.totalTxCount = 0;
         this.isConnected = false;
         this.cache = new Map();
         this.lastApiCall = 0;
@@ -13,11 +16,17 @@ class SigmaTrade {
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
         
+        // Pagination state
+        this.currentPage = 1;
+        this.isLoading = false;
+        this.hasMore = true;
+        this.observer = null;
+        
         this.init();
     }
     
     async init() {
-        this.log('Initializing SigmaTrade...', 'info');
+        this.log('Initializing SigmaTrade v2.0.0...', 'info');
         
         // Initialize UI
         this.initializeUI();
@@ -30,6 +39,9 @@ class SigmaTrade {
         
         // Set up event listeners
         this.setupEventListeners();
+        
+        // Set up infinite scroll
+        this.setupInfiniteScroll();
     }
     
     // Safe logging without exposing sensitive data
@@ -146,7 +158,7 @@ class SigmaTrade {
                 // Check for new transactions periodically (every 10 blocks ~30 sec)
                 if (blockNumber % 10 === 0) {
                     this.invalidateCache();
-                    this.fetchAllTransactions();
+                    this.refreshData();
                 }
             }
             
@@ -156,20 +168,81 @@ class SigmaTrade {
     }
     
     invalidateCache() {
+        // Keep total TX count cache, but invalidate transaction lists
+        const totalTxCache = this.cache.get('total_tx_count');
         this.cache.clear();
+        if (totalTxCache) {
+            this.cache.set('total_tx_count', totalTxCache);
+        }
         this.log('Cache invalidated', 'info');
     }
     
     async startMonitoring() {
         // Get initial data
-        await this.updateBalance();
-        await this.fetchAllTransactions();
+        await Promise.all([
+            this.updateAllBalances(),
+            this.fetchTotalTransactionCount(),
+            this.fetchTransactions(1)
+        ]);
         
         // Set up periodic updates
-        setInterval(() => this.updateBalance(), CONFIG.INTERVALS.BALANCE_UPDATE);
+        setInterval(() => this.updateAllBalances(), CONFIG.INTERVALS.BALANCE_UPDATE);
     }
     
-    async updateBalance() {
+    async refreshData() {
+        // Refresh balances and first page of transactions
+        await Promise.all([
+            this.updateAllBalances(),
+            this.fetchTotalTransactionCount()
+        ]);
+        
+        // Reset pagination
+        this.currentPage = 1;
+        this.hasMore = true;
+        await this.fetchTransactions(1, true);
+    }
+    
+    // ============= TOKEN BALANCES =============
+    
+    async updateAllBalances() {
+        try {
+            const balances = {};
+            
+            // Get BNB balance
+            const bnbBalance = await this.getBNBBalance();
+            balances.BNB = {
+                ...CONFIG.TOKENS.BNB,
+                balance: bnbBalance,
+                formatted: this.formatBalance(bnbBalance, CONFIG.TOKENS.BNB.decimals)
+            };
+            
+            // Get ERC-20 token balances
+            for (const [key, token] of Object.entries(CONFIG.TOKENS)) {
+                if (token.isNative) continue; // Skip BNB, already done
+                
+                const balance = await this.getTokenBalance(token.address, token.decimals);
+                balances[key] = {
+                    ...token,
+                    balance: balance,
+                    formatted: this.formatBalance(balance, token.decimals)
+                };
+            }
+            
+            this.tokenBalances = balances;
+            this.displayBalances();
+            
+            // Update BNB in stat card
+            const balanceElement = document.getElementById('balance');
+            if (balanceElement && balances.BNB) {
+                balanceElement.textContent = balances.BNB.formatted;
+            }
+            
+        } catch (error) {
+            this.log('Error updating balances', 'error');
+        }
+    }
+    
+    async getBNBBalance() {
         try {
             const response = await this.makeRPCCall({
                 jsonrpc: '2.0',
@@ -179,18 +252,253 @@ class SigmaTrade {
             });
             
             if (response && response.result) {
-                const balanceWei = parseInt(response.result, 16);
-                const balanceBNB = (balanceWei / 1e18).toFixed(4);
-                this.balance = balanceBNB;
-                
-                const balanceElement = document.getElementById('balance');
-                if (balanceElement) {
-                    balanceElement.textContent = balanceBNB;
-                }
+                const balanceWei = BigInt(response.result);
+                return balanceWei.toString();
             }
         } catch (error) {
-            this.log('Error updating balance', 'error');
+            this.log('Error getting BNB balance', 'error');
         }
+        return '0';
+    }
+    
+    async getTokenBalance(contractAddress, decimals) {
+        try {
+            // ERC-20 balanceOf(address) function signature
+            const data = '0x70a08231000000000000000000000000' + CONFIG.WALLET_ADDRESS.slice(2).toLowerCase();
+            
+            const response = await this.makeRPCCall({
+                jsonrpc: '2.0',
+                method: 'eth_call',
+                params: [{
+                    to: contractAddress,
+                    data: data
+                }, 'latest'],
+                id: Date.now()
+            });
+            
+            if (response && response.result) {
+                const balance = BigInt(response.result);
+                return balance.toString();
+            }
+        } catch (error) {
+            this.log(`Error getting token balance for ${contractAddress}`, 'error');
+        }
+        return '0';
+    }
+    
+    formatBalance(balanceWei, decimals) {
+        try {
+            const balance = BigInt(balanceWei);
+            const divisor = BigInt(10) ** BigInt(decimals);
+            const wholePart = balance / divisor;
+            const fractionalPart = balance % divisor;
+            
+            // Format with up to 4 decimal places
+            const fractionalStr = fractionalPart.toString().padStart(decimals, '0');
+            const formatted = `${wholePart}.${fractionalStr.slice(0, 4)}`;
+            
+            return this.formatNumber(parseFloat(formatted));
+        } catch (error) {
+            return '0.0000';
+        }
+    }
+    
+    formatNumber(num) {
+        return num.toLocaleString('ru-RU', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 4
+        });
+    }
+    
+    displayBalances() {
+        const gridElement = document.getElementById('balancesGrid');
+        if (!gridElement) return;
+        
+        const balances = Object.values(this.tokenBalances);
+        if (balances.length === 0) {
+            gridElement.innerHTML = `
+                <div class="loading-state">
+                    <p>Загрузка балансов...</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const html = balances.map(token => `
+            <div class="balance-card">
+                <div class="balance-header">
+                    <div class="balance-icon">${token.icon}</div>
+                    <div class="balance-token">${token.symbol}</div>
+                </div>
+                <div class="balance-amount">${token.formatted}</div>
+                <div class="balance-usd">${token.name}</div>
+            </div>
+        `).join('');
+        
+        gridElement.innerHTML = html;
+    }
+    
+    // ============= TOTAL TRANSACTION COUNT =============
+    
+    async fetchTotalTransactionCount() {
+        try {
+            const cacheKey = 'total_tx_count';
+            const cached = this.getFromCache(cacheKey, CONFIG.CACHE.TOTAL_TX_TTL);
+            if (cached) {
+                this.log('Using cached total TX count', 'info');
+                this.totalTxCount = cached;
+                this.updateStats();
+                return;
+            }
+            
+            this.log('Fetching total transaction count...', 'info');
+            
+            // Get counts from both endpoints
+            const [regularCount, tokenCount] = await Promise.all([
+                this.getTransactionCount('txlist'),
+                this.getTransactionCount('tokentx')
+            ]);
+            
+            this.totalTxCount = regularCount + tokenCount;
+            this.setCache(cacheKey, this.totalTxCount, CONFIG.CACHE.TOTAL_TX_TTL);
+            this.updateStats();
+            
+            this.log(`Total transactions: ${this.totalTxCount}`, 'success');
+            
+        } catch (error) {
+            this.log('Error fetching total TX count', 'error');
+        }
+    }
+    
+    async getTransactionCount(action) {
+        try {
+            // Use page=1&offset=1 to get metadata with total count
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=${action}&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=10000&sort=desc`;
+            
+            if (CONFIG.ETHERSCAN.API_KEY) {
+                url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
+            }
+            
+            const response = await this.rateLimitedFetch(url);
+            const data = await response.json();
+            
+            if (data.status === '1' && data.result) {
+                // Return the length of results
+                // Note: Etherscan doesn't provide total count in response,
+                // so we approximate by checking if we got maximum results
+                return data.result.length;
+            }
+            
+        } catch (error) {
+            this.log(`Error getting ${action} count`, 'error');
+        }
+        return 0;
+    }
+    
+    // ============= TRANSACTION FETCHING WITH PAGINATION =============
+    
+    async fetchTransactions(page = 1, reset = false) {
+        if (this.isLoading) return;
+        if (!this.hasMore && !reset) return;
+        
+        this.isLoading = true;
+        
+        if (reset) {
+            this.currentPage = 1;
+            this.hasMore = true;
+            this.allTransactions = [];
+        }
+        
+        try {
+            // Fetch both regular and token transactions for this page
+            const [regular, token] = await Promise.all([
+                this.fetchRegularTransactions(page),
+                this.fetchTokenTransactions(page)
+            ]);
+            
+            // Merge and sort
+            const newTransactions = [
+                ...regular.map(tx => ({...tx, txType: 'regular'})),
+                ...token.map(tx => ({...tx, txType: 'token'}))
+            ];
+            
+            newTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
+            
+            if (reset) {
+                this.allTransactions = newTransactions;
+            } else {
+                this.allTransactions = [...this.allTransactions, ...newTransactions];
+            }
+            
+            // Check if we have more to load
+            if (newTransactions.length < CONFIG.PAGINATION.PAGE_SIZE) {
+                this.hasMore = false;
+            }
+            
+            this.displayTransactions(this.allTransactions);
+            
+            if (!this.hasMore) {
+                this.showEndOfList();
+            }
+            
+        } catch (error) {
+            this.log('Error fetching transactions', 'error');
+            this.displayError();
+        } finally {
+            this.isLoading = false;
+        }
+    }
+    
+    async fetchRegularTransactions(page = 1) {
+        try {
+            const offset = CONFIG.PAGINATION.PAGE_SIZE;
+            
+            this.log(`Fetching regular transactions (page ${page})...`, 'info');
+            
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=txlist&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
+            
+            if (CONFIG.ETHERSCAN.API_KEY) {
+                url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
+            }
+            
+            const response = await this.rateLimitedFetch(url);
+            const data = await response.json();
+            
+            if (data.status === '1' && data.result) {
+                return data.result;
+            } else if (data.message === 'NOTOK') {
+                this.log(`API Error: ${data.result}`, 'warning');
+            }
+            
+        } catch (error) {
+            this.log('Error fetching regular transactions', 'error');
+        }
+        return [];
+    }
+    
+    async fetchTokenTransactions(page = 1) {
+        try {
+            const offset = CONFIG.PAGINATION.PAGE_SIZE;
+            
+            this.log(`Fetching token transactions (page ${page})...`, 'info');
+            
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=tokentx&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
+            
+            if (CONFIG.ETHERSCAN.API_KEY) {
+                url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
+            }
+            
+            const response = await this.rateLimitedFetch(url);
+            const data = await response.json();
+            
+            if (data.status === '1' && data.result) {
+                return data.result;
+            }
+            
+        } catch (error) {
+            this.log('Error fetching token transactions', 'error');
+        }
+        return [];
     }
     
     // Rate limiting wrapper for API calls
@@ -205,102 +513,6 @@ class SigmaTrade {
         
         this.lastApiCall = Date.now();
         return fetch(url);
-    }
-    
-    async fetchAllTransactions() {
-        // Fetch both regular and token transactions
-        await Promise.all([
-            this.fetchRegularTransactions(),
-            this.fetchTokenTransactions()
-        ]);
-        
-        // Merge and display
-        this.mergeAndDisplayTransactions();
-    }
-    
-    async fetchRegularTransactions() {
-        try {
-            const cacheKey = 'regular_tx';
-            const cached = this.getFromCache(cacheKey);
-            if (cached) {
-                this.log('Using cached regular transactions', 'info');
-                this.transactions = cached;
-                return;
-            }
-            
-            this.log('Fetching regular transactions...', 'info');
-            
-            // Build URL with API key if available
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=txlist&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=${CONFIG.PAGINATION.PAGE_SIZE}&sort=desc`;
-            
-            if (CONFIG.ETHERSCAN.API_KEY) {
-                url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
-            }
-            
-            const response = await this.rateLimitedFetch(url);
-            const data = await response.json();
-            
-            if (data.status === '1' && data.result) {
-                this.transactions = data.result;
-                this.setCache(cacheKey, data.result);
-                this.log(`Loaded ${data.result.length} regular transactions`, 'success');
-            } else if (data.message === 'NOTOK') {
-                this.log(`API Error: ${data.result}`, 'warning');
-            }
-            
-        } catch (error) {
-            this.log('Error fetching regular transactions', 'error');
-        }
-    }
-    
-    async fetchTokenTransactions() {
-        try {
-            const cacheKey = 'token_tx';
-            const cached = this.getFromCache(cacheKey);
-            if (cached) {
-                this.log('Using cached token transactions', 'info');
-                this.tokenTransactions = cached;
-                return;
-            }
-            
-            this.log('Fetching token transactions...', 'info');
-            
-            // Build URL for BEP-20 token transfers
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=tokentx&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=${CONFIG.PAGINATION.PAGE_SIZE}&sort=desc`;
-            
-            if (CONFIG.ETHERSCAN.API_KEY) {
-                url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
-            }
-            
-            const response = await this.rateLimitedFetch(url);
-            const data = await response.json();
-            
-            if (data.status === '1' && data.result) {
-                this.tokenTransactions = data.result;
-                this.setCache(cacheKey, data.result);
-                this.log(`Loaded ${data.result.length} token transactions`, 'success');
-            }
-            
-        } catch (error) {
-            this.log('Error fetching token transactions', 'error');
-        }
-    }
-    
-    mergeAndDisplayTransactions() {
-        // Merge both types of transactions
-        const allTransactions = [
-            ...this.transactions.map(tx => ({...tx, txType: 'regular'})),
-            ...this.tokenTransactions.map(tx => ({...tx, txType: 'token'}))
-        ];
-        
-        // Sort by timestamp descending
-        allTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
-        
-        // Take only the most recent ones
-        const recent = allTransactions.slice(0, CONFIG.PAGINATION.PAGE_SIZE);
-        
-        this.displayTransactions(recent);
-        this.updateStats(allTransactions.length);
     }
     
     displayTransactions(transactions) {
@@ -364,6 +576,11 @@ class SigmaTrade {
         }).join('');
         
         listElement.innerHTML = html;
+        
+        // Re-attach scroll loader if has more
+        if (this.hasMore && !this.isLoading) {
+            this.attachScrollLoader();
+        }
     }
     
     displayNoTransactions() {
@@ -383,17 +600,48 @@ class SigmaTrade {
             listElement.innerHTML = `
                 <div class="loading-state">
                     <p>Ошибка загрузки транзакций</p>
-                    <button class="btn-control" onclick="app.fetchAllTransactions()">Повторить</button>
+                    <button class="btn-control" onclick="app.refreshData()">Повторить</button>
                 </div>
             `;
         }
     }
     
-    updateStats(totalCount = null) {
+    attachScrollLoader() {
+        const listElement = document.getElementById('transactionList');
+        if (!listElement) return;
+        
+        // Remove existing loader if any
+        const existingLoader = listElement.querySelector('.scroll-loader');
+        if (existingLoader) {
+            existingLoader.remove();
+        }
+        
+        // Add loader at the end
+        const loader = document.createElement('div');
+        loader.className = 'scroll-loader';
+        loader.id = 'scrollLoader';
+        loader.innerHTML = `
+            <div class="spinner"></div>
+            <span>Загрузка...</span>
+        `;
+        loader.style.display = 'none';
+        listElement.appendChild(loader);
+    }
+    
+    showEndOfList() {
+        const listElement = document.getElementById('transactionList');
+        if (!listElement) return;
+        
+        const endMessage = document.createElement('div');
+        endMessage.className = 'end-of-list';
+        endMessage.textContent = 'Все транзакции загружены';
+        listElement.appendChild(endMessage);
+    }
+    
+    updateStats() {
         const totalTxElement = document.getElementById('totalTx');
         if (totalTxElement) {
-            const count = totalCount || (this.transactions.length + this.tokenTransactions.length);
-            totalTxElement.textContent = count;
+            totalTxElement.textContent = this.totalTxCount.toLocaleString('ru-RU');
         }
         
         const apiStatusElement = document.getElementById('apiStatus');
@@ -405,7 +653,7 @@ class SigmaTrade {
     updateBlockNumber(blockNumber) {
         const blockElement = document.getElementById('lastBlock');
         if (blockElement) {
-            blockElement.textContent = `#${blockNumber.toLocaleString()}`;
+            blockElement.textContent = `#${blockNumber.toLocaleString('ru-RU')}`;
         }
     }
     
@@ -443,23 +691,27 @@ class SigmaTrade {
     }
     
     // Cache management
-    setCache(key, value) {
+    setCache(key, value, ttl = CONFIG.CACHE.TTL) {
         if (!CONFIG.CACHE.ENABLED) return;
         
         this.cache.set(key, {
             value: value,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            ttl: ttl
         });
     }
     
-    getFromCache(key) {
+    getFromCache(key, ttl = CONFIG.CACHE.TTL) {
         if (!CONFIG.CACHE.ENABLED) return null;
         
         const cached = this.cache.get(key);
         if (!cached) return null;
         
         // Check if cache is still valid
-        if (Date.now() - cached.timestamp > CONFIG.CACHE.TTL) {
+        const age = Date.now() - cached.timestamp;
+        const cacheTTL = cached.ttl || ttl;
+        
+        if (age > cacheTTL) {
             this.cache.delete(key);
             return null;
         }
@@ -471,14 +723,45 @@ class SigmaTrade {
         window.open(`${CONFIG.NETWORK.EXPLORER}/tx/${hash}`, '_blank');
     }
     
+    // ============= INFINITE SCROLL =============
+    
+    setupInfiniteScroll() {
+        const listElement = document.getElementById('transactionList');
+        if (!listElement) return;
+        
+        const options = {
+            root: listElement,
+            rootMargin: `${CONFIG.SCROLL.THRESHOLD}px`,
+            threshold: 0.1
+        };
+        
+        this.observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && this.hasMore && !this.isLoading) {
+                    this.log('Loading more transactions...', 'info');
+                    this.currentPage++;
+                    this.fetchTransactions(this.currentPage);
+                }
+            });
+        }, options);
+        
+        // Start observing the loader
+        setTimeout(() => {
+            const loader = document.getElementById('scrollLoader');
+            if (loader && this.observer) {
+                this.observer.observe(loader);
+            }
+        }, 1000);
+    }
+    
     setupEventListeners() {
         // Refresh button
         const refreshBtn = document.getElementById('refreshBtn');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
-                this.invalidateCache();
+                this.log('Manual refresh triggered', 'info');
                 this.showLoading();
-                this.fetchAllTransactions();
+                this.refreshData();
             });
         }
         
@@ -507,15 +790,11 @@ class SigmaTrade {
         const txType = document.getElementById('txTypeFilter')?.value || 'all';
         const period = document.getElementById('periodFilter')?.value || 'all';
         
-        // Merge all transactions
-        let allTransactions = [
-            ...this.transactions.map(tx => ({...tx, txType: 'regular'})),
-            ...this.tokenTransactions.map(tx => ({...tx, txType: 'token'}))
-        ];
+        let filtered = [...this.allTransactions];
         
         // Filter by type
         if (txType !== 'all') {
-            allTransactions = allTransactions.filter(tx => {
+            filtered = filtered.filter(tx => {
                 const isIncoming = tx.to.toLowerCase() === CONFIG.WALLET_ADDRESS.toLowerCase();
                 if (txType === 'in') return isIncoming;
                 if (txType === 'out') return !isIncoming;
@@ -534,13 +813,10 @@ class SigmaTrade {
             };
             
             const threshold = now - periods[period];
-            allTransactions = allTransactions.filter(tx => tx.timeStamp >= threshold);
+            filtered = filtered.filter(tx => tx.timeStamp >= threshold);
         }
         
-        // Sort by timestamp
-        allTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
-        
-        this.displayTransactions(allTransactions);
+        this.displayTransactions(filtered);
     }
 }
 
@@ -557,7 +833,7 @@ document.addEventListener('visibilitychange', () => {
     } else {
         console.log('▶️ Page visible - resuming updates');
         if (app) {
-            app.fetchAllTransactions();
+            app.refreshData();
         }
     }
 });

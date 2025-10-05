@@ -24,6 +24,38 @@ const CONFIG = {
         EXPLORER: 'https://bscscan.com'
     },
     
+    // Token Contracts (BSC)
+    TOKENS: {
+        BNB: {
+            name: 'BNB',
+            symbol: 'BNB',
+            decimals: 18,
+            icon: '💰',
+            isNative: true
+        },
+        USDT: {
+            address: '0x55d398326f99059fF775485246999027B3197955',
+            name: 'Tether USD',
+            symbol: 'USDT',
+            decimals: 18,
+            icon: '💵'
+        },
+        CAKE: {
+            address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+            name: 'PancakeSwap',
+            symbol: 'CAKE',
+            decimals: 18,
+            icon: '🎂'
+        },
+        BUSD: {
+            address: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+            name: 'Binance USD',
+            symbol: 'BUSD',
+            decimals: 18,
+            icon: '💴'
+        }
+    },
+    
     // Update intervals (in milliseconds)
     INTERVALS: {
         BLOCK_UPDATE: 3000,     // 3 seconds (BSC block time ~3s)
@@ -34,13 +66,22 @@ const CONFIG = {
     // Pagination
     PAGINATION: {
         PAGE_SIZE: 50,
-        MAX_PAGES: 10
+        MAX_PAGES: 10,
+        INITIAL_LOAD: 50 // initial transactions to load
     },
     
     // Cache settings
     CACHE: {
         ENABLED: true,
-        TTL: 60000 // 1 minute
+        TTL: 60000, // 1 minute
+        BALANCES_TTL: 10000, // 10 seconds for balances
+        TOTAL_TX_TTL: 300000 // 5 minutes for total tx count
+    },
+    
+    // Infinite Scroll settings
+    SCROLL: {
+        THRESHOLD: 100, // pixels from bottom to trigger load
+        BATCH_SIZE: 50  // transactions per batch
     }
 };
 

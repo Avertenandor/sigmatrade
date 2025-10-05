@@ -1,9 +1,29 @@
 {
-  "version": "1.2.1",
+  "version": "2.0.0",
   "name": "SigmaTrade",
-  "description": "Blockchain Transaction Monitoring Interface",
+  "description": "Trading Bots Family Monitoring Interface",
   "lastUpdate": "2025-10-05",
   "changes": [
+    {
+      "version": "2.0.0",
+      "date": "2025-10-05",
+      "changes": [
+        "MAJOR UPDATE: Concept redesign - Family of Trading Bots",
+        "Added Bots Section: Exchange Bot, Arbitrage Bot, MEF Bot",
+        "Added real-time token balances display (BNB, USDT, CAKE, BUSD)",
+        "Implemented total transaction count (not limited by pagination)",
+        "Added infinite scroll pagination for transactions",
+        "Enhanced UI with new sections for bots and balances",
+        "Updated meta tags to reflect new concept",
+        "Improved caching system with different TTLs for different data",
+        "Added BigInt support for accurate balance calculations",
+        "Optimized API calls with intelligent rate limiting",
+        "Added visual indicators for bot status",
+        "Implemented scroll threshold detection",
+        "Added 'End of list' message when all transactions loaded",
+        "Updated CONFIG with token contracts and scroll settings"
+      ]
+    },
     {
       "version": "1.2.1",
       "date": "2025-10-05",
@@ -20,17 +40,10 @@
         "Added .hidden CSS utility class",
         "Updated JavaScript to use classList.toggle() instead of inline styles",
         "Expanded meta tags from 12 to 35+ for full compatibility",
-        "Added all Open Graph fields (og:site_name, og:image:secure_url, og:image:type, og:image:alt, og:locale)",
-        "Added all Twitter Card fields (twitter:site, twitter:creator, twitter:image:alt)",
-        "Added iOS-specific meta tags (apple-mobile-web-app-title, format-detection)",
-        "Added Android/Chrome meta tags (mobile-web-app-capable, application-name)",
-        "Added Safari-specific settings (format-detection for phone/date/address/email)",
-        "Added theme colors for all platforms (msapplication-TileColor, msapplication-navbutton-color)",
-        "Added DNS prefetch and preconnect for performance optimization",
-        "Added canonical URL",
+        "Added all Open Graph fields",
+        "Added all Twitter Card fields",
         "Created RULES.md - comprehensive development guidelines",
-        "Established code quality standards and pre-commit checklist",
-        "Full compatibility achieved: iPhone, iPad, Android, Desktop, All social networks"
+        "Full compatibility achieved for all platforms"
       ]
     },
     {
@@ -41,12 +54,7 @@
         "Added BEP-20 token transaction monitoring",
         "Implemented rate limiting protection for API calls",
         "Enhanced WebSocket reconnection with exponential backoff",
-        "Improved error handling and user feedback",
-        "Added loading indicators",
-        "Secured logging without exposing sensitive data",
-        "Merged regular and token transactions display",
-        "Visual distinction for transaction types (BNB vs Tokens)",
-        "Optimized update frequency (every 10 blocks instead of every block)"
+        "Improved error handling and user feedback"
       ]
     },
     {
@@ -54,15 +62,10 @@
       "date": "2025-10-05",
       "changes": [
         "Initial project setup",
-        "Real-time transaction monitoring via QuickNode WebSocket",
-        "Etherscan V2 API integration (BSC chainid=56)",
-        "Dark theme UI with multi-layer design",
-        "Mobile adaptation for iOS/Android",
-        "SEO optimization with Open Graph and Twitter Card tags",
-        "PWA support with manifest.json",
-        "Request optimization with caching",
-        "Filter and search functionality",
-        "Complete documentation"
+        "Real-time transaction monitoring",
+        "Dark theme UI",
+        "Mobile adaptation",
+        "SEO optimization"
       ]
     }
   ]
