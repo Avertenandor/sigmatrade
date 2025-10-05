@@ -1,4 +1,4 @@
-// Configuration for SigmaTrade v4.0.0 - МАКСИМАЛЬНО ОПТИМИЗИРОВАННЫЕ НАСТРОЙКИ
+// Configuration for SigmaTrade v5.0.0
 const CONFIG = {
     // Wallet to monitor
     WALLET_ADDRESS: '0xB685760EBD368a891F27ae547391F4E2A289895b',
@@ -92,7 +92,7 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 /* 
-⚡ ОПТИМИЗАЦИИ v4.0.0:
+⚡ ОПТИМИЗАЦИИ v4.0.0 (сохранены в v5.0.0):
 
 1. БАТЧИНГ RPC:
    - ВСЕ балансы токенов в ОДНОМ запросе вместо 4+

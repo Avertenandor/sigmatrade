@@ -141,6 +141,54 @@
                     <p class="hero-subtitle">Автоматический обмен криптовалют 24/7 на Binance Smart Chain</p>
                 </div>
 
+                <!-- Bots Family Section -->
+                <div class="bots-family-section">
+                    <h2 class="section-title">
+                        <span class="icon">🤖</span>
+                        Семейство торговых ботов Sigma Trade
+                    </h2>
+                    <div class="bots-grid">
+                        <div class="bot-card exchange-bot" data-page="exchange">
+                            <div class="bot-icon">🔄</div>
+                            <h3 class="bot-name">Бот-обменник</h3>
+                            <p class="bot-description">Автоматический обмен криптовалют с оптимальными курсами 24/7</p>
+                            <div class="bot-stats">
+                                <div class="bot-stat">
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value active-badge">Активен</span>
+                                </div>
+                            </div>
+                            <button class="bot-btn" onclick="app.switchPage('exchange')">Смотреть детали →</button>
+                        </div>
+
+                        <div class="bot-card mev-bot" data-page="mev">
+                            <div class="bot-icon">💼</div>
+                            <h3 class="bot-name">МЭВ-бот</h3>
+                            <p class="bot-description">Максимальная извлекаемая ценность через мониторинг мемпула</p>
+                            <div class="bot-stats">
+                                <div class="bot-stat">
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value development-badge">В разработке</span>
+                                </div>
+                            </div>
+                            <button class="bot-btn" onclick="app.switchPage('mev')">Подробнее →</button>
+                        </div>
+
+                        <div class="bot-card arb-bot" data-page="arbitrage">
+                            <div class="bot-icon">📊</div>
+                            <h3 class="bot-name">Арбитражный бот</h3>
+                            <p class="bot-description">Межбиржевой арбитраж и поиск ценовых аномалий</p>
+                            <div class="bot-stats">
+                                <div class="bot-stat">
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value development-badge">В разработке</span>
+                                </div>
+                            </div>
+                            <button class="bot-btn" onclick="app.switchPage('arbitrage')">Подробнее →</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Token Balances Section -->
                 <div class="balances-section">
                     <h2 class="section-title">
@@ -376,7 +424,7 @@
                     <a href="#" class="footer-link">API</a>
                     <a href="#" class="footer-link">Поддержка</a>
                 </div>
-                <div class="footer-version">v3.0.0</div>
+                <div class="footer-version">v5.0.0</div>
             </div>
         </div>
     </footer>
