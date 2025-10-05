@@ -1,4 +1,4 @@
-// SigmaTrade Application v2.0.0 - Enhanced with Token Balances & Infinite Scroll
+// SigmaTrade Application v3.0.0 - Multi-page Structure
 class SigmaTrade {
     constructor() {
         this.ws = null;
@@ -22,11 +22,17 @@ class SigmaTrade {
         this.hasMore = true;
         this.observer = null;
         
+        // Current active page
+        this.currentActivePage = 'exchange';
+        
         this.init();
     }
     
     async init() {
-        this.log('Initializing SigmaTrade v2.0.0...', 'info');
+        this.log('Initializing SigmaTrade v3.0.0...', 'info');
+        
+        // Initialize navigation
+        this.initializeNavigation();
         
         // Initialize UI
         this.initializeUI();
@@ -34,7 +40,7 @@ class SigmaTrade {
         // Connect to QuickNode WebSocket
         await this.connectWebSocket();
         
-        // Start monitoring
+        // Start monitoring (only for exchange page)
         await this.startMonitoring();
         
         // Set up event listeners
@@ -42,6 +48,89 @@ class SigmaTrade {
         
         // Set up infinite scroll
         this.setupInfiniteScroll();
+        
+        // Handle initial URL hash
+        this.handleHashChange();
+    }
+    
+    // ============= NAVIGATION =============
+    
+    initializeNavigation() {
+        // Tab navigation
+        const navTabs = document.querySelectorAll('.nav-tab');
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const page = e.currentTarget.getAttribute('data-page');
+                this.switchPage(page);
+            });
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mainNav = document.getElementById('mainNav');
+        
+        if (mobileMenuToggle && mainNav) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenuToggle.classList.toggle('active');
+                mainNav.classList.toggle('mobile-open');
+            });
+        }
+        
+        // Handle hash changes (for direct URL navigation)
+        window.addEventListener('hashchange', () => {
+            this.handleHashChange();
+        });
+    }
+    
+    handleHashChange() {
+        const hash = window.location.hash.slice(1); // Remove #
+        const validPages = ['exchange', 'mev', 'arbitrage'];
+        
+        if (validPages.includes(hash)) {
+            this.switchPage(hash);
+        } else {
+            // Default to exchange page
+            window.location.hash = 'exchange';
+        }
+    }
+    
+    switchPage(pageName) {
+        // Close mobile menu if open
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mainNav = document.getElementById('mainNav');
+        
+        if (mobileMenuToggle && mainNav) {
+            mobileMenuToggle.classList.remove('active');
+            mainNav.classList.remove('mobile-open');
+        }
+        
+        // Update active tab
+        const navTabs = document.querySelectorAll('.nav-tab');
+        navTabs.forEach(tab => {
+            if (tab.getAttribute('data-page') === pageName) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+        
+        // Update active page
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(page => {
+            if (page.id === `page-${pageName}`) {
+                page.classList.add('active');
+            } else {
+                page.classList.remove('active');
+            }
+        });
+        
+        // Update URL hash
+        window.location.hash = pageName;
+        
+        // Update current active page
+        this.currentActivePage = pageName;
+        
+        this.log(`Switched to page: ${pageName}`, 'info');
     }
     
     // Safe logging without exposing sensitive data
@@ -158,7 +247,9 @@ class SigmaTrade {
                 // Check for new transactions periodically (every 10 blocks ~30 sec)
                 if (blockNumber % 10 === 0) {
                     this.invalidateCache();
-                    this.refreshData();
+                    if (this.currentActivePage === 'exchange') {
+                        this.refreshData();
+                    }
                 }
             }
             
@@ -178,18 +269,27 @@ class SigmaTrade {
     }
     
     async startMonitoring() {
-        // Get initial data
-        await Promise.all([
-            this.updateAllBalances(),
-            this.fetchTotalTransactionCount(),
-            this.fetchTransactions(1)
-        ]);
+        // Get initial data (only for exchange page)
+        if (this.currentActivePage === 'exchange') {
+            await Promise.all([
+                this.updateAllBalances(),
+                this.fetchTotalTransactionCount(),
+                this.fetchTransactions(1)
+            ]);
+        }
         
         // Set up periodic updates
-        setInterval(() => this.updateAllBalances(), CONFIG.INTERVALS.BALANCE_UPDATE);
+        setInterval(() => {
+            if (this.currentActivePage === 'exchange') {
+                this.updateAllBalances();
+            }
+        }, CONFIG.INTERVALS.BALANCE_UPDATE);
     }
     
     async refreshData() {
+        // Only refresh if on exchange page
+        if (this.currentActivePage !== 'exchange') return;
+        
         // Refresh balances and first page of transactions
         await Promise.all([
             this.updateAllBalances(),
@@ -737,7 +837,7 @@ class SigmaTrade {
         
         this.observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && this.hasMore && !this.isLoading) {
+                if (entry.isIntersecting && this.hasMore && !this.isLoading && this.currentActivePage === 'exchange') {
                     this.log('Loading more transactions...', 'info');
                     this.currentPage++;
                     this.fetchTransactions(this.currentPage);
@@ -832,7 +932,7 @@ document.addEventListener('visibilitychange', () => {
         console.log('⏸️ Page hidden - reducing updates');
     } else {
         console.log('▶️ Page visible - resuming updates');
-        if (app) {
+        if (app && app.currentActivePage === 'exchange') {
             app.refreshData();
         }
     }

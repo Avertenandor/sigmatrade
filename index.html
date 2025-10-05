@@ -90,138 +90,276 @@
     <!-- Header -->
     <header class="header">
         <div class="container">
-            <div class="logo">
-                <span class="logo-icon">Σ</span>
-                <span class="logo-text">SIGMA<span class="logo-accent">TRADE</span></span>
-            </div>
-            <div class="header-info">
-                <div class="network-status">
-                    <span class="status-dot" id="networkStatus"></span>
-                    <span id="networkName">Подключение...</span>
+            <div class="header-top">
+                <div class="logo">
+                    <span class="logo-icon">Σ</span>
+                    <span class="logo-text">SIGMA<span class="logo-accent">TRADE</span></span>
                 </div>
-                <div class="wallet-short">
-                    <span class="wallet-label">Кошелек:</span>
-                    <span class="wallet-address" id="walletShort">0xB685...895b</span>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="header-info">
+                    <div class="network-status">
+                        <span class="status-dot" id="networkStatus"></span>
+                        <span id="networkName">Подключение...</span>
+                    </div>
+                    <div class="wallet-short">
+                        <span class="wallet-label">Кошелек:</span>
+                        <span class="wallet-address" id="walletShort">0xB685...895b</span>
+                    </div>
                 </div>
             </div>
+            
+            <!-- Navigation Tabs -->
+            <nav class="main-nav" id="mainNav">
+                <button class="nav-tab active" data-page="exchange">
+                    <span class="nav-icon">🔄</span>
+                    <span class="nav-label">Бот-обменник</span>
+                </button>
+                <button class="nav-tab" data-page="mev">
+                    <span class="nav-icon">💼</span>
+                    <span class="nav-label">МЭВ-бот</span>
+                </button>
+                <button class="nav-tab" data-page="arbitrage">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Арбитраж</span>
+                </button>
+            </nav>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="container">
-            <!-- Bots Section -->
-            <div class="bots-section">
-                <h2 class="section-title">
-                    <span class="icon">🤖</span>
-                    Семейство ботов Sigma Trade
-                </h2>
-                <div class="bots-grid">
-                    <div class="bot-card" data-bot="exchange">
-                        <div class="bot-icon">🔄</div>
-                        <h3 class="bot-name">Робот обмена</h3>
-                        <p class="bot-description">Автоматический обмен криптовалют</p>
-                        <div class="bot-status">
-                            <span class="status-indicator active"></span>
-                            <span class="status-text">Active</span>
-                        </div>
-                    </div>
-                    <div class="bot-card" data-bot="arbitrage">
-                        <div class="bot-icon">📊</div>
-                        <h3 class="bot-name">Робот арбитража</h3>
-                        <p class="bot-description">Арбитраж между биржами</p>
-                        <div class="bot-status">
-                            <span class="status-indicator active"></span>
-                            <span class="status-text">Active</span>
-                        </div>
-                    </div>
-                    <div class="bot-card" data-bot="mef">
-                        <div class="bot-icon">💼</div>
-                        <h3 class="bot-name">МЭФ Робот</h3>
-                        <p class="bot-description">МЭФ-деятельность</p>
-                        <div class="bot-status">
-                            <span class="status-indicator active"></span>
-                            <span class="status-text">Active</span>
-                        </div>
-                    </div>
+        <!-- Page: Exchange Bot (Main) -->
+        <div class="page active" id="page-exchange">
+            <div class="container">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <h1 class="hero-title">Пока все болтают, мы работаем</h1>
+                    <p class="hero-subtitle">Автоматический обмен криптовалют 24/7 на Binance Smart Chain</p>
                 </div>
-            </div>
 
-            <!-- Token Balances Section -->
-            <div class="balances-section">
-                <h2 class="section-title">
-                    <span class="icon">💰</span>
-                    Текущие балансы кошелька
-                </h2>
-                <div class="balances-grid" id="balancesGrid">
-                    <div class="loading-state">
-                        <div class="spinner"></div>
-                        <p>Загрузка балансов...</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Stats Bar -->
-            <div class="stats-bar">
-                <div class="stat-card">
-                    <div class="stat-label">Всего транзакций</div>
-                    <div class="stat-value" id="totalTx">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Последний блок</div>
-                    <div class="stat-value" id="lastBlock">-</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Баланс BNB</div>
-                    <div class="stat-value" id="balance">0.00</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Статус API</div>
-                    <div class="stat-value" id="apiStatus">-</div>
-                </div>
-            </div>
-
-            <!-- Main Transaction Window -->
-            <div class="transaction-window">
-                <div class="window-header">
-                    <h2>
-                        <span class="icon">📊</span>
-                        История транзакций
+                <!-- Token Balances Section -->
+                <div class="balances-section">
+                    <h2 class="section-title">
+                        <span class="icon">💰</span>
+                        Текущие балансы кошелька
                     </h2>
-                    <div class="window-controls">
-                        <button class="btn-control" id="refreshBtn" title="Обновить">
-                            <span class="icon">🔄</span>
-                        </button>
-                        <button class="btn-control" id="filterBtn" title="Фильтры">
-                            <span class="icon">🔍</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="filters hidden" id="filterPanel">
-                    <div class="filter-group">
-                        <label>Тип транзакции:</label>
-                        <select id="txTypeFilter">
-                            <option value="all">Все</option>
-                            <option value="in">Входящие</option>
-                            <option value="out">Исходящие</option>
-                            <option value="token">Токены</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Период:</label>
-                        <select id="periodFilter">
-                            <option value="24h">24 часа</option>
-                            <option value="7d">7 дней</option>
-                            <option value="30d">30 дней</option>
-                            <option value="all">Все время</option>
-                        </select>
+                    <div class="balances-grid" id="balancesGrid">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Загрузка балансов...</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="transaction-list" id="transactionList">
-                    <div class="loading-state">
-                        <div class="spinner"></div>
-                        <p>Загрузка транзакций...</p>
+                <!-- Stats Bar -->
+                <div class="stats-bar">
+                    <div class="stat-card">
+                        <div class="stat-label">Всего транзакций</div>
+                        <div class="stat-value" id="totalTx">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Последний блок</div>
+                        <div class="stat-value" id="lastBlock">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Баланс BNB</div>
+                        <div class="stat-value" id="balance">0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Статус API</div>
+                        <div class="stat-value" id="apiStatus">-</div>
+                    </div>
+                </div>
+
+                <!-- Main Transaction Window -->
+                <div class="transaction-window">
+                    <div class="window-header">
+                        <h2>
+                            <span class="icon">📊</span>
+                            История транзакций
+                        </h2>
+                        <div class="window-controls">
+                            <button class="btn-control" id="refreshBtn" title="Обновить">
+                                <span class="icon">🔄</span>
+                            </button>
+                            <button class="btn-control" id="filterBtn" title="Фильтры">
+                                <span class="icon">🔍</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="filters hidden" id="filterPanel">
+                        <div class="filter-group">
+                            <label>Тип транзакции:</label>
+                            <select id="txTypeFilter">
+                                <option value="all">Все</option>
+                                <option value="in">Входящие</option>
+                                <option value="out">Исходящие</option>
+                                <option value="token">Токены</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Период:</label>
+                            <select id="periodFilter">
+                                <option value="24h">24 часа</option>
+                                <option value="7d">7 дней</option>
+                                <option value="30d">30 дней</option>
+                                <option value="all">Все время</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="transaction-list" id="transactionList">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Загрузка транзакций...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: MEV Bot -->
+        <div class="page" id="page-mev">
+            <div class="container">
+                <div class="hero-section">
+                    <h1 class="hero-title">МЭВ-бот</h1>
+                    <p class="hero-subtitle">Максимальная извлекаемая ценность (MEV) на BSC</p>
+                </div>
+
+                <!-- MEV Info Cards -->
+                <div class="info-cards-grid">
+                    <div class="info-card">
+                        <div class="info-icon">⚡</div>
+                        <h3>Скорость</h3>
+                        <p>Мгновенная обработка транзакций в мемпуле</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🎯</div>
+                        <h3>Точность</h3>
+                        <p>Умные алгоритмы поиска возможностей</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">💎</div>
+                        <h3>Доходность</h3>
+                        <p>Оптимальное извлечение ценности</p>
+                    </div>
+                </div>
+
+                <!-- MEV Stats -->
+                <div class="mev-stats-section">
+                    <h2 class="section-title">
+                        <span class="icon">📈</span>
+                        Статистика МЭВ-бота
+                    </h2>
+                    <div class="stats-bar">
+                        <div class="stat-card mev-accent">
+                            <div class="stat-label">Извлечено за сегодня</div>
+                            <div class="stat-value">Скоро</div>
+                        </div>
+                        <div class="stat-card mev-accent">
+                            <div class="stat-label">Успешных операций</div>
+                            <div class="stat-value">Скоро</div>
+                        </div>
+                        <div class="stat-card mev-accent">
+                            <div class="stat-label">Средняя прибыль</div>
+                            <div class="stat-value">Скоро</div>
+                        </div>
+                        <div class="stat-card mev-accent">
+                            <div class="stat-label">Gas эффективность</div>
+                            <div class="stat-value">Скоро</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MEV Activity -->
+                <div class="transaction-window">
+                    <div class="window-header">
+                        <h2>
+                            <span class="icon">💼</span>
+                            Недавние МЭВ-операции
+                        </h2>
+                    </div>
+                    <div class="transaction-list">
+                        <div class="loading-state">
+                            <p>Мониторинг МЭВ-возможностей...</p>
+                            <p class="text-secondary">Данные скоро будут доступны</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Arbitrage Bot -->
+        <div class="page" id="page-arbitrage">
+            <div class="container">
+                <div class="hero-section">
+                    <h1 class="hero-title">Арбитражный бот</h1>
+                    <p class="hero-subtitle">Межбиржевой арбитраж криптовалют</p>
+                </div>
+
+                <!-- Arbitrage Info Cards -->
+                <div class="info-cards-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🔄</div>
+                        <h3>Мульти-DEX</h3>
+                        <p>Мониторинг PancakeSwap, BakerySwap, ApeSwap</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🤖</div>
+                        <h3>Автоматизация</h3>
+                        <p>24/7 поиск и исполнение арбитражных сделок</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">📊</div>
+                        <h3>Аналитика</h3>
+                        <p>Анализ спредов и оптимальных маршрутов</p>
+                    </div>
+                </div>
+
+                <!-- Arbitrage Stats -->
+                <div class="arbitrage-stats-section">
+                    <h2 class="section-title">
+                        <span class="icon">💹</span>
+                        Статистика арбитража
+                    </h2>
+                    <div class="stats-bar">
+                        <div class="stat-card arb-accent">
+                            <div class="stat-label">Прибыль за сегодня</div>
+                            <div class="stat-value">Скоро</div>
+                        </div>
+                        <div class="stat-card arb-accent">
+                            <div class="stat-label">Сделок выполнено</div>
+                            <div class="stat-value">Скоро</div>
+                        </div>
+                        <div class="stat-card arb-accent">
+                            <div class="stat-label">Средний спред</div>
+                            <div class="stat-value">Скоро</div>
+                        </div>
+                        <div class="stat-card arb-accent">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-value">Скоро</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arbitrage Activity -->
+                <div class="transaction-window">
+                    <div class="window-header">
+                        <h2>
+                            <span class="icon">📈</span>
+                            Недавные арбитражные сделки
+                        </h2>
+                    </div>
+                    <div class="transaction-list">
+                        <div class="loading-state">
+                            <p>Мониторинг арбитражных возможностей...</p>
+                            <p class="text-secondary">Данные скоро будут доступны</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -238,6 +376,7 @@
                     <a href="#" class="footer-link">API</a>
                     <a href="#" class="footer-link">Поддержка</a>
                 </div>
+                <div class="footer-version">v3.0.0</div>
             </div>
         </div>
     </footer>
