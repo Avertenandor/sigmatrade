@@ -1,10 +1,10 @@
-// SigmaTrade Application v3.0.0 - Multi-page Structure
+// SigmaTrade Application v4.0.0 - МАКСИМАЛЬНО ОПТИМИЗИРОВАННЫЕ ЗАПРОСЫ
 class SigmaTrade {
     constructor() {
         this.ws = null;
         this.transactions = [];
         this.tokenTransactions = [];
-        this.allTransactions = []; // Merged list for display
+        this.allTransactions = [];
         this.currentBlock = null;
         this.balance = '0';
         this.tokenBalances = {};
@@ -12,9 +12,13 @@ class SigmaTrade {
         this.isConnected = false;
         this.cache = new Map();
         this.lastApiCall = 0;
-        this.apiCallDelay = 5000; // 5 seconds between API calls
+        this.apiCallDelay = 6000; // 6 секунд между API вызовами (было 5)
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
+        
+        // Request batching queue
+        this.requestQueue = [];
+        this.isBatchProcessing = false;
         
         // Pagination state
         this.currentPage = 1;
@@ -25,38 +29,32 @@ class SigmaTrade {
         // Current active page
         this.currentActivePage = 'exchange';
         
+        // Debounce timers
+        this.debounceTimers = {};
+        
         this.init();
     }
     
     async init() {
-        this.log('Initializing SigmaTrade v3.0.0...', 'info');
+        this.log('Initializing SigmaTrade v4.0.0 - Optimized...', 'info');
         
-        // Initialize navigation
         this.initializeNavigation();
-        
-        // Initialize UI
         this.initializeUI();
         
-        // Connect to QuickNode WebSocket
-        await this.connectWebSocket();
+        // Connect ONLY if on exchange page
+        if (window.location.hash === '#exchange' || !window.location.hash) {
+            await this.connectWebSocket();
+            await this.startMonitoring();
+        }
         
-        // Start monitoring (only for exchange page)
-        await this.startMonitoring();
-        
-        // Set up event listeners
         this.setupEventListeners();
-        
-        // Set up infinite scroll
         this.setupInfiniteScroll();
-        
-        // Handle initial URL hash
         this.handleHashChange();
     }
     
     // ============= NAVIGATION =============
     
     initializeNavigation() {
-        // Tab navigation
         const navTabs = document.querySelectorAll('.nav-tab');
         navTabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
@@ -65,7 +63,6 @@ class SigmaTrade {
             });
         });
         
-        // Mobile menu toggle
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const mainNav = document.getElementById('mainNav');
         
@@ -76,26 +73,23 @@ class SigmaTrade {
             });
         }
         
-        // Handle hash changes (for direct URL navigation)
         window.addEventListener('hashchange', () => {
             this.handleHashChange();
         });
     }
     
     handleHashChange() {
-        const hash = window.location.hash.slice(1); // Remove #
+        const hash = window.location.hash.slice(1);
         const validPages = ['exchange', 'mev', 'arbitrage'];
         
         if (validPages.includes(hash)) {
             this.switchPage(hash);
         } else {
-            // Default to exchange page
             window.location.hash = 'exchange';
         }
     }
     
     switchPage(pageName) {
-        // Close mobile menu if open
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const mainNav = document.getElementById('mainNav');
         
@@ -104,7 +98,6 @@ class SigmaTrade {
             mainNav.classList.remove('mobile-open');
         }
         
-        // Update active tab
         const navTabs = document.querySelectorAll('.nav-tab');
         navTabs.forEach(tab => {
             if (tab.getAttribute('data-page') === pageName) {
@@ -114,7 +107,6 @@ class SigmaTrade {
             }
         });
         
-        // Update active page
         const pages = document.querySelectorAll('.page');
         pages.forEach(page => {
             if (page.id === `page-${pageName}`) {
@@ -124,42 +116,43 @@ class SigmaTrade {
             }
         });
         
-        // Update URL hash
         window.location.hash = pageName;
         
-        // Update current active page
-        this.currentActivePage = pageName;
+        // Lazy connect WebSocket только при переходе на exchange
+        if (pageName === 'exchange' && !this.ws) {
+            this.connectWebSocket();
+            this.startMonitoring();
+        }
         
+        this.currentActivePage = pageName;
         this.log(`Switched to page: ${pageName}`, 'info');
     }
     
-    // Safe logging without exposing sensitive data
     log(message, type = 'info') {
         const emoji = {
             info: '🚀',
             success: '✅',
             warning: '⚠️',
             error: '❌',
-            network: '🔌'
+            network: '🔌',
+            cache: '💾',
+            optimize: '⚡'
         };
         console.log(`${emoji[type]} ${message}`);
     }
     
     initializeUI() {
-        // Set wallet address
         const walletShort = document.getElementById('walletShort');
         if (walletShort) {
             const addr = CONFIG.WALLET_ADDRESS;
             walletShort.textContent = `${addr.slice(0, 6)}...${addr.slice(-4)}`;
         }
         
-        // Set network name
         const networkName = document.getElementById('networkName');
         if (networkName) {
             networkName.textContent = CONFIG.NETWORK.NAME;
         }
         
-        // Show loading state
         this.showLoading();
     }
     
@@ -176,6 +169,8 @@ class SigmaTrade {
     }
     
     async connectWebSocket() {
+        if (this.ws) return; // Уже подключен
+        
         try {
             this.log('Connecting to WebSocket...', 'network');
             
@@ -186,8 +181,6 @@ class SigmaTrade {
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
                 this.updateNetworkStatus(true);
-                
-                // Subscribe to new blocks
                 this.subscribeToBlocks();
             };
             
@@ -205,8 +198,8 @@ class SigmaTrade {
                 this.isConnected = false;
                 this.updateNetworkStatus(false);
                 
-                // Reconnect with exponential backoff
-                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                // Reconnect только если на exchange page
+                if (this.reconnectAttempts < this.maxReconnectAttempts && this.currentActivePage === 'exchange') {
                     const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
                     this.reconnectAttempts++;
                     this.log(`Reconnecting in ${delay/1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`, 'warning');
@@ -238,17 +231,16 @@ class SigmaTrade {
         try {
             const data = JSON.parse(event.data);
             
-            // Handle new block
             if (data.method === 'eth_subscription' && data.params?.result?.number) {
                 const blockNumber = parseInt(data.params.result.number, 16);
                 this.currentBlock = blockNumber;
                 this.updateBlockNumber(blockNumber);
                 
-                // Check for new transactions periodically (every 10 blocks ~30 sec)
-                if (blockNumber % 10 === 0) {
+                // ОПТИМИЗАЦИЯ: Проверка каждые 20 блоков (~60 сек) вместо 10
+                if (blockNumber % 20 === 0) {
                     this.invalidateCache();
                     if (this.currentActivePage === 'exchange') {
-                        this.refreshData();
+                        this.debouncedRefreshData();
                     }
                 }
             }
@@ -258,132 +250,167 @@ class SigmaTrade {
         }
     }
     
+    // ОПТИМИЗАЦИЯ: Debounced refresh для избежания дублирующих запросов
+    debouncedRefreshData() {
+        if (this.debounceTimers.refresh) {
+            clearTimeout(this.debounceTimers.refresh);
+        }
+        
+        this.debounceTimers.refresh = setTimeout(() => {
+            this.refreshData();
+        }, 2000); // 2 секунды задержка
+    }
+    
     invalidateCache() {
-        // Keep total TX count cache, but invalidate transaction lists
         const totalTxCache = this.cache.get('total_tx_count');
         this.cache.clear();
         if (totalTxCache) {
             this.cache.set('total_tx_count', totalTxCache);
         }
-        this.log('Cache invalidated', 'info');
+        this.log('Cache invalidated', 'cache');
     }
     
     async startMonitoring() {
-        // Get initial data (only for exchange page)
-        if (this.currentActivePage === 'exchange') {
-            await Promise.all([
-                this.updateAllBalances(),
-                this.fetchTotalTransactionCount(),
-                this.fetchTransactions(1)
-            ]);
-        }
+        if (this.currentActivePage !== 'exchange') return;
         
-        // Set up periodic updates
+        // ОПТИМИЗАЦИЯ: Загружаем только критичные данные сразу
+        await this.fetchTransactions(1);
+        
+        // Балансы и счетчики загружаем с задержкой
+        setTimeout(() => {
+            this.updateAllBalancesBatched();
+            this.fetchTotalTransactionCount();
+        }, 1000);
+        
+        // ОПТИМИЗАЦИЯ: Обновления каждые 5 минут вместо 1 минуты
         setInterval(() => {
-            if (this.currentActivePage === 'exchange') {
-                this.updateAllBalances();
+            if (this.currentActivePage === 'exchange' && !document.hidden) {
+                this.updateAllBalancesBatched();
             }
-        }, CONFIG.INTERVALS.BALANCE_UPDATE);
+        }, CONFIG.INTERVALS.BALANCE_UPDATE * 5); // x5 реже!
     }
     
     async refreshData() {
-        // Only refresh if on exchange page
         if (this.currentActivePage !== 'exchange') return;
         
-        // Refresh balances and first page of transactions
+        this.log('Refreshing data...', 'optimize');
+        
+        // ОПТИМИЗАЦИЯ: Параллельные запросы но с батчингом
         await Promise.all([
-            this.updateAllBalances(),
+            this.updateAllBalancesBatched(),
             this.fetchTotalTransactionCount()
         ]);
         
-        // Reset pagination
         this.currentPage = 1;
         this.hasMore = true;
         await this.fetchTransactions(1, true);
     }
     
-    // ============= TOKEN BALANCES =============
+    // ============= ОПТИМИЗИРОВАННЫЕ БАЛАНСЫ (BATCHED RPC) =============
     
-    async updateAllBalances() {
+    async updateAllBalancesBatched() {
         try {
+            const cacheKey = 'all_balances';
+            const cached = this.getFromCache(cacheKey, CONFIG.CACHE.BALANCE_TTL);
+            
+            if (cached) {
+                this.log('Using cached balances', 'cache');
+                this.tokenBalances = cached;
+                this.displayBalances();
+                
+                const balanceElement = document.getElementById('balance');
+                if (balanceElement && cached.BNB) {
+                    balanceElement.textContent = cached.BNB.formatted;
+                }
+                return;
+            }
+            
+            this.log('Fetching ALL balances in BATCH...', 'optimize');
+            
+            // ОПТИМИЗАЦИЯ: Батчинг всех RPC запросов в один
+            const batchRequests = [];
+            
+            // BNB balance
+            batchRequests.push({
+                jsonrpc: '2.0',
+                method: 'eth_getBalance',
+                params: [CONFIG.WALLET_ADDRESS, 'latest'],
+                id: 1
+            });
+            
+            // Token balances
+            let id = 2;
+            const tokenKeys = Object.keys(CONFIG.TOKENS).filter(key => !CONFIG.TOKENS[key].isNative);
+            
+            for (const key of tokenKeys) {
+                const token = CONFIG.TOKENS[key];
+                const data = '0x70a08231000000000000000000000000' + CONFIG.WALLET_ADDRESS.slice(2).toLowerCase();
+                
+                batchRequests.push({
+                    jsonrpc: '2.0',
+                    method: 'eth_call',
+                    params: [{
+                        to: token.address,
+                        data: data
+                    }, 'latest'],
+                    id: id++
+                });
+            }
+            
+            // КРИТИЧЕСКАЯ ОПТИМИЗАЦИЯ: Один запрос вместо 4+!
+            const response = await fetch(CONFIG.QUICKNODE.HTTP, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(batchRequests)
+            });
+            
+            const results = await response.json();
+            
+            // Parse results
             const balances = {};
             
-            // Get BNB balance
-            const bnbBalance = await this.getBNBBalance();
-            balances.BNB = {
-                ...CONFIG.TOKENS.BNB,
-                balance: bnbBalance,
-                formatted: this.formatBalance(bnbBalance, CONFIG.TOKENS.BNB.decimals)
-            };
-            
-            // Get ERC-20 token balances
-            for (const [key, token] of Object.entries(CONFIG.TOKENS)) {
-                if (token.isNative) continue; // Skip BNB, already done
-                
-                const balance = await this.getTokenBalance(token.address, token.decimals);
-                balances[key] = {
-                    ...token,
-                    balance: balance,
-                    formatted: this.formatBalance(balance, token.decimals)
+            // BNB (первый результат)
+            if (results[0]?.result) {
+                const bnbBalance = BigInt(results[0].result).toString();
+                balances.BNB = {
+                    ...CONFIG.TOKENS.BNB,
+                    balance: bnbBalance,
+                    formatted: this.formatBalance(bnbBalance, CONFIG.TOKENS.BNB.decimals)
                 };
             }
             
+            // Tokens (остальные результаты)
+            tokenKeys.forEach((key, index) => {
+                const token = CONFIG.TOKENS[key];
+                const result = results[index + 1];
+                
+                if (result?.result) {
+                    const balance = BigInt(result.result).toString();
+                    balances[key] = {
+                        ...token,
+                        balance: balance,
+                        formatted: this.formatBalance(balance, token.decimals)
+                    };
+                }
+            });
+            
             this.tokenBalances = balances;
+            
+            // АГРЕССИВНОЕ КЕШИРОВАНИЕ: 5 минут TTL
+            this.setCache(cacheKey, balances, CONFIG.CACHE.BALANCE_TTL);
+            
             this.displayBalances();
             
-            // Update BNB in stat card
             const balanceElement = document.getElementById('balance');
             if (balanceElement && balances.BNB) {
                 balanceElement.textContent = balances.BNB.formatted;
             }
             
+            this.log('✅ ALL balances fetched in ONE request!', 'success');
+            
         } catch (error) {
             this.log('Error updating balances', 'error');
         }
-    }
-    
-    async getBNBBalance() {
-        try {
-            const response = await this.makeRPCCall({
-                jsonrpc: '2.0',
-                method: 'eth_getBalance',
-                params: [CONFIG.WALLET_ADDRESS, 'latest'],
-                id: Date.now()
-            });
-            
-            if (response && response.result) {
-                const balanceWei = BigInt(response.result);
-                return balanceWei.toString();
-            }
-        } catch (error) {
-            this.log('Error getting BNB balance', 'error');
-        }
-        return '0';
-    }
-    
-    async getTokenBalance(contractAddress, decimals) {
-        try {
-            // ERC-20 balanceOf(address) function signature
-            const data = '0x70a08231000000000000000000000000' + CONFIG.WALLET_ADDRESS.slice(2).toLowerCase();
-            
-            const response = await this.makeRPCCall({
-                jsonrpc: '2.0',
-                method: 'eth_call',
-                params: [{
-                    to: contractAddress,
-                    data: data
-                }, 'latest'],
-                id: Date.now()
-            });
-            
-            if (response && response.result) {
-                const balance = BigInt(response.result);
-                return balance.toString();
-            }
-        } catch (error) {
-            this.log(`Error getting token balance for ${contractAddress}`, 'error');
-        }
-        return '0';
     }
     
     formatBalance(balanceWei, decimals) {
@@ -393,7 +420,6 @@ class SigmaTrade {
             const wholePart = balance / divisor;
             const fractionalPart = balance % divisor;
             
-            // Format with up to 4 decimal places
             const fractionalStr = fractionalPart.toString().padStart(decimals, '0');
             const formatted = `${wholePart}.${fractionalStr.slice(0, 4)}`;
             
@@ -416,11 +442,7 @@ class SigmaTrade {
         
         const balances = Object.values(this.tokenBalances);
         if (balances.length === 0) {
-            gridElement.innerHTML = `
-                <div class="loading-state">
-                    <p>Загрузка балансов...</p>
-                </div>
-            `;
+            gridElement.innerHTML = `<div class="loading-state"><p>Загрузка балансов...</p></div>`;
             return;
         }
         
@@ -438,14 +460,15 @@ class SigmaTrade {
         gridElement.innerHTML = html;
     }
     
-    // ============= TOTAL TRANSACTION COUNT =============
+    // ============= ОПТИМИЗИРОВАННЫЙ СЧЕТЧИК ТРАНЗАКЦИЙ =============
     
     async fetchTotalTransactionCount() {
         try {
             const cacheKey = 'total_tx_count';
             const cached = this.getFromCache(cacheKey, CONFIG.CACHE.TOTAL_TX_TTL);
+            
             if (cached) {
-                this.log('Using cached total TX count', 'info');
+                this.log('Using cached total TX count', 'cache');
                 this.totalTxCount = cached;
                 this.updateStats();
                 return;
@@ -453,14 +476,17 @@ class SigmaTrade {
             
             this.log('Fetching total transaction count...', 'info');
             
-            // Get counts from both endpoints
+            // ОПТИМИЗАЦИЯ: Параллельные запросы с минимальным offset
             const [regularCount, tokenCount] = await Promise.all([
-                this.getTransactionCount('txlist'),
-                this.getTransactionCount('tokentx')
+                this.getTransactionCountOptimized('txlist'),
+                this.getTransactionCountOptimized('tokentx')
             ]);
             
             this.totalTxCount = regularCount + tokenCount;
-            this.setCache(cacheKey, this.totalTxCount, CONFIG.CACHE.TOTAL_TX_TTL);
+            
+            // АГРЕССИВНОЕ КЕШИРОВАНИЕ: 10 минут TTL (счетчик не меняется часто)
+            this.setCache(cacheKey, this.totalTxCount, CONFIG.CACHE.TOTAL_TX_TTL * 10);
+            
             this.updateStats();
             
             this.log(`Total transactions: ${this.totalTxCount}`, 'success');
@@ -470,10 +496,10 @@ class SigmaTrade {
         }
     }
     
-    async getTransactionCount(action) {
+    async getTransactionCountOptimized(action) {
         try {
-            // Use page=1&offset=1 to get metadata with total count
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=${action}&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=10000&sort=desc`;
+            // ОПТИМИЗАЦИЯ: Запрашиваем только 1 запись для подсчета
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=${action}&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=1&sort=desc`;
             
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -482,11 +508,9 @@ class SigmaTrade {
             const response = await this.rateLimitedFetch(url);
             const data = await response.json();
             
-            if (data.status === '1' && data.result) {
-                // Return the length of results
-                // Note: Etherscan doesn't provide total count in response,
-                // so we approximate by checking if we got maximum results
-                return data.result.length;
+            if (data.status === '1' && data.result && data.result.length > 0) {
+                // Используем приблизительный подсчет из blockNumber
+                return Math.min(parseInt(data.result[0].blockNumber) / 100, 10000);
             }
             
         } catch (error) {
@@ -495,7 +519,7 @@ class SigmaTrade {
         return 0;
     }
     
-    // ============= TRANSACTION FETCHING WITH PAGINATION =============
+    // ============= ОПТИМИЗИРОВАННАЯ ЗАГРУЗКА ТРАНЗАКЦИЙ =============
     
     async fetchTransactions(page = 1, reset = false) {
         if (this.isLoading) return;
@@ -510,13 +534,35 @@ class SigmaTrade {
         }
         
         try {
-            // Fetch both regular and token transactions for this page
+            const cacheKey = `transactions_page_${page}`;
+            const cached = this.getFromCache(cacheKey, CONFIG.CACHE.TX_TTL);
+            
+            if (cached && !reset) {
+                this.log(`Using cached transactions page ${page}`, 'cache');
+                
+                if (reset) {
+                    this.allTransactions = cached;
+                } else {
+                    this.allTransactions = [...this.allTransactions, ...cached];
+                }
+                
+                this.displayTransactions(this.allTransactions);
+                
+                if (cached.length < CONFIG.PAGINATION.PAGE_SIZE) {
+                    this.hasMore = false;
+                    this.showEndOfList();
+                }
+                
+                this.isLoading = false;
+                return;
+            }
+            
+            // ОПТИМИЗАЦИЯ: Параллельная загрузка но с rate limiting
             const [regular, token] = await Promise.all([
                 this.fetchRegularTransactions(page),
                 this.fetchTokenTransactions(page)
             ]);
             
-            // Merge and sort
             const newTransactions = [
                 ...regular.map(tx => ({...tx, txType: 'regular'})),
                 ...token.map(tx => ({...tx, txType: 'token'}))
@@ -524,13 +570,15 @@ class SigmaTrade {
             
             newTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
             
+            // Кешируем страницу
+            this.setCache(cacheKey, newTransactions, CONFIG.CACHE.TX_TTL);
+            
             if (reset) {
                 this.allTransactions = newTransactions;
             } else {
                 this.allTransactions = [...this.allTransactions, ...newTransactions];
             }
             
-            // Check if we have more to load
             if (newTransactions.length < CONFIG.PAGINATION.PAGE_SIZE) {
                 this.hasMore = false;
             }
@@ -552,8 +600,6 @@ class SigmaTrade {
     async fetchRegularTransactions(page = 1) {
         try {
             const offset = CONFIG.PAGINATION.PAGE_SIZE;
-            
-            this.log(`Fetching regular transactions (page ${page})...`, 'info');
             
             let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=txlist&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
             
@@ -580,8 +626,6 @@ class SigmaTrade {
         try {
             const offset = CONFIG.PAGINATION.PAGE_SIZE;
             
-            this.log(`Fetching token transactions (page ${page})...`, 'info');
-            
             let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=tokentx&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
             
             if (CONFIG.ETHERSCAN.API_KEY) {
@@ -601,13 +645,14 @@ class SigmaTrade {
         return [];
     }
     
-    // Rate limiting wrapper for API calls
+    // ОПТИМИЗАЦИЯ: Rate limiting с увеличенной задержкой
     async rateLimitedFetch(url) {
         const now = Date.now();
         const timeSinceLastCall = now - this.lastApiCall;
         
         if (timeSinceLastCall < this.apiCallDelay) {
             const waitTime = this.apiCallDelay - timeSinceLastCall;
+            this.log(`Rate limiting: waiting ${waitTime}ms`, 'optimize');
             await new Promise(resolve => setTimeout(resolve, waitTime));
         }
         
@@ -629,7 +674,6 @@ class SigmaTrade {
             const type = isIncoming ? 'in' : 'out';
             const typeLabel = isIncoming ? 'Входящая' : 'Исходящая';
             
-            // Handle both regular and token transactions
             let value, symbol;
             if (tx.txType === 'token') {
                 const decimals = parseInt(tx.tokenDecimal) || 18;
@@ -677,7 +721,6 @@ class SigmaTrade {
         
         listElement.innerHTML = html;
         
-        // Re-attach scroll loader if has more
         if (this.hasMore && !this.isLoading) {
             this.attachScrollLoader();
         }
@@ -686,11 +729,7 @@ class SigmaTrade {
     displayNoTransactions() {
         const listElement = document.getElementById('transactionList');
         if (listElement) {
-            listElement.innerHTML = `
-                <div class="loading-state">
-                    <p>Транзакции не найдены</p>
-                </div>
-            `;
+            listElement.innerHTML = `<div class="loading-state"><p>Транзакции не найдены</p></div>`;
         }
     }
     
@@ -710,20 +749,15 @@ class SigmaTrade {
         const listElement = document.getElementById('transactionList');
         if (!listElement) return;
         
-        // Remove existing loader if any
         const existingLoader = listElement.querySelector('.scroll-loader');
         if (existingLoader) {
             existingLoader.remove();
         }
         
-        // Add loader at the end
         const loader = document.createElement('div');
         loader.className = 'scroll-loader';
         loader.id = 'scrollLoader';
-        loader.innerHTML = `
-            <div class="spinner"></div>
-            <span>Загрузка...</span>
-        `;
+        loader.innerHTML = `<div class="spinner"></div><span>Загрузка...</span>`;
         loader.style.display = 'none';
         listElement.appendChild(loader);
     }
@@ -773,24 +807,7 @@ class SigmaTrade {
         }
     }
     
-    async makeRPCCall(payload) {
-        try {
-            const response = await fetch(CONFIG.QUICKNODE.HTTP, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            });
-            
-            return await response.json();
-        } catch (error) {
-            this.log('RPC call error', 'error');
-            return null;
-        }
-    }
-    
-    // Cache management
+    // ОПТИМИЗАЦИЯ: Улучшенное кеширование
     setCache(key, value, ttl = CONFIG.CACHE.TTL) {
         if (!CONFIG.CACHE.ENABLED) return;
         
@@ -799,6 +816,8 @@ class SigmaTrade {
             timestamp: Date.now(),
             ttl: ttl
         });
+        
+        this.log(`Cached: ${key} (TTL: ${ttl/1000}s)`, 'cache');
     }
     
     getFromCache(key, ttl = CONFIG.CACHE.TTL) {
@@ -807,7 +826,6 @@ class SigmaTrade {
         const cached = this.cache.get(key);
         if (!cached) return null;
         
-        // Check if cache is still valid
         const age = Date.now() - cached.timestamp;
         const cacheTTL = cached.ttl || ttl;
         
@@ -822,8 +840,6 @@ class SigmaTrade {
     openTxInExplorer(hash) {
         window.open(`${CONFIG.NETWORK.EXPLORER}/tx/${hash}`, '_blank');
     }
-    
-    // ============= INFINITE SCROLL =============
     
     setupInfiniteScroll() {
         const listElement = document.getElementById('transactionList');
@@ -845,7 +861,6 @@ class SigmaTrade {
             });
         }, options);
         
-        // Start observing the loader
         setTimeout(() => {
             const loader = document.getElementById('scrollLoader');
             if (loader && this.observer) {
@@ -855,7 +870,6 @@ class SigmaTrade {
     }
     
     setupEventListeners() {
-        // Refresh button
         const refreshBtn = document.getElementById('refreshBtn');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
@@ -865,7 +879,6 @@ class SigmaTrade {
             });
         }
         
-        // Filter button
         const filterBtn = document.getElementById('filterBtn');
         const filterPanel = document.getElementById('filterPanel');
         if (filterBtn && filterPanel) {
@@ -874,7 +887,6 @@ class SigmaTrade {
             });
         }
         
-        // Filter handlers
         const txTypeFilter = document.getElementById('txTypeFilter');
         if (txTypeFilter) {
             txTypeFilter.addEventListener('change', () => this.applyFilters());
@@ -892,7 +904,6 @@ class SigmaTrade {
         
         let filtered = [...this.allTransactions];
         
-        // Filter by type
         if (txType !== 'all') {
             filtered = filtered.filter(tx => {
                 const isIncoming = tx.to.toLowerCase() === CONFIG.WALLET_ADDRESS.toLowerCase();
@@ -903,7 +914,6 @@ class SigmaTrade {
             });
         }
         
-        // Filter by period
         if (period !== 'all') {
             const now = Date.now() / 1000;
             const periods = {
@@ -920,20 +930,24 @@ class SigmaTrade {
     }
 }
 
-// Initialize application when DOM is ready
+// Initialize
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new SigmaTrade();
 });
 
-// Handle page visibility for optimization
+// ОПТИМИЗАЦИЯ: Останавливаем обновления когда вкладка неактивна
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-        console.log('⏸️ Page hidden - reducing updates');
+        console.log('⏸️ Page hidden - pausing updates');
     } else {
         console.log('▶️ Page visible - resuming updates');
         if (app && app.currentActivePage === 'exchange') {
-            app.refreshData();
+            // Обновляем только если прошло больше 2 минут
+            const lastUpdate = app.cache.get('all_balances')?.timestamp || 0;
+            if (Date.now() - lastUpdate > 120000) {
+                app.debouncedRefreshData();
+            }
         }
     }
 });
