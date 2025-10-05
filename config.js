@@ -13,8 +13,7 @@ const CONFIG = {
     ETHERSCAN: {
         BASE_URL: 'https://api.etherscan.io/v2/api',
         CHAIN_ID: 56, // BSC
-        // Note: API key should be added by user or fetched from backend
-        API_KEY: '' // Will be set if available
+        API_KEY: 'RF1Q8SCFHFD1EVAP5A4WCMIM4DREA7UNUH'
     },
     
     // Network settings
