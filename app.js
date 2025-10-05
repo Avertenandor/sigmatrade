@@ -1,4 +1,4 @@
-// SigmaTrade Application v5.0.0 - Точный подсчет TX + Визуализация ботов
+// SigmaTrade Application v4.1.0 - IndexedDB + Virtual Scrolling + Minification
 class SigmaTrade {
     constructor() {
         this.ws = null;
@@ -12,9 +12,16 @@ class SigmaTrade {
         this.isConnected = false;
         this.cache = new Map();
         this.lastApiCall = 0;
-        this.apiCallDelay = 6000; // 6 секунд между API вызовами (было 5)
+        this.apiCallDelay = 6000;
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
+        
+        // v4.1.0: IndexedDB
+        this.cacheDB = null;
+        this.cacheReady = false;
+        
+        // v4.1.0: Virtual Scrolling
+        this.virtualScroll = null;
         
         // Request batching queue
         this.requestQueue = [];
@@ -36,7 +43,21 @@ class SigmaTrade {
     }
     
     async init() {
-        this.log('Initializing SigmaTrade v5.0.0 - Optimized with accurate TX count...', 'info');
+        this.log('Initializing SigmaTrade v4.1.0 - IndexedDB + Virtual Scrolling...', 'info');
+        
+        // v4.1.0: Инициализация IndexedDB
+        try {
+            this.cacheDB = new CacheDB();
+            await this.cacheDB.init();
+            this.cacheReady = true;
+            this.log('IndexedDB cache ready', 'cache');
+            
+            // Cleanup старых записей
+            await this.cacheDB.cleanup();
+        } catch (error) {
+            this.log('IndexedDB not available, using Map fallback', 'warning');
+            this.cacheReady = false;
+        }
         
         this.initializeNavigation();
         this.initializeUI();
@@ -311,7 +332,7 @@ class SigmaTrade {
     async updateAllBalancesBatched() {
         try {
             const cacheKey = 'all_balances';
-            const cached = this.getFromCache(cacheKey, CONFIG.CACHE.BALANCE_TTL);
+            const cached = await this.getFromCache(cacheKey, CONFIG.CACHE.BALANCE_TTL);
             
             if (cached) {
                 this.log('Using cached balances', 'cache');
@@ -397,7 +418,7 @@ class SigmaTrade {
             this.tokenBalances = balances;
             
             // АГРЕССИВНОЕ КЕШИРОВАНИЕ: 5 минут TTL
-            this.setCache(cacheKey, balances, CONFIG.CACHE.BALANCE_TTL);
+            await this.setCache(cacheKey, balances, CONFIG.CACHE.BALANCE_TTL);
             
             this.displayBalances();
             
@@ -465,7 +486,7 @@ class SigmaTrade {
     async fetchTotalTransactionCount() {
         try {
             const cacheKey = 'total_tx_count';
-            const cached = this.getFromCache(cacheKey, CONFIG.CACHE.TOTAL_TX_TTL);
+            const cached = await this.getFromCache(cacheKey, CONFIG.CACHE.TOTAL_TX_TTL);
             
             if (cached) {
                 this.log('Using cached total TX count', 'cache');
@@ -485,7 +506,7 @@ class SigmaTrade {
             this.totalTxCount = regularCount + tokenCount;
             
             // АГРЕССИВНОЕ КЕШИРОВАНИЕ: 10 минут TTL (счетчик не меняется часто)
-            this.setCache(cacheKey, this.totalTxCount, CONFIG.CACHE.TOTAL_TX_TTL * 10);
+            await this.setCache(cacheKey, this.totalTxCount, CONFIG.CACHE.TOTAL_TX_TTL * 10);
             
             this.updateStats();
             
@@ -567,7 +588,7 @@ class SigmaTrade {
         
         try {
             const cacheKey = `transactions_page_${page}`;
-            const cached = this.getFromCache(cacheKey, CONFIG.CACHE.TX_TTL);
+            const cached = await this.getFromCache(cacheKey, CONFIG.CACHE.TX_TTL);
             
             if (cached && !reset) {
                 this.log(`Using cached transactions page ${page}`, 'cache');
@@ -603,7 +624,7 @@ class SigmaTrade {
             newTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
             
             // Кешируем страницу
-            this.setCache(cacheKey, newTransactions, CONFIG.CACHE.TX_TTL);
+            await this.setCache(cacheKey, newTransactions, CONFIG.CACHE.TX_TTL);
             
             if (reset) {
                 this.allTransactions = newTransactions;
@@ -701,61 +722,99 @@ class SigmaTrade {
             return;
         }
         
-        const html = transactions.map(tx => {
-            const isIncoming = tx.to.toLowerCase() === CONFIG.WALLET_ADDRESS.toLowerCase();
-            const type = isIncoming ? 'in' : 'out';
-            const typeLabel = isIncoming ? 'Входящая' : 'Исходящая';
-            
-            let value, symbol;
-            if (tx.txType === 'token') {
-                const decimals = parseInt(tx.tokenDecimal) || 18;
-                value = (parseInt(tx.value) / Math.pow(10, decimals)).toFixed(6);
-                symbol = tx.tokenSymbol || 'TOKEN';
-            } else {
-                value = (parseInt(tx.value) / 1e18).toFixed(6);
-                symbol = CONFIG.NETWORK.SYMBOL;
-            }
-            
-            const date = new Date(tx.timeStamp * 1000).toLocaleString('ru-RU');
-            const txTypeLabel = tx.txType === 'token' ? '🪙 Токен' : '💰 BNB';
-            
-            return `
-                <div class="tx-item" onclick="app.openTxInExplorer('${tx.hash}')">
-                    <div class="tx-header">
-                        <span class="tx-type ${type}">${typeLabel}</span>
-                        <span class="tx-hash">${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}</span>
-                    </div>
-                    <div class="tx-details">
-                        <div class="tx-detail">
-                            <span class="tx-detail-label">Тип</span>
-                            <span class="tx-detail-value">${txTypeLabel}</span>
-                        </div>
-                        <div class="tx-detail">
-                            <span class="tx-detail-label">Сумма</span>
-                            <span class="tx-detail-value">${value} ${symbol}</span>
-                        </div>
-                        <div class="tx-detail">
-                            <span class="tx-detail-label">От/Кому</span>
-                            <span class="tx-detail-value">${isIncoming ? tx.from.slice(0, 10) : tx.to.slice(0, 10)}...</span>
-                        </div>
-                        <div class="tx-detail">
-                            <span class="tx-detail-label">Блок</span>
-                            <span class="tx-detail-value">#${tx.blockNumber}</span>
-                        </div>
-                        <div class="tx-detail">
-                            <span class="tx-detail-label">Время</span>
-                            <span class="tx-detail-value">${date}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-        
-        listElement.innerHTML = html;
-        
-        if (this.hasMore && !this.isLoading) {
-            this.attachScrollLoader();
+        // v4.1.0: Уничтожить старый virtual scroll
+        if (this.virtualScroll) {
+            this.virtualScroll.destroy();
+            this.virtualScroll = null;
         }
+        
+        // Очистить контейнер
+        listElement.innerHTML = '';
+        
+        // v4.1.0: Создать virtual scroll
+        const itemHeight = 150; // Высота tx-item
+        
+        this.virtualScroll = new VirtualScroll(
+            listElement,
+            itemHeight,
+            (tx, index) => this.renderTransactionItem(tx, index)
+        );
+        
+        // Установить данные
+        this.virtualScroll.setItems(transactions);
+        
+        // Scroll loader
+        if (this.hasMore && !this.isLoading) {
+            const loader = document.createElement('div');
+            loader.className = 'scroll-loader';
+            loader.id = 'scrollLoader';
+            loader.innerHTML = `<div class="spinner"></div><span>Загрузка...</span>`;
+            loader.style.display = 'none';
+            
+            this.virtualScroll.attachScrollLoader(loader);
+            this.virtualScroll.setScrollEndCallback(() => {
+                if (this.hasMore && !this.isLoading && this.currentActivePage === 'exchange') {
+                    this.log('Loading more transactions...', 'info');
+                    this.currentPage++;
+                    this.fetchTransactions(this.currentPage);
+                }
+            });
+        }
+    }
+    
+    // v4.1.0: Рендер одной транзакции для Virtual Scroll
+    renderTransactionItem(tx, index) {
+        const div = document.createElement('div');
+        div.className = 'tx-item';
+        div.onclick = () => this.openTxInExplorer(tx.hash);
+        
+        const isIncoming = tx.to.toLowerCase() === CONFIG.WALLET_ADDRESS.toLowerCase();
+        const type = isIncoming ? 'in' : 'out';
+        const typeLabel = isIncoming ? 'Входящая' : 'Исходящая';
+        
+        let value, symbol;
+        if (tx.txType === 'token') {
+            const decimals = parseInt(tx.tokenDecimal) || 18;
+            value = (parseInt(tx.value) / Math.pow(10, decimals)).toFixed(6);
+            symbol = tx.tokenSymbol || 'TOKEN';
+        } else {
+            value = (parseInt(tx.value) / 1e18).toFixed(6);
+            symbol = CONFIG.NETWORK.SYMBOL;
+        }
+        
+        const date = new Date(tx.timeStamp * 1000).toLocaleString('ru-RU');
+        const txTypeLabel = tx.txType === 'token' ? '🪙 Токен' : '💰 BNB';
+        
+        div.innerHTML = `
+            <div class="tx-header">
+                <span class="tx-type ${type}">${typeLabel}</span>
+                <span class="tx-hash">${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}</span>
+            </div>
+            <div class="tx-details">
+                <div class="tx-detail">
+                    <span class="tx-detail-label">Тип</span>
+                    <span class="tx-detail-value">${txTypeLabel}</span>
+                </div>
+                <div class="tx-detail">
+                    <span class="tx-detail-label">Сумма</span>
+                    <span class="tx-detail-value">${value} ${symbol}</span>
+                </div>
+                <div class="tx-detail">
+                    <span class="tx-detail-label">От/Кому</span>
+                    <span class="tx-detail-value">${isIncoming ? tx.from.slice(0, 10) : tx.to.slice(0, 10)}...</span>
+                </div>
+                <div class="tx-detail">
+                    <span class="tx-detail-label">Блок</span>
+                    <span class="tx-detail-value">#${tx.blockNumber}</span>
+                </div>
+                <div class="tx-detail">
+                    <span class="tx-detail-label">Время</span>
+                    <span class="tx-detail-value">${date}</span>
+                </div>
+            </div>
+        `;
+        
+        return div;
     }
     
     displayNoTransactions() {
@@ -839,34 +898,66 @@ class SigmaTrade {
         }
     }
     
-    // ОПТИМИЗАЦИЯ: Улучшенное кеширование
-    setCache(key, value, ttl = CONFIG.CACHE.TTL) {
+    // v4.1.0: Улучшенное кеширование с IndexedDB
+    async setCache(key, value, ttl = CONFIG.CACHE.TTL) {
         if (!CONFIG.CACHE.ENABLED) return;
         
+        // Memory cache (быстро)
         this.cache.set(key, {
             value: value,
             timestamp: Date.now(),
             ttl: ttl
         });
         
-        this.log(`Cached: ${key} (TTL: ${ttl/1000}s)`, 'cache');
+        // IndexedDB cache (персистентно)
+        if (this.cacheReady) {
+            try {
+                await this.cacheDB.set(key, value, ttl);
+                this.log(`💾 Cached to IndexedDB: ${key} (TTL: ${ttl/1000}s)`, 'cache');
+            } catch (error) {
+                this.log('Failed to cache to IndexedDB', 'error');
+            }
+        }
     }
     
-    getFromCache(key, ttl = CONFIG.CACHE.TTL) {
+    async getFromCache(key, ttl = CONFIG.CACHE.TTL) {
         if (!CONFIG.CACHE.ENABLED) return null;
         
+        // Memory cache сначала
         const cached = this.cache.get(key);
-        if (!cached) return null;
-        
-        const age = Date.now() - cached.timestamp;
-        const cacheTTL = cached.ttl || ttl;
-        
-        if (age > cacheTTL) {
-            this.cache.delete(key);
-            return null;
+        if (cached) {
+            const age = Date.now() - cached.timestamp;
+            const cacheTTL = cached.ttl || ttl;
+            
+            if (age <= cacheTTL) {
+                this.log(`💾 Cache HIT (memory): ${key}`, 'cache');
+                return cached.value;
+            } else {
+                this.cache.delete(key);
+            }
         }
         
-        return cached.value;
+        // IndexedDB потом
+        if (this.cacheReady) {
+            try {
+                const value = await this.cacheDB.get(key, ttl);
+                if (value) {
+                    // Восстановить в memory
+                    this.cache.set(key, {
+                        value: value,
+                        timestamp: Date.now(),
+                        ttl: ttl
+                    });
+                    this.log(`💾 Cache HIT (IndexedDB): ${key}`, 'cache');
+                    return value;
+                }
+            } catch (error) {
+                this.log('Failed to read from IndexedDB', 'error');
+            }
+        }
+        
+        this.log(`💾 Cache MISS: ${key}`, 'cache');
+        return null;
     }
     
     openTxInExplorer(hash) {
