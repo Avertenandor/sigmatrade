@@ -1,4 +1,4 @@
-// SigmaTrade Application v8.0.0 - Multi-Wallet Support
+// SigmaTrade Application v10.1.0 - Multi-Wallet Fixed
 class SigmaTrade {
     constructor() {
         this.ws = null;
@@ -16,47 +16,31 @@ class SigmaTrade {
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
         
-        // v4.1.0: IndexedDB
         this.cacheDB = null;
         this.cacheReady = false;
-        
-        // v4.1.0: Virtual Scrolling
         this.virtualScroll = null;
-        
-        // Request batching queue
         this.requestQueue = [];
         this.isBatchProcessing = false;
-        
-        // Pagination state
         this.currentPage = 1;
         this.isLoading = false;
         this.hasMore = true;
         this.observer = null;
-        
-        // Current active page
         this.currentActivePage = 'exchange';
-        
-        // 🆕 v8.0.0: Multi-Wallet Support
         this.currentWalletId = CONFIG.MULTI_WALLET.DEFAULT_WALLET;
-        this.walletData = {}; // Данные для каждого кошелька
-        
-        // Debounce timers
+        this.walletData = {};
         this.debounceTimers = {};
         
         this.init();
     }
     
     async init() {
-        this.log('Initializing SigmaTrade v8.0.0 - Multi-Wallet Support...', 'info');
+        this.log('Initializing SigmaTrade v10.1.0 - Multi-Wallet Fixed...', 'info');
         
-        // v4.1.0: Инициализация IndexedDB
         try {
             this.cacheDB = new CacheDB();
             await this.cacheDB.init();
             this.cacheReady = true;
             this.log('IndexedDB cache ready', 'cache');
-            
-            // Cleanup старых записей
             await this.cacheDB.cleanup();
         } catch (error) {
             this.log('IndexedDB not available, using Map fallback', 'warning');
@@ -66,8 +50,11 @@ class SigmaTrade {
         this.initializeNavigation();
         this.initializeUI();
         
-        // Connect ONLY if on exchange page
-        if (window.location.hash === '#exchange' || !window.location.hash) {
+        // Инициализация для любого активного кошелька
+        const hash = window.location.hash.slice(1) || 'exchange';
+        if (CONFIG.WALLETS[hash]?.address) {
+            this.currentWalletId = hash;
+            this.currentActivePage = hash;
             await this.connectWebSocket();
             await this.startMonitoring();
         }
@@ -76,8 +63,6 @@ class SigmaTrade {
         this.setupInfiniteScroll();
         this.handleHashChange();
     }
-    
-    // ============= NAVIGATION =============
     
     initializeNavigation() {
         const navTabs = document.querySelectorAll('.nav-tab');
@@ -142,20 +127,17 @@ class SigmaTrade {
         });
         
         window.location.hash = pageName;
-        
         this.currentActivePage = pageName;
         
-        // 🆕 v8.0.0: Автоматическое переключение кошелька при смене страницы
+        // Переключение кошелька и перезапуск мониторинга
         if (CONFIG.MULTI_WALLET.AUTO_SWITCH && CONFIG.WALLETS[pageName]) {
-            if (this.currentWalletId !== pageName) {
+            if (this.currentWalletId !== pageName && CONFIG.WALLETS[pageName]?.address) {
                 this.switchWallet(pageName);
+                if (!this.ws) {
+                    this.connectWebSocket();
+                }
+                this.startMonitoring();
             }
-        }
-        
-        // Lazy connect WebSocket только при переходе на активную страницу с адресом
-        if (CONFIG.WALLETS[pageName]?.address && !this.ws) {
-            this.connectWebSocket();
-            this.startMonitoring();
         }
         
         this.log(`Switched to page: ${pageName}`, 'info');
@@ -174,12 +156,10 @@ class SigmaTrade {
         console.log(`${emoji[type]} ${message}`);
     }
     
-    // 🆕 v8.0.0: Получить текущий активный кошелек
     getCurrentWallet() {
         return CONFIG.WALLETS[this.currentWalletId];
     }
     
-    // 🆕 v8.0.0: Переключить кошелек
     switchWallet(walletId) {
         if (!CONFIG.WALLETS[walletId]) {
             this.log(`Invalid wallet ID: ${walletId}`, 'error');
@@ -193,17 +173,11 @@ class SigmaTrade {
         
         this.log(`Switching to wallet: ${walletId}`, 'info');
         this.currentWalletId = walletId;
-        
-        // Обновить UI
         this.updateWalletInfo();
-        
-        // Очистить данные
         this.transactions = [];
         this.allTransactions = [];
         this.tokenBalances = {};
         this.totalTxCount = 0;
-        
-        // Перезагрузить данные
         this.currentPage = 1;
         this.hasMore = true;
         this.showLoading();
@@ -224,7 +198,6 @@ class SigmaTrade {
         this.showLoading();
     }
     
-    // 🆕 v8.0.0: Обновить информацию о кошельке в UI
     updateWalletInfo() {
         const wallet = this.getCurrentWallet();
         
@@ -235,7 +208,6 @@ class SigmaTrade {
             walletShort.title = `${wallet.name}: ${addr}`;
         }
         
-        // 🎨 v9.0.0: Использовать data-атрибут вместо inline style
         const networkStatus = document.getElementById('networkStatus');
         if (networkStatus) {
             networkStatus.setAttribute('data-bot-type', this.currentWalletId);
@@ -255,7 +227,7 @@ class SigmaTrade {
     }
     
     async connectWebSocket() {
-        if (this.ws) return; // Уже подключен
+        if (this.ws) return;
         
         try {
             this.log('Connecting to WebSocket...', 'network');
@@ -284,8 +256,8 @@ class SigmaTrade {
                 this.isConnected = false;
                 this.updateNetworkStatus(false);
                 
-                // Reconnect только если на exchange page
-                if (this.reconnectAttempts < this.maxReconnectAttempts && this.currentActivePage === 'exchange') {
+                const wallet = this.getCurrentWallet();
+                if (this.reconnectAttempts < this.maxReconnectAttempts && wallet?.address) {
                     const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
                     this.reconnectAttempts++;
                     this.log(`Reconnecting in ${delay/1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`, 'warning');
@@ -322,10 +294,10 @@ class SigmaTrade {
                 this.currentBlock = blockNumber;
                 this.updateBlockNumber(blockNumber);
                 
-                // ОПТИМИЗАЦИЯ: Проверка каждые 20 блоков (~60 сек) вместо 10
                 if (blockNumber % 20 === 0) {
                     this.invalidateCache();
-                    if (this.currentActivePage === 'exchange') {
+                    const wallet = this.getCurrentWallet();
+                    if (wallet?.address) {
                         this.debouncedRefreshData();
                     }
                 }
@@ -336,7 +308,6 @@ class SigmaTrade {
         }
     }
     
-    // ОПТИМИЗАЦИЯ: Debounced refresh для избежания дублирующих запросов
     debouncedRefreshData() {
         if (this.debounceTimers.refresh) {
             clearTimeout(this.debounceTimers.refresh);
@@ -344,7 +315,7 @@ class SigmaTrade {
         
         this.debounceTimers.refresh = setTimeout(() => {
             this.refreshData();
-        }, 2000); // 2 секунды задержка
+        }, 2000);
     }
     
     invalidateCache() {
@@ -357,31 +328,33 @@ class SigmaTrade {
     }
     
     async startMonitoring() {
-        if (this.currentActivePage !== 'exchange') return;
+        const wallet = this.getCurrentWallet();
+        if (!wallet.address) {
+            this.log(`Cannot start monitoring - no address for ${this.currentWalletId}`, 'warning');
+            return;
+        }
         
-        // ОПТИМИЗАЦИЯ: Загружаем только критичные данные сразу
         await this.fetchTransactions(1);
         
-        // Балансы и счетчики загружаем с задержкой
         setTimeout(() => {
             this.updateAllBalancesBatched();
             this.fetchTotalTransactionCount();
         }, 1000);
         
-        // ОПТИМИЗАЦИЯ: Обновления каждые 5 минут вместо 1 минуты
         setInterval(() => {
-            if (this.currentActivePage === 'exchange' && !document.hidden) {
+            const currentWallet = this.getCurrentWallet();
+            if (currentWallet.address && !document.hidden) {
                 this.updateAllBalancesBatched();
             }
-        }, CONFIG.INTERVALS.BALANCE_UPDATE * 5); // x5 реже!
+        }, CONFIG.INTERVALS.BALANCE_UPDATE * 5);
     }
     
     async refreshData() {
-        if (this.currentActivePage !== 'exchange') return;
+        const wallet = this.getCurrentWallet();
+        if (!wallet.address) return;
         
         this.log('Refreshing data...', 'optimize');
         
-        // ОПТИМИЗАЦИЯ: Параллельные запросы но с батчингом
         await Promise.all([
             this.updateAllBalancesBatched(),
             this.fetchTotalTransactionCount()
@@ -391,8 +364,6 @@ class SigmaTrade {
         this.hasMore = true;
         await this.fetchTransactions(1, true);
     }
-    
-    // ============= ОПТИМИЗИРОВАННЫЕ БАЛАНСЫ (BATCHED RPC) =============
     
     async updateAllBalancesBatched() {
         try {
@@ -413,17 +384,14 @@ class SigmaTrade {
             
             this.log('Fetching ALL balances in BATCH...', 'optimize');
             
-            // 🆕 v8.0.0: Используем адрес текущего кошелька
             const wallet = this.getCurrentWallet();
             if (!wallet.address) {
                 this.log('Current wallet has no address', 'warning');
                 return;
             }
             
-            // ОПТИМИЗАЦИЯ: Батчинг всех RPC запросов в один
             const batchRequests = [];
             
-            // BNB balance
             batchRequests.push({
                 jsonrpc: '2.0',
                 method: 'eth_getBalance',
@@ -431,7 +399,6 @@ class SigmaTrade {
                 id: 1
             });
             
-            // Token balances
             let id = 2;
             const tokenKeys = Object.keys(CONFIG.TOKENS).filter(key => !CONFIG.TOKENS[key].isNative);
             
@@ -450,7 +417,6 @@ class SigmaTrade {
                 });
             }
             
-            // КРИТИЧЕСКАЯ ОПТИМИЗАЦИЯ: Один запрос вместо 4+!
             const response = await fetch(CONFIG.QUICKNODE.HTTP, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -458,11 +424,8 @@ class SigmaTrade {
             });
             
             const results = await response.json();
-            
-            // Parse results
             const balances = {};
             
-            // BNB (первый результат)
             if (results[0]?.result) {
                 const bnbBalance = BigInt(results[0].result).toString();
                 balances.BNB = {
@@ -472,7 +435,6 @@ class SigmaTrade {
                 };
             }
             
-            // Tokens (остальные результаты)
             tokenKeys.forEach((key, index) => {
                 const token = CONFIG.TOKENS[key];
                 const result = results[index + 1];
@@ -488,10 +450,7 @@ class SigmaTrade {
             });
             
             this.tokenBalances = balances;
-            
-            // АГРЕССИВНОЕ КЕШИРОВАНИЕ: 5 минут TTL
             await this.setCache(cacheKey, balances, CONFIG.CACHE.BALANCE_TTL);
-            
             this.displayBalances();
             
             const balanceElement = document.getElementById('balance');
@@ -553,8 +512,6 @@ class SigmaTrade {
         gridElement.innerHTML = html;
     }
     
-    // ============= ОПТИМИЗИРОВАННЫЙ СЧЕТЧИК ТРАНЗАКЦИЙ =============
-    
     async fetchTotalTransactionCount() {
         try {
             const cacheKey = 'total_tx_count';
@@ -569,19 +526,14 @@ class SigmaTrade {
             
             this.log('Fetching total transaction count...', 'info');
             
-            // ОПТИМИЗАЦИЯ: Параллельные запросы с минимальным offset
             const [regularCount, tokenCount] = await Promise.all([
                 this.getTransactionCountOptimized('txlist'),
                 this.getTransactionCountOptimized('tokentx')
             ]);
             
             this.totalTxCount = regularCount + tokenCount;
-            
-            // АГРЕССИВНОЕ КЕШИРОВАНИЕ: 10 минут TTL (счетчик не меняется часто)
             await this.setCache(cacheKey, this.totalTxCount, CONFIG.CACHE.TOTAL_TX_TTL * 10);
-            
             this.updateStats();
-            
             this.log(`Total transactions: ${this.totalTxCount}`, 'success');
             
         } catch (error) {
@@ -591,11 +543,12 @@ class SigmaTrade {
     
     async getTransactionCountOptimized(action) {
         try {
-            // УЛУЧШЕННЫЙ МЕТОД: Бинарный поиск для точного подсчета
             this.log(`Counting ${action} transactions...`, 'info');
             
-            // Шаг 1: Пробуем получить много транзакций за раз
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=${action}&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc`;
+            const wallet = this.getCurrentWallet();
+            if (!wallet.address) return 0;
+            
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=${action}&address=${wallet.address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc`;
             
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -611,29 +564,22 @@ class SigmaTrade {
                     return 0;
                 }
                 
-                // Если получили ровно 10000, значит транзакций больше
-                // В таком случае делаем еще один запрос для более точного подсчета
                 if (count === 10000) {
                     this.log(`More than 10000 ${action} - using approximation`, 'warning');
-                    // Берем последнюю транзакцию и экстраполируем
                     const lastTx = data.result[data.result.length - 1];
                     const lastBlock = parseInt(lastTx.blockNumber);
                     const currentBlock = this.currentBlock || lastBlock;
                     
-                    // Примерная оценка: 10000 TX за (currentBlock - lastBlock) блоков
-                    // BSC: ~3 сек на блок, ~28800 блоков в день
                     const blocksPerDay = 28800;
                     const daysPassed = (currentBlock - lastBlock) / blocksPerDay;
                     const txPerDay = 10000 / daysPassed;
                     
-                    // Экстраполируем на весь период
                     const totalBlocks = currentBlock - (lastTx.blockNumber || currentBlock - 1000000);
                     const estimatedTotal = Math.floor((totalBlocks / blocksPerDay) * txPerDay);
                     
                     return Math.max(10000, Math.min(estimatedTotal, 50000));
                 }
                 
-                // Если меньше 10000 - это точное количество
                 this.log(`Exact count for ${action}: ${count}`, 'success');
                 return count;
             }
@@ -643,8 +589,6 @@ class SigmaTrade {
         }
         return 0;
     }
-    
-    // ============= ОПТИМИЗИРОВАННАЯ ЗАГРУЗКА ТРАНЗАКЦИЙ =============
     
     async fetchTransactions(page = 1, reset = false) {
         if (this.isLoading) return;
@@ -682,7 +626,6 @@ class SigmaTrade {
                 return;
             }
             
-            // ОПТИМИЗАЦИЯ: Параллельная загрузка но с rate limiting
             const [regular, token] = await Promise.all([
                 this.fetchRegularTransactions(page),
                 this.fetchTokenTransactions(page)
@@ -694,8 +637,6 @@ class SigmaTrade {
             ];
             
             newTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
-            
-            // Кешируем страницу
             await this.setCache(cacheKey, newTransactions, CONFIG.CACHE.TX_TTL);
             
             if (reset) {
@@ -776,7 +717,6 @@ class SigmaTrade {
         return [];
     }
     
-    // ОПТИМИЗАЦИЯ: Rate limiting с увеличенной задержкой
     async rateLimitedFetch(url) {
         const now = Date.now();
         const timeSinceLastCall = now - this.lastApiCall;
@@ -800,17 +740,14 @@ class SigmaTrade {
             return;
         }
         
-        // v4.1.0: Уничтожить старый virtual scroll
         if (this.virtualScroll) {
             this.virtualScroll.destroy();
             this.virtualScroll = null;
         }
         
-        // Очистить контейнер
         listElement.innerHTML = '';
         
-        // v4.1.0: Создать virtual scroll
-        const itemHeight = 150; // Высота tx-item
+        const itemHeight = 150;
         
         this.virtualScroll = new VirtualScroll(
             listElement,
@@ -818,10 +755,8 @@ class SigmaTrade {
             (tx, index) => this.renderTransactionItem(tx, index)
         );
         
-        // Установить данные
         this.virtualScroll.setItems(transactions);
         
-        // Scroll loader
         if (this.hasMore && !this.isLoading) {
             const loader = document.createElement('div');
             loader.className = 'scroll-loader';
@@ -831,7 +766,8 @@ class SigmaTrade {
             
             this.virtualScroll.attachScrollLoader(loader);
             this.virtualScroll.setScrollEndCallback(() => {
-                if (this.hasMore && !this.isLoading && this.currentActivePage === 'exchange') {
+                const wallet = this.getCurrentWallet();
+                if (this.hasMore && !this.isLoading && wallet?.address) {
                     this.log('Loading more transactions...', 'info');
                     this.currentPage++;
                     this.fetchTransactions(this.currentPage);
@@ -840,7 +776,6 @@ class SigmaTrade {
         }
     }
     
-    // v4.1.0: Рендер одной транзакции для Virtual Scroll
     renderTransactionItem(tx, index) {
         const div = document.createElement('div');
         div.className = 'tx-item';
@@ -915,23 +850,6 @@ class SigmaTrade {
         }
     }
     
-    attachScrollLoader() {
-        const listElement = document.getElementById('transactionList');
-        if (!listElement) return;
-        
-        const existingLoader = listElement.querySelector('.scroll-loader');
-        if (existingLoader) {
-            existingLoader.remove();
-        }
-        
-        const loader = document.createElement('div');
-        loader.className = 'scroll-loader';
-        loader.id = 'scrollLoader';
-        loader.innerHTML = `<div class="spinner"></div><span>Загрузка...</span>`;
-        loader.style.display = 'none';
-        listElement.appendChild(loader);
-    }
-    
     showEndOfList() {
         const listElement = document.getElementById('transactionList');
         if (!listElement) return;
@@ -977,18 +895,15 @@ class SigmaTrade {
         }
     }
     
-    // v4.1.0: Улучшенное кеширование с IndexedDB
     async setCache(key, value, ttl = CONFIG.CACHE.TTL) {
         if (!CONFIG.CACHE.ENABLED) return;
         
-        // Memory cache (быстро)
         this.cache.set(key, {
             value: value,
             timestamp: Date.now(),
             ttl: ttl
         });
         
-        // IndexedDB cache (персистентно)
         if (this.cacheReady) {
             try {
                 await this.cacheDB.set(key, value, ttl);
@@ -1002,7 +917,6 @@ class SigmaTrade {
     async getFromCache(key, ttl = CONFIG.CACHE.TTL) {
         if (!CONFIG.CACHE.ENABLED) return null;
         
-        // Memory cache сначала
         const cached = this.cache.get(key);
         if (cached) {
             const age = Date.now() - cached.timestamp;
@@ -1016,12 +930,10 @@ class SigmaTrade {
             }
         }
         
-        // IndexedDB потом
         if (this.cacheReady) {
             try {
                 const value = await this.cacheDB.get(key, ttl);
                 if (value) {
-                    // Восстановить в memory
                     this.cache.set(key, {
                         value: value,
                         timestamp: Date.now(),
@@ -1055,7 +967,8 @@ class SigmaTrade {
         
         this.observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && this.hasMore && !this.isLoading && this.currentActivePage === 'exchange') {
+                const wallet = this.getCurrentWallet();
+                if (entry.isIntersecting && this.hasMore && !this.isLoading && wallet?.address) {
                     this.log('Loading more transactions...', 'info');
                     this.currentPage++;
                     this.fetchTransactions(this.currentPage);
@@ -1133,20 +1046,17 @@ class SigmaTrade {
     }
 }
 
-// Initialize
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new SigmaTrade();
 });
 
-// ОПТИМИЗАЦИЯ: Останавливаем обновления когда вкладка неактивна
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         console.log('⏸️ Page hidden - pausing updates');
     } else {
         console.log('▶️ Page visible - resuming updates');
-        if (app && app.currentActivePage === 'exchange') {
-            // Обновляем только если прошло больше 2 минут
+        if (app && app.getCurrentWallet()?.address) {
             const lastUpdate = app.cache.get('all_balances')?.timestamp || 0;
             if (Date.now() - lastUpdate > 120000) {
                 app.debouncedRefreshData();
