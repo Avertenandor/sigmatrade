@@ -1,4 +1,4 @@
-// Configuration for SigmaTrade v8.0.0 - Multi-Wallet Support
+// Configuration for SigmaTrade v10.0.0 - Updated MEV Bot Address
 const CONFIG = {
     // 🆕 v8.0.0: МУЛЬТИКОШЕЛЕК - Семейство ботов Sigma Trade
     WALLETS: {
@@ -14,7 +14,7 @@ const CONFIG = {
         mev: {
             id: 'mev',
             name: 'МЭВ-бот',
-            address: '0xd5c6f3B71bCcEb2eF8332bd8225f5F39E56A122c',
+            address: '0x3D81936910786DcF122FBc187a052570775BcFdc',
             icon: '💼',
             color: '#F59E0B', // Оранжевый
             status: 'active', // Теперь активен!
