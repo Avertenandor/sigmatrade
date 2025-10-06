@@ -18,21 +18,12 @@ class VirtualScroll {
     }
     
     init() {
+        // 🎨 v9.0.0: Использовать CSS классы вместо inline стилей
         this.viewport = document.createElement('div');
         this.viewport.className = 'virtual-scroll-viewport';
-        this.viewport.style.cssText = `
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            position: relative;
-        `;
         
         this.content = document.createElement('div');
         this.content.className = 'virtual-scroll-content';
-        this.content.style.cssText = `
-            position: relative;
-            width: 100%;
-        `;
         
         this.viewport.appendChild(this.content);
         this.container.appendChild(this.viewport);
@@ -44,8 +35,10 @@ class VirtualScroll {
     setItems(items) {
         this.items = items;
         
+        // 🎨 v9.0.0: Использовать data-атрибут + CSS вместо inline style
         const totalHeight = items.length * this.itemHeight;
-        this.content.style.height = totalHeight + 'px';
+        this.content.setAttribute('data-height', totalHeight);
+        this.content.style.height = `${totalHeight}px`; // Необходимо для scroll - динамическое значение
         
         this.update();
     }
@@ -85,13 +78,12 @@ class VirtualScroll {
         
         this.visibleItems.forEach((item, index) => {
             const element = this.renderItem(item, this.startIndex + index);
-            element.style.cssText = `
-                position: absolute;
-                top: ${offsetY + (index * this.itemHeight)}px;
-                width: 100%;
-                left: 0;
-                box-sizing: border-box;
-            `;
+            
+            // 🎨 v9.0.0: Использовать CSS класс + data-атрибут вместо inline style
+            element.classList.add('virtual-scroll-item');
+            const itemTop = offsetY + (index * this.itemHeight);
+            // Исключение: transform необходим для virtual scroll - динамическое позиционирование
+            element.style.transform = `translateY(${itemTop}px)`;
             
             fragment.appendChild(element);
         });

@@ -235,10 +235,10 @@ class SigmaTrade {
             walletShort.title = `${wallet.name}: ${addr}`;
         }
         
-        // Обновить цвет статуса в соответствии с ботом
+        // 🎨 v9.0.0: Использовать data-атрибут вместо inline style
         const networkStatus = document.getElementById('networkStatus');
-        if (networkStatus && wallet.color) {
-            networkStatus.style.setProperty('--bot-color', wallet.color);
+        if (networkStatus) {
+            networkStatus.setAttribute('data-bot-type', this.currentWalletId);
         }
     }
     

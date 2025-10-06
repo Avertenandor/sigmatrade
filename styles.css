@@ -1447,6 +1447,39 @@ body::before {
     }
 }
 
+/* ========== VIRTUAL SCROLL STYLES (NO INLINE) ========== */
+.virtual-scroll-viewport {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.virtual-scroll-content {
+    position: relative;
+    width: 100%;
+}
+
+.virtual-scroll-item {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    box-sizing: border-box;
+}
+
+/* ========== BOT TYPE INDICATORS (NO INLINE) ========== */
+.status-dot[data-bot-type="exchange"] {
+    --bot-color: #00ff88;
+}
+
+.status-dot[data-bot-type="mev"] {
+    --bot-color: #ffd700;
+}
+
+.status-dot[data-bot-type="arbitrage"] {
+    --bot-color: #00bfff;
+}
+
 /* ========== PRINT STYLES ========== */
 @media print {
     body::before {
