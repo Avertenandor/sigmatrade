@@ -307,6 +307,20 @@
                     </div>
                 </div>
 
+                <!-- Token Balances Section -->
+                <div class="balances-section">
+                    <h2 class="section-title">
+                        <span class="icon">💰</span>
+                        Текущие балансы кошелька
+                    </h2>
+                    <div class="balances-grid" id="mevBalancesGrid">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Загрузка балансов...</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- MEV Stats -->
                 <div class="mev-stats-section">
                     <h2 class="section-title">
@@ -315,20 +329,20 @@
                     </h2>
                     <div class="stats-bar">
                         <div class="stat-card mev-accent">
-                            <div class="stat-label">Извлечено за сегодня</div>
-                            <div class="stat-value">Скоро</div>
+                            <div class="stat-label">Всего транзакций</div>
+                            <div class="stat-value" id="mevTotalTx">0</div>
                         </div>
                         <div class="stat-card mev-accent">
-                            <div class="stat-label">Успешных операций</div>
-                            <div class="stat-value">Скоро</div>
+                            <div class="stat-label">Последний блок</div>
+                            <div class="stat-value" id="mevLastBlock">-</div>
                         </div>
                         <div class="stat-card mev-accent">
-                            <div class="stat-label">Средняя прибыль</div>
-                            <div class="stat-value">Скоро</div>
+                            <div class="stat-label">Баланс BNB</div>
+                            <div class="stat-value" id="mevBalance">0.00</div>
                         </div>
                         <div class="stat-card mev-accent">
-                            <div class="stat-label">Gas эффективность</div>
-                            <div class="stat-value">Скоро</div>
+                            <div class="stat-label">Статус API</div>
+                            <div class="stat-value" id="mevApiStatus">-</div>
                         </div>
                     </div>
                 </div>
@@ -338,13 +352,43 @@
                     <div class="window-header">
                         <h2>
                             <span class="icon">💼</span>
-                            Недавние МЭВ-операции
+                            История МЭВ-операций
                         </h2>
+                        <div class="window-controls">
+                            <button class="btn-control" id="mevRefreshBtn" title="Обновить">
+                                <span class="icon">🔄</span>
+                            </button>
+                            <button class="btn-control" id="mevFilterBtn" title="Фильтры">
+                                <span class="icon">🔍</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="transaction-list">
+                    
+                    <div class="filters hidden" id="mevFilterPanel">
+                        <div class="filter-group">
+                            <label>Тип транзакции:</label>
+                            <select id="mevTxTypeFilter">
+                                <option value="all">Все</option>
+                                <option value="in">Входящие</option>
+                                <option value="out">Исходящие</option>
+                                <option value="token">Токены</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Период:</label>
+                            <select id="mevPeriodFilter">
+                                <option value="24h">24 часа</option>
+                                <option value="7d">7 дней</option>
+                                <option value="30d">30 дней</option>
+                                <option value="all">Все время</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="transaction-list" id="mevTransactionList">
                         <div class="loading-state">
-                            <p>Мониторинг МЭВ-возможностей...</p>
-                            <p class="text-secondary">Данные скоро будут доступны</p>
+                            <div class="spinner"></div>
+                            <p>Загрузка транзакций...</p>
                         </div>
                     </div>
                 </div>
@@ -433,7 +477,7 @@
                     <a href="#" class="footer-link">API</a>
                     <a href="#" class="footer-link">Поддержка</a>
                 </div>
-                <div class="footer-version">v11.0.0</div>
+                <div class="footer-version">v11.1.0</div>
             </div>
         </div>
     </footer>

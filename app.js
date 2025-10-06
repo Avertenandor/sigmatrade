@@ -215,7 +215,8 @@ class SigmaTrade {
     }
     
     showLoading() {
-        const listElement = document.getElementById('transactionList');
+        const listId = this.currentActivePage === 'mev' ? 'mevTransactionList' : 'transactionList';
+        const listElement = document.getElementById(listId);
         if (listElement) {
             listElement.innerHTML = `
                 <div class="loading-state">
@@ -454,8 +455,13 @@ class SigmaTrade {
             this.displayBalances();
             
             const balanceElement = document.getElementById('balance');
+            const mevBalanceElement = document.getElementById('mevBalance');
+            
             if (balanceElement && balances.BNB) {
                 balanceElement.textContent = balances.BNB.formatted;
+            }
+            if (mevBalanceElement && balances.BNB) {
+                mevBalanceElement.textContent = balances.BNB.formatted;
             }
             
             this.log('✅ ALL balances fetched in ONE request!', 'success');
@@ -489,7 +495,9 @@ class SigmaTrade {
     }
     
     displayBalances() {
-        const gridElement = document.getElementById('balancesGrid');
+        // Отображаем балансы на текущей странице
+        const gridId = this.currentActivePage === 'mev' ? 'mevBalancesGrid' : 'balancesGrid';
+        const gridElement = document.getElementById(gridId);
         if (!gridElement) return;
         
         const balances = Object.values(this.tokenBalances);
@@ -732,7 +740,9 @@ class SigmaTrade {
     }
     
     displayTransactions(transactions) {
-        const listElement = document.getElementById('transactionList');
+        // Отображаем транзакции на текущей странице
+        const listId = this.currentActivePage === 'mev' ? 'mevTransactionList' : 'transactionList';
+        const listElement = document.getElementById(listId);
         if (!listElement) return;
         
         if (!transactions || transactions.length === 0) {
@@ -840,7 +850,8 @@ class SigmaTrade {
     }
     
     displayNoTransactions() {
-        const listElement = document.getElementById('transactionList');
+        const listId = this.currentActivePage === 'mev' ? 'mevTransactionList' : 'transactionList';
+        const listElement = document.getElementById(listId);
         if (listElement) {
             listElement.innerHTML = `<div class="loading-state"><p>Транзакции не найдены</p></div>`;
         }
@@ -869,21 +880,39 @@ class SigmaTrade {
     }
     
     updateStats() {
+        // Обновляем статистику на всех страницах
         const totalTxElement = document.getElementById('totalTx');
+        const mevTotalTxElement = document.getElementById('mevTotalTx');
+        
         if (totalTxElement) {
             totalTxElement.textContent = this.totalTxCount.toLocaleString('ru-RU');
         }
+        if (mevTotalTxElement) {
+            mevTotalTxElement.textContent = this.totalTxCount.toLocaleString('ru-RU');
+        }
         
         const apiStatusElement = document.getElementById('apiStatus');
+        const mevApiStatusElement = document.getElementById('mevApiStatus');
+        
+        const statusText = this.isConnected ? 'Online' : 'Offline';
         if (apiStatusElement) {
-            apiStatusElement.textContent = this.isConnected ? 'Online' : 'Offline';
+            apiStatusElement.textContent = statusText;
+        }
+        if (mevApiStatusElement) {
+            mevApiStatusElement.textContent = statusText;
         }
     }
     
     updateBlockNumber(blockNumber) {
         const blockElement = document.getElementById('lastBlock');
+        const mevBlockElement = document.getElementById('mevLastBlock');
+        
+        const blockText = `#${blockNumber.toLocaleString('ru-RU')}`;
         if (blockElement) {
-            blockElement.textContent = `#${blockNumber.toLocaleString('ru-RU')}`;
+            blockElement.textContent = blockText;
+        }
+        if (mevBlockElement) {
+            mevBlockElement.textContent = blockText;
         }
     }
     
@@ -1027,6 +1056,7 @@ class SigmaTrade {
     }
     
     setupEventListeners() {
+        // Exchange page buttons
         const refreshBtn = document.getElementById('refreshBtn');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
@@ -1044,6 +1074,25 @@ class SigmaTrade {
             });
         }
         
+        // MEV page buttons
+        const mevRefreshBtn = document.getElementById('mevRefreshBtn');
+        if (mevRefreshBtn) {
+            mevRefreshBtn.addEventListener('click', () => {
+                this.log('MEV Manual refresh triggered', 'info');
+                this.showLoading();
+                this.refreshData();
+            });
+        }
+        
+        const mevFilterBtn = document.getElementById('mevFilterBtn');
+        const mevFilterPanel = document.getElementById('mevFilterPanel');
+        if (mevFilterBtn && mevFilterPanel) {
+            mevFilterBtn.addEventListener('click', () => {
+                mevFilterPanel.classList.toggle('hidden');
+            });
+        }
+        
+        // Exchange filters
         const txTypeFilter = document.getElementById('txTypeFilter');
         if (txTypeFilter) {
             txTypeFilter.addEventListener('change', () => this.applyFilters());
@@ -1053,11 +1102,24 @@ class SigmaTrade {
         if (periodFilter) {
             periodFilter.addEventListener('change', () => this.applyFilters());
         }
+        
+        // MEV filters
+        const mevTxTypeFilter = document.getElementById('mevTxTypeFilter');
+        if (mevTxTypeFilter) {
+            mevTxTypeFilter.addEventListener('change', () => this.applyFilters());
+        }
+        
+        const mevPeriodFilter = document.getElementById('mevPeriodFilter');
+        if (mevPeriodFilter) {
+            mevPeriodFilter.addEventListener('change', () => this.applyFilters());
+        }
     }
     
     applyFilters() {
-        const txType = document.getElementById('txTypeFilter')?.value || 'all';
-        const period = document.getElementById('periodFilter')?.value || 'all';
+        // Используем фильтры с текущей страницы
+        const isMevPage = this.currentActivePage === 'mev';
+        const txType = document.getElementById(isMevPage ? 'mevTxTypeFilter' : 'txTypeFilter')?.value || 'all';
+        const period = document.getElementById(isMevPage ? 'mevPeriodFilter' : 'periodFilter')?.value || 'all';
         
         let filtered = [...this.allTransactions];
         
