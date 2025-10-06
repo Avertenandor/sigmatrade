@@ -1,4 +1,4 @@
-// SigmaTrade Application v4.1.0 - IndexedDB + Virtual Scrolling + Minification
+// SigmaTrade Application v8.0.0 - Multi-Wallet Support
 class SigmaTrade {
     constructor() {
         this.ws = null;
@@ -36,6 +36,10 @@ class SigmaTrade {
         // Current active page
         this.currentActivePage = 'exchange';
         
+        // 🆕 v8.0.0: Multi-Wallet Support
+        this.currentWalletId = CONFIG.MULTI_WALLET.DEFAULT_WALLET;
+        this.walletData = {}; // Данные для каждого кошелька
+        
         // Debounce timers
         this.debounceTimers = {};
         
@@ -43,7 +47,7 @@ class SigmaTrade {
     }
     
     async init() {
-        this.log('Initializing SigmaTrade v4.1.0 - IndexedDB + Virtual Scrolling...', 'info');
+        this.log('Initializing SigmaTrade v8.0.0 - Multi-Wallet Support...', 'info');
         
         // v4.1.0: Инициализация IndexedDB
         try {
@@ -139,13 +143,21 @@ class SigmaTrade {
         
         window.location.hash = pageName;
         
-        // Lazy connect WebSocket только при переходе на exchange
-        if (pageName === 'exchange' && !this.ws) {
+        this.currentActivePage = pageName;
+        
+        // 🆕 v8.0.0: Автоматическое переключение кошелька при смене страницы
+        if (CONFIG.MULTI_WALLET.AUTO_SWITCH && CONFIG.WALLETS[pageName]) {
+            if (this.currentWalletId !== pageName) {
+                this.switchWallet(pageName);
+            }
+        }
+        
+        // Lazy connect WebSocket только при переходе на активную страницу с адресом
+        if (CONFIG.WALLETS[pageName]?.address && !this.ws) {
             this.connectWebSocket();
             this.startMonitoring();
         }
         
-        this.currentActivePage = pageName;
         this.log(`Switched to page: ${pageName}`, 'info');
     }
     
@@ -162,12 +174,47 @@ class SigmaTrade {
         console.log(`${emoji[type]} ${message}`);
     }
     
-    initializeUI() {
-        const walletShort = document.getElementById('walletShort');
-        if (walletShort) {
-            const addr = CONFIG.WALLET_ADDRESS;
-            walletShort.textContent = `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+    // 🆕 v8.0.0: Получить текущий активный кошелек
+    getCurrentWallet() {
+        return CONFIG.WALLETS[this.currentWalletId];
+    }
+    
+    // 🆕 v8.0.0: Переключить кошелек
+    switchWallet(walletId) {
+        if (!CONFIG.WALLETS[walletId]) {
+            this.log(`Invalid wallet ID: ${walletId}`, 'error');
+            return;
         }
+        
+        if (!CONFIG.WALLETS[walletId].address) {
+            this.log(`Wallet ${walletId} has no address (in development)`, 'warning');
+            return;
+        }
+        
+        this.log(`Switching to wallet: ${walletId}`, 'info');
+        this.currentWalletId = walletId;
+        
+        // Обновить UI
+        this.updateWalletInfo();
+        
+        // Очистить данные
+        this.transactions = [];
+        this.allTransactions = [];
+        this.tokenBalances = {};
+        this.totalTxCount = 0;
+        
+        // Перезагрузить данные
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.showLoading();
+        
+        if (this.currentActivePage === this.currentWalletId) {
+            this.refreshData();
+        }
+    }
+    
+    initializeUI() {
+        this.updateWalletInfo();
         
         const networkName = document.getElementById('networkName');
         if (networkName) {
@@ -175,6 +222,24 @@ class SigmaTrade {
         }
         
         this.showLoading();
+    }
+    
+    // 🆕 v8.0.0: Обновить информацию о кошельке в UI
+    updateWalletInfo() {
+        const wallet = this.getCurrentWallet();
+        
+        const walletShort = document.getElementById('walletShort');
+        if (walletShort && wallet.address) {
+            const addr = wallet.address;
+            walletShort.textContent = `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+            walletShort.title = `${wallet.name}: ${addr}`;
+        }
+        
+        // Обновить цвет статуса в соответствии с ботом
+        const networkStatus = document.getElementById('networkStatus');
+        if (networkStatus && wallet.color) {
+            networkStatus.style.setProperty('--bot-color', wallet.color);
+        }
     }
     
     showLoading() {
@@ -348,6 +413,13 @@ class SigmaTrade {
             
             this.log('Fetching ALL balances in BATCH...', 'optimize');
             
+            // 🆕 v8.0.0: Используем адрес текущего кошелька
+            const wallet = this.getCurrentWallet();
+            if (!wallet.address) {
+                this.log('Current wallet has no address', 'warning');
+                return;
+            }
+            
             // ОПТИМИЗАЦИЯ: Батчинг всех RPC запросов в один
             const batchRequests = [];
             
@@ -355,7 +427,7 @@ class SigmaTrade {
             batchRequests.push({
                 jsonrpc: '2.0',
                 method: 'eth_getBalance',
-                params: [CONFIG.WALLET_ADDRESS, 'latest'],
+                params: [wallet.address, 'latest'],
                 id: 1
             });
             
@@ -365,7 +437,7 @@ class SigmaTrade {
             
             for (const key of tokenKeys) {
                 const token = CONFIG.TOKENS[key];
-                const data = '0x70a08231000000000000000000000000' + CONFIG.WALLET_ADDRESS.slice(2).toLowerCase();
+                const data = '0x70a08231000000000000000000000000' + wallet.address.slice(2).toLowerCase();
                 
                 batchRequests.push({
                     jsonrpc: '2.0',
@@ -652,9 +724,12 @@ class SigmaTrade {
     
     async fetchRegularTransactions(page = 1) {
         try {
+            const wallet = this.getCurrentWallet();
+            if (!wallet.address) return [];
+            
             const offset = CONFIG.PAGINATION.PAGE_SIZE;
             
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=txlist&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=txlist&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
             
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -677,9 +752,12 @@ class SigmaTrade {
     
     async fetchTokenTransactions(page = 1) {
         try {
+            const wallet = this.getCurrentWallet();
+            if (!wallet.address) return [];
+            
             const offset = CONFIG.PAGINATION.PAGE_SIZE;
             
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=tokentx&address=${CONFIG.WALLET_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=tokentx&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
             
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -768,7 +846,8 @@ class SigmaTrade {
         div.className = 'tx-item';
         div.onclick = () => this.openTxInExplorer(tx.hash);
         
-        const isIncoming = tx.to.toLowerCase() === CONFIG.WALLET_ADDRESS.toLowerCase();
+        const wallet = this.getCurrentWallet();
+        const isIncoming = tx.to.toLowerCase() === wallet.address.toLowerCase();
         const type = isIncoming ? 'in' : 'out';
         const typeLabel = isIncoming ? 'Входящая' : 'Исходящая';
         
@@ -1028,8 +1107,9 @@ class SigmaTrade {
         let filtered = [...this.allTransactions];
         
         if (txType !== 'all') {
+            const wallet = this.getCurrentWallet();
             filtered = filtered.filter(tx => {
-                const isIncoming = tx.to.toLowerCase() === CONFIG.WALLET_ADDRESS.toLowerCase();
+                const isIncoming = tx.to.toLowerCase() === wallet.address.toLowerCase();
                 if (txType === 'in') return isIncoming;
                 if (txType === 'out') return !isIncoming;
                 if (txType === 'token') return tx.txType === 'token';
