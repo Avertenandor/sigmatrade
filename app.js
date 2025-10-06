@@ -802,7 +802,15 @@ class SigmaTrade {
         div.innerHTML = `
             <div class="tx-header">
                 <span class="tx-type ${type}">${typeLabel}</span>
-                <span class="tx-hash">${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}</span>
+                <div class="tx-hash-container">
+                    <span class="tx-hash" title="${tx.hash}">${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}</span>
+                    <button class="copy-btn" onclick="app.copyToClipboard('${tx.hash}', event)" title="Копировать хеш">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="tx-details">
                 <div class="tx-detail">
@@ -949,6 +957,40 @@ class SigmaTrade {
         
         this.log(`💾 Cache MISS: ${key}`, 'cache');
         return null;
+    }
+    
+    async copyToClipboard(text, event) {
+        // Prevent tx-item click event
+        if (event) {
+            event.stopPropagation();
+        }
+        
+        try {
+            await navigator.clipboard.writeText(text);
+            
+            // Show toast notification
+            if (window.showToast) {
+                showToast('✅ Хеш скопирован в буфер обмена!', 'success');
+            }
+            
+            // Visual feedback on button
+            if (event && event.currentTarget) {
+                const btn = event.currentTarget;
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '✓';
+                btn.style.background = 'var(--accent-success)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = '';
+                }, 1500);
+            }
+        } catch (error) {
+            this.log('Failed to copy to clipboard', 'error');
+            if (window.showToast) {
+                showToast('❌ Ошибка копирования', 'error');
+            }
+        }
     }
     
     openTxInExplorer(hash) {

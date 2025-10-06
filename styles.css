@@ -1085,11 +1085,49 @@ body::before {
     color: var(--accent-danger);
 }
 
+.tx-hash-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
 .tx-hash {
     font-family: 'Courier New', 'Monaco', monospace;
     color: var(--accent-primary);
     font-size: var(--font-sm);
     font-weight: 600;
+}
+
+.copy-btn {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    color: var(--text-secondary);
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+}
+
+.copy-btn:hover {
+    background: var(--bg-elevated);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    transform: scale(1.1);
+}
+
+.copy-btn:active {
+    transform: scale(0.95);
+}
+
+.copy-btn svg {
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
 }
 
 .tx-details {
