@@ -58,6 +58,8 @@ class VirtualScroll {
     }
     
     update() {
+        if (!this.viewport) return; // Защита от null
+        
         const scrollTop = this.viewport.scrollTop;
         const viewportHeight = this.viewport.clientHeight;
         
