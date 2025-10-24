@@ -1,0 +1,19 @@
+{
+  "meta.title": "SigmaTrade | Pemantauan Keluarga Bot Trading",
+  "meta.description": "SigmaTrade - pemantauan profesional keluarga bot trading. Lacak bot pertukaran, arbitrase, dan aktivitas MEV secara real-time di Binance Smart Chain.",
+  "header": {
+    "network_status": "Menghubungkan...",
+    "wallet_label": "Dompet:",
+    "email_title": "Hubungi kami",
+    "copy_email": "Salin email",
+    "login_btn": "Masuk"
+  },
+  "nav": {
+    "exchange": "Bot Pertukaran",
+    "mev": "Bot MEV",
+    "arbitrage": "Arbitrase",
+    "partner_rewards": "Program Mitra",
+    "cooperation": "Mulai",
+    "mindmap": "Peta Situs"
+  }
+}

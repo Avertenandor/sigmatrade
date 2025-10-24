@@ -1,0 +1,19 @@
+{
+  "meta.title": "SigmaTrade | Моніторинг сім'ї торгових ботів",
+  "meta.description": "SigmaTrade - професійний моніторинг сім'ї торгових ботів. Відстежуйте роботу ботів обміну, арбітражу та МЕВ-діяльності в реальному часі на Binance Smart Chain.",
+  "header": {
+    "network_status": "Підключення...",
+    "wallet_label": "Гаманець:",
+    "email_title": "Написати нам",
+    "copy_email": "Копіювати email",
+    "login_btn": "Увійти"
+  },
+  "nav": {
+    "exchange": "Бот-обмінник",
+    "mev": "МЕВ-бот",
+    "arbitrage": "Арбітраж",
+    "partner_rewards": "Партнерська програма",
+    "cooperation": "Як почати",
+    "mindmap": "Карта сайту"
+  }
+}

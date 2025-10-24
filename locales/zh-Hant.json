@@ -1,0 +1,19 @@
+{
+  "meta.title": "SigmaTrade | 交易機器人家族監控",
+  "meta.description": "SigmaTrade - 專業的交易機器人家族監控。即時追蹤幣安智能鏈上的交換機器人、套利和MEV活動。",
+  "header": {
+    "network_status": "連接中...",
+    "wallet_label": "錢包:",
+    "email_title": "聯繫我們",
+    "copy_email": "複製郵箱",
+    "login_btn": "登入"
+  },
+  "nav": {
+    "exchange": "交換機器人",
+    "mev": "MEV機器人",
+    "arbitrage": "套利",
+    "partner_rewards": "合作夥伴計劃",
+    "cooperation": "開始使用",
+    "mindmap": "網站地圖"
+  }
+}

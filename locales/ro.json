@@ -1,0 +1,19 @@
+{
+  "meta.title": "SigmaTrade | Monitorizarea familiei de roboți de tranzacționare",
+  "meta.description": "SigmaTrade - monitorizare profesională a familiei de roboți de tranzacționare. Urmăriți roboții de schimb, arbitraj și activitatea MEV în timp real pe Binance Smart Chain.",
+  "header": {
+    "network_status": "Conectare...",
+    "wallet_label": "Portofel:",
+    "email_title": "Contactați-ne",
+    "copy_email": "Copiază email",
+    "login_btn": "Autentificare"
+  },
+  "nav": {
+    "exchange": "Bot de schimb",
+    "mev": "Bot MEV",
+    "arbitrage": "Arbitraj",
+    "partner_rewards": "Program de parteneriat",
+    "cooperation": "Cum să începi",
+    "mindmap": "Harta site-ului"
+  }
+}

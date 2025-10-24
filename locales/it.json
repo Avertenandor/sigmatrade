@@ -1,0 +1,19 @@
+{
+  "meta.title": "SigmaTrade | Monitoraggio della famiglia di bot di trading",
+  "meta.description": "SigmaTrade - monitoraggio professionale della famiglia di bot di trading. Traccia bot di scambio, arbitraggio e attività MEV in tempo reale su Binance Smart Chain.",
+  "header": {
+    "network_status": "Connessione...",
+    "wallet_label": "Portafoglio:",
+    "email_title": "Contattaci",
+    "copy_email": "Copia email",
+    "login_btn": "Accedi"
+  },
+  "nav": {
+    "exchange": "Bot di scambio",
+    "mev": "Bot MEV",
+    "arbitrage": "Arbitraggio",
+    "partner_rewards": "Programma partner",
+    "cooperation": "Come iniziare",
+    "mindmap": "Mappa del sito"
+  }
+}
