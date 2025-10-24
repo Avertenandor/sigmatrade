@@ -77,7 +77,7 @@
     <link rel="preconnect" href="https://api.etherscan.io">
     <link rel="preconnect" href="https://old-patient-butterfly.bsc.quiknode.pro">
     
-    <link rel="stylesheet" href="styles.css?v=11.1.4">
+    <link rel="stylesheet" href="styles.css?v=11.1.5">
 </head>
 <body>
     <!-- Header -->
@@ -135,6 +135,10 @@
                 <button class="nav-tab" data-page="partner-rewards">
                     <span class="nav-icon">🤝</span>
                     <span class="nav-label">Партнерская программа</span>
+                </button>
+                <button class="nav-tab" data-page="cooperation">
+                    <span class="nav-icon">🚀</span>
+                    <span class="nav-label">Как начать</span>
                 </button>
                 <button class="nav-tab" data-page="mindmap">
                     <span class="nav-icon">🗺️</span>
@@ -646,6 +650,175 @@
             </div>
         </div>
 
+        <!-- Page: Cooperation Process -->
+        <div class="page" id="page-cooperation">
+            <div class="container">
+                <div class="hero-section">
+                    <h1 class="hero-title">Как начать сотрудничество</h1>
+                    <p class="hero-subtitle">Путь от заявки до работы с торговыми системами</p>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="partner-info-section">
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">📧</span>
+                            <span>Первый контакт</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            Напишите нам на <span class="partner-info-highlight">trdgood00@gmail.com</span>.
+                            Расскажите о себе, своем опыте и целях. Мы ответим в течение 24-48 часов.
+                        </p>
+                    </div>
+
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">🎥</span>
+                            <span>Видео собеседование</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            После рассмотрения заявки проводится <span class="partner-info-highlight">онлайн собеседование</span>,
+                            где мы обсуждаем условия сотрудничества и оцениваем взаимную совместимость.
+                        </p>
+                    </div>
+
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">⭐</span>
+                            <span>Рекомендации</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            <span class="partner-info-highlight">Рекомендации от действующих участников</span>
+                            значительно повышают шансы на одобрение и позитивно влияют на условия сотрудничества.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Cooperation Map -->
+                <div class="partner-rewards-section">
+                    <h2 class="section-title">
+                        <span class="icon">🗺️</span>
+                        Интерактивная карта процесса
+                    </h2>
+
+                    <!-- Map Controls -->
+                    <div class="partner-rewards-controls">
+                        <button class="partner-rewards-btn" id="cooperationZoomIn" title="Приблизить">
+                            <span class="icon">🔍</span> +
+                        </button>
+                        <button class="partner-rewards-btn" id="cooperationZoomOut" title="Отдалить">
+                            <span class="icon">🔍</span> −
+                        </button>
+                        <button class="partner-rewards-btn" id="cooperationReset" title="Сбросить вид">
+                            <span class="icon">🔄</span> Сброс
+                        </button>
+                        <button class="partner-rewards-btn" id="cooperationCenter" title="Центрировать">
+                            <span class="icon">🎯</span> Центр
+                        </button>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div class="partner-rewards-container" id="cooperationContainer">
+                        <svg id="cooperationSvg" class="partner-rewards-svg">
+                            <defs>
+                                <marker id="cooperation-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00d4ff" />
+                                </marker>
+                                <marker id="cooperation-arrow-success" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ff88" />
+                                </marker>
+                                <marker id="cooperation-arrow-fail" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#ff4444" />
+                                </marker>
+                                <filter id="cooperation-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g id="cooperationContent"></g>
+                        </svg>
+                        <div class="partner-rewards-legend">
+                            <div class="partner-legend-title">Легенда</div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);"></span>
+                                <span>Этапы процесса</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);"></span>
+                                <span>Успешный результат</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);"></span>
+                                <span>Отказ</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);"></span>
+                                <span>Бонус (рекомендации)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Usage Info -->
+                    <div class="mindmap-info">
+                        <h3>Как использовать карту:</h3>
+                        <ul>
+                            <li><strong>Перетаскивание:</strong> Зажмите и перемещайте узлы для изменения расположения</li>
+                            <li><strong>Масштабирование:</strong> Используйте кнопки +/− или колесико мыши</li>
+                            <li><strong>Наведение:</strong> Наведите курсор на узел для просмотра деталей</li>
+                            <li><strong>Мобильная версия:</strong> Используйте жесты масштабирования для удобной навигации</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Success Path Details -->
+                <div class="partner-explanation">
+                    <h3>✅ При успешном прохождении собеседования</h3>
+                    <div class="partner-explanation-content">
+                        <div class="partner-level-block level-1">
+                            <div class="partner-level-title">Доступ к системам</div>
+                            <div class="partner-level-description">
+                                Вы получаете доступ к профессиональным торговым системам: <strong>MEV-ботам</strong>,
+                                <strong>арбитражным ботам</strong> и <strong>торговым ботам</strong>. Начинаете зарабатывать сразу после получения доступа.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-2">
+                            <div class="partner-level-title">Место в команде</div>
+                            <div class="partner-level-description">
+                                Вас определяют в <strong>действующую команду</strong>, где вы получаете поддержку,
+                                обучение и доступ к коллективным ресурсам. Работайте в команде профессионалов.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-3">
+                            <div class="partner-level-title">Право создать свою команду</div>
+                            <div class="partner-level-description">
+                                Получаете возможность <strong>основать собственную команду</strong> и приглашать партнеров.
+                                Зарабатывайте на трех уровнях партнерской сети (3% → 2% → 5%).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Notice -->
+                <div class="partner-explanation" style="margin-top: var(--spacing-xl);">
+                    <h3 style="color: var(--text-secondary);">⚠️ Важное уведомление</h3>
+                    <div class="partner-explanation-content">
+                        <div style="padding: var(--spacing-lg); background: rgba(255, 68, 68, 0.1); border-radius: var(--radius-md); border-left: 4px solid #ff4444;">
+                            <p style="color: var(--text-secondary); line-height: var(--leading-relaxed); margin: 0;">
+                                <strong style="color: #ff4444;">SigmaTrade оставляет за собой право отказать в сотрудничестве без объяснения причин любому пользователю.</strong>
+                                Это необходимо для поддержания высокого уровня безопасности и качества работы в нашей закрытой экосистеме.
+                                Мы ценим каждую заявку, но принимаем только тех, кто соответствует нашим стандартам.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Page: Mind Map -->
         <div class="page" id="page-mindmap">
             <div class="container">
@@ -756,17 +929,18 @@
                     </div>
                 </div>
 
-                <div class="footer-version">v11.1.4</div>
+                <div class="footer-version">v11.1.5</div>
             </div>
         </div>
     </footer>
 
-    <script src="config.js?v=11.1.4"></script>
-    <script src="db.js?v=11.1.4"></script>
-    <script src="virtual-scroll.js?v=11.1.4"></script>
-    <script src="toast.js?v=11.1.4"></script>
-    <script src="mindmap.js?v=11.1.4"></script>
-    <script src="partner-rewards-map.js?v=11.1.4"></script>
-    <script src="app.js?v=11.1.4"></script>
+    <script src="config.js?v=11.1.5"></script>
+    <script src="db.js?v=11.1.5"></script>
+    <script src="virtual-scroll.js?v=11.1.5"></script>
+    <script src="toast.js?v=11.1.5"></script>
+    <script src="mindmap.js?v=11.1.5"></script>
+    <script src="partner-rewards-map.js?v=11.1.5"></script>
+    <script src="cooperation-map.js?v=11.1.5"></script>
+    <script src="app.js?v=11.1.5"></script>
 </body>
 </html>
