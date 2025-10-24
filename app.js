@@ -150,6 +150,13 @@ class SigmaTrade {
             }, 100);
         }
 
+        // Initialize exchange bot map if switching to exchange page
+        if (pageName === 'exchange' && window.exchangeBotMap) {
+            setTimeout(() => {
+                window.exchangeBotMap.init();
+            }, 100);
+        }
+
         // Переключение кошелька и перезапуск мониторинга
         if (CONFIG.MULTI_WALLET.AUTO_SWITCH && CONFIG.WALLETS[pageName]) {
             if (this.currentWalletId !== pageName && CONFIG.WALLETS[pageName]?.address) {

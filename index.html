@@ -286,6 +286,217 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Exchange Bot Interactive Map -->
+                <div class="partner-rewards-section">
+                    <h2 class="section-title">
+                        <span class="icon">🗺️</span>
+                        Как работает бот-обменник
+                    </h2>
+
+                    <!-- Important Warning Banner -->
+                    <div class="partner-explanation" style="margin-bottom: var(--spacing-xl);">
+                        <div class="partner-explanation-content">
+                            <div style="padding: var(--spacing-lg); background: rgba(255, 68, 68, 0.1); border-radius: var(--radius-md); border-left: 4px solid #ff4444;">
+                                <h3 style="color: #ff4444; margin: 0 0 var(--spacing-md) 0;">⚠️ КРИТИЧЕСКИ ВАЖНО!</h3>
+                                <p style="color: var(--text-secondary); line-height: var(--leading-relaxed); margin: 0;">
+                                    <strong style="color: #ff4444;">Любые попытки внести средства на смарт-контракт без предварительного собеседования приведут к безвозвратной потере средств!</strong>
+                                    Деньги, внесенные таким образом, НЕ БУДУТ ВОЗВРАЩЕНЫ пользователю ни при каких обстоятельствах.
+                                    Для участия в работе бота необходимо пройти собеседование и получить официальный доступ.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exchange Bot Info -->
+                    <div class="partner-info-section">
+                        <div class="partner-info-card">
+                            <div class="partner-info-card-title">
+                                <span class="partner-info-card-icon">🔄</span>
+                                <span>Автоматический обмен</span>
+                            </div>
+                            <p class="partner-info-card-description">
+                                Бот-обменник проводит <span class="partner-info-highlight">обмены криптовалют 24/7</span> на Binance Smart Chain.
+                                Каждая операция обмена выполняется автоматически с оптимальным курсом в режиме реального времени.
+                            </p>
+                        </div>
+
+                        <div class="partner-info-card">
+                            <div class="partner-info-card-title">
+                                <span class="partner-info-card-icon">💰</span>
+                                <span>Плавающая комиссия</span>
+                            </div>
+                            <p class="partner-info-card-description">
+                                С каждого обмена удерживается <span class="partner-info-highlight">комиссия от 0.1% до 0.8%</span> от суммы операции.
+                                Размер комиссии зависит от объема обмена, рыночных условий и загруженности сети.
+                            </p>
+                        </div>
+
+                        <div class="partner-info-card">
+                            <div class="partner-info-card-title">
+                                <span class="partner-info-card-icon">🎯</span>
+                                <span>Распределение прибыли</span>
+                            </div>
+                            <p class="partner-info-card-description">
+                                Комиссия <span class="partner-info-highlight">делится между участниками</span>, чьи средства работают в обороте бота.
+                                Доход пропорционален вашему вкладу в общий оборотный капитал системы.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Map Controls -->
+                    <div class="partner-rewards-controls">
+                        <button class="partner-rewards-btn" id="exchangeBotZoomIn" title="Приблизить">
+                            <span class="icon">🔍</span> +
+                        </button>
+                        <button class="partner-rewards-btn" id="exchangeBotZoomOut" title="Отдалить">
+                            <span class="icon">🔍</span> −
+                        </button>
+                        <button class="partner-rewards-btn" id="exchangeBotReset" title="Сбросить вид">
+                            <span class="icon">🔄</span> Сброс
+                        </button>
+                        <button class="partner-rewards-btn" id="exchangeBotCenter" title="Центрировать">
+                            <span class="icon">🎯</span> Центр
+                        </button>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div class="partner-rewards-container" id="exchangeBotContainer">
+                        <svg id="exchangeBotSvg" class="partner-rewards-svg">
+                            <defs>
+                                <!-- Arrow markers for different types -->
+                                <marker id="exchange-arrow-process" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00d4ff" />
+                                </marker>
+                                <marker id="exchange-arrow-money" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ffd700" />
+                                </marker>
+                                <marker id="exchange-arrow-success" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ff88" />
+                                </marker>
+                                <marker id="exchange-arrow-danger" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ff4444" />
+                                </marker>
+                                <marker id="exchange-arrow-pool" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ccff" />
+                                </marker>
+                                <marker id="exchange-arrow-info" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                                    <polygon points="0 0, 8 3, 0 6" fill="#888888" />
+                                </marker>
+
+                                <!-- Glow filters -->
+                                <filter id="exchange-core-glow">
+                                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <filter id="exchange-danger-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g id="exchangeBotContent"></g>
+                        </svg>
+                        <div class="partner-rewards-legend">
+                            <div class="partner-legend-title">Легенда</div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);"></span>
+                                <span>Бот-обменник (центр)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);"></span>
+                                <span>Процесс обмена</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);"></span>
+                                <span>Комиссия и доход</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #9966ff 0%, #6633cc 100%);"></span>
+                                <span>Участники оборота</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);"></span>
+                                <span>Правильный путь</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);"></span>
+                                <span>❌ ОПАСНОСТЬ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Usage Info -->
+                    <div class="mindmap-info">
+                        <h3>Как использовать карту:</h3>
+                        <ul>
+                            <li><strong>Перетаскивание:</strong> Зажмите и перемещайте узлы для изменения расположения</li>
+                            <li><strong>Масштабирование:</strong> Используйте кнопки +/− или колесико мыши</li>
+                            <li><strong>Наведение:</strong> Наведите курсор на узел для просмотра деталей и подсветки связей</li>
+                            <li><strong>Цветовая кодировка:</strong> Красные узлы — предупреждения об опасности, зеленые — правильный путь</li>
+                            <li><strong>Мобильная версия:</strong> Используйте жесты масштабирования для удобной навигации</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- How to Start Section -->
+                <div class="partner-explanation">
+                    <h3>💡 Как начать работу с ботом-обменником</h3>
+                    <div class="partner-explanation-content">
+                        <div class="partner-level-block level-1">
+                            <div class="partner-level-title">Шаг 1: Собеседование</div>
+                            <div class="partner-level-description">
+                                Напишите на <strong>trdgood00@gmail.com</strong> с заявкой на участие.
+                                После рассмотрения заявки мы назначим онлайн собеседование для обсуждения условий сотрудничества.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-2">
+                            <div class="partner-level-title">Шаг 2: Получение доступа</div>
+                            <div class="partner-level-description">
+                                После успешного прохождения собеседования вы получаете официальный доступ к системе
+                                и можете безопасно внести средства для участия в обороте бота.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-3">
+                            <div class="partner-level-title">Шаг 3: Получение прибыли</div>
+                            <div class="partner-level-description">
+                                Ваши средства начинают работать в обороте бота. С каждого обмена вы получаете долю от комиссии
+                                пропорционально вашему вкладу. <strong>Доход начисляется автоматически.</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commission Details -->
+                <div class="partner-explanation">
+                    <h3>📊 Детали комиссии и распределения</h3>
+                    <div class="partner-explanation-content">
+                        <div style="padding: var(--spacing-lg); background: var(--bg-secondary); border-radius: var(--radius-md); line-height: var(--leading-relaxed);">
+                            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                <strong style="color: var(--text-primary);">Размер комиссии:</strong> От <span style="color: var(--accent-primary); font-weight: 700;">0.1%</span>
+                                до <span style="color: var(--accent-primary); font-weight: 700;">0.8%</span> от суммы каждого обмена.
+                                Конкретный процент зависит от объема операции и текущих рыночных условий.
+                            </p>
+                            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                <strong style="color: var(--text-primary);">Распределение:</strong> Комиссия делится между всеми участниками,
+                                чьи средства находятся в обороте бота. Чем больше ваш вклад в общий оборотный капитал,
+                                тем большую долю от каждой комиссии вы получаете.
+                            </p>
+                            <p style="color: var(--text-secondary);">
+                                <strong style="color: var(--text-primary);">Пример:</strong> При обмене на сумму $10,000 с комиссией 0.5%,
+                                общая комиссия составит $50. Если ваша доля в обороте 10%, вы получите <span style="color: #00ff88; font-weight: 700;">$5</span>
+                                с этой операции. При сотнях обменов в день доход становится значительным.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -941,6 +1152,7 @@
     <script src="mindmap.js?v=11.1.5"></script>
     <script src="partner-rewards-map.js?v=11.1.5"></script>
     <script src="cooperation-map.js?v=11.1.5"></script>
+    <script src="exchange-bot-map.js?v=11.1.5"></script>
     <script src="app.js?v=11.1.5"></script>
 </body>
 </html>
