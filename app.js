@@ -90,7 +90,7 @@ class SigmaTrade {
     
     handleHashChange() {
         const hash = window.location.hash.slice(1);
-        const validPages = ['exchange', 'mev', 'arbitrage', 'partner-rewards', 'mindmap'];
+        const validPages = ['exchange', 'mev', 'arbitrage', 'partner-rewards', 'cooperation', 'mindmap'];
 
         if (validPages.includes(hash)) {
             this.switchPage(hash);
@@ -140,6 +140,13 @@ class SigmaTrade {
         if (pageName === 'partner-rewards' && window.partnerRewardsMap) {
             setTimeout(() => {
                 window.partnerRewardsMap.init();
+            }, 100);
+        }
+
+        // Initialize cooperation map if switching to cooperation page
+        if (pageName === 'cooperation' && window.cooperationMap) {
+            setTimeout(() => {
+                window.cooperationMap.init();
             }, 100);
         }
 
