@@ -14,6 +14,7 @@
     initHeaderScroll();
     initNavigationCards();
     initWalletCopy();
+    initEmailCopy();
     initLogoClick();
     console.log('[site-interactions] Site interactions initialized');
   }
@@ -178,6 +179,39 @@
         console.error('[site-interactions] Failed to copy:', err);
         showToast('❌ Ошибка копирования', 'error');
       }
+    });
+  }
+
+  /**
+   * Копирование email адреса
+   */
+  function initEmailCopy() {
+    const copyButtons = document.querySelectorAll('.copy-email-btn');
+    if (!copyButtons.length) return;
+
+    copyButtons.forEach(btn => {
+      btn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const email = this.getAttribute('data-email');
+        if (!email) return;
+
+        try {
+          await navigator.clipboard.writeText(email);
+
+          // Добавляем класс "copied" для визуальной обратной связи
+          this.classList.add('copied');
+          setTimeout(() => {
+            this.classList.remove('copied');
+          }, 2000);
+
+          showToast('✅ Email скопирован!', 'success');
+        } catch (err) {
+          console.error('[site-interactions] Failed to copy email:', err);
+          showToast('❌ Ошибка копирования', 'error');
+        }
+      });
     });
   }
 
