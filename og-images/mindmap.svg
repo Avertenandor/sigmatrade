@@ -1,0 +1,61 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="mind-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e1a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a1e2a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0e1a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="mind-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#888888;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#555555;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#888888;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#mind-bg)"/>
+
+  <!-- Decorative network lines -->
+  <line x1="300" y1="315" x2="600" y2="315" stroke="#555555" stroke-width="2" opacity="0.3"/>
+  <line x1="600" y1="315" x2="900" y2="315" stroke="#555555" stroke-width="2" opacity="0.3"/>
+  <line x1="600" y1="200" x2="600" y2="430" stroke="#555555" stroke-width="2" opacity="0.3"/>
+
+  <!-- Node circles -->
+  <circle cx="300" cy="315" r="15" fill="#00d4ff" opacity="0.5"/>
+  <circle cx="900" cy="315" r="15" fill="#ff6600" opacity="0.5"/>
+  <circle cx="600" cy="200" r="15" fill="#9966ff" opacity="0.5"/>
+  <circle cx="600" cy="430" r="15" fill="#00ff88" opacity="0.5"/>
+
+  <!-- Main Icon -->
+  <g transform="translate(600, 315)">
+    <circle cx="0" cy="0" r="70" fill="url(#mind-accent)" opacity="0.3"/>
+    <text x="0" y="25" font-size="60" text-anchor="middle">🗺️</text>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="130" font-family="Arial, sans-serif" font-size="60" font-weight="bold" fill="url(#mind-accent)" text-anchor="middle">
+    Site Map
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="530" font-family="Arial, sans-serif" font-size="28" fill="#ffffff" text-anchor="middle" opacity="0.8">
+    Interactive Platform Structure Visualization
+  </text>
+
+  <!-- Features -->
+  <g transform="translate(300, 580)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" text-anchor="middle" opacity="0.6">
+      📱 Pages
+    </text>
+  </g>
+  <g transform="translate(600, 580)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" text-anchor="middle" opacity="0.6">
+      🔧 Features
+    </text>
+  </g>
+  <g transform="translate(900, 580)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" text-anchor="middle" opacity="0.6">
+      💾 Data
+    </text>
+  </g>
+</svg>

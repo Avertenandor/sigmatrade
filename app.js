@@ -157,6 +157,13 @@ class SigmaTrade {
             }, 100);
         }
 
+        // Initialize MEV bot map if switching to MEV page
+        if (pageName === 'mev' && window.mevBotMap) {
+            setTimeout(() => {
+                window.mevBotMap.init();
+            }, 100);
+        }
+
         // Переключение кошелька и перезапуск мониторинга
         if (CONFIG.MULTI_WALLET.AUTO_SWITCH && CONFIG.WALLETS[pageName]) {
             if (this.currentWalletId !== pageName && CONFIG.WALLETS[pageName]?.address) {

@@ -1,0 +1,62 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="partner-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f1a0a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1f2a15;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f1a0a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="partner-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#00cc66;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#partner-bg)"/>
+
+  <!-- Decorative elements -->
+  <circle cx="120" cy="100" r="100" fill="#00ff88" opacity="0.06"/>
+  <circle cx="1080" cy="530" r="140" fill="#00cc66" opacity="0.06"/>
+
+  <!-- Main Icon -->
+  <g transform="translate(600, 200)">
+    <circle cx="0" cy="0" r="70" fill="url(#partner-accent)" opacity="0.3"/>
+    <text x="0" y="25" font-size="60" text-anchor="middle">🤝</text>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="330" font-family="Arial, sans-serif" font-size="60" font-weight="bold" fill="url(#partner-accent)" text-anchor="middle">
+    Partner Program
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="390" font-family="Arial, sans-serif" font-size="32" fill="#ffffff" text-anchor="middle" opacity="0.9">
+    Earn on 3 Levels of Partner Network
+  </text>
+
+  <!-- Levels indicator -->
+  <g transform="translate(600, 470)">
+    <rect x="-150" y="-25" width="300" height="50" rx="25" fill="#00ff88" opacity="0.2"/>
+    <text x="0" y="10" font-family="Arial, sans-serif" font-size="24" fill="#00ff88" text-anchor="middle" font-weight="bold">
+      💰 3% → 2% → 5%
+    </text>
+  </g>
+
+  <!-- Features -->
+  <g transform="translate(300, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      👥 3 Levels Deep
+    </text>
+  </g>
+  <g transform="translate(600, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      💸 Income + Deposits
+    </text>
+  </g>
+  <g transform="translate(900, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      📈 Growing Rewards
+    </text>
+  </g>
+</svg>

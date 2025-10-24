@@ -1,0 +1,62 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="arb-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#150a20;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#251535;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#150a20;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="arb-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9966ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#6633cc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9966ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#arb-bg)"/>
+
+  <!-- Decorative elements -->
+  <circle cx="130" cy="110" r="110" fill="#9966ff" opacity="0.06"/>
+  <circle cx="1070" cy="520" r="130" fill="#6633cc" opacity="0.06"/>
+
+  <!-- Main Icon -->
+  <g transform="translate(600, 200)">
+    <circle cx="0" cy="0" r="70" fill="url(#arb-accent)" opacity="0.3"/>
+    <text x="0" y="25" font-size="60" text-anchor="middle">📊</text>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="330" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="url(#arb-accent)" text-anchor="middle">
+    Arbitrage Bot
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="390" font-family="Arial, sans-serif" font-size="32" fill="#ffffff" text-anchor="middle" opacity="0.9">
+    Cross-Exchange Arbitrage
+  </text>
+
+  <!-- Status indicator -->
+  <g transform="translate(600, 470)">
+    <rect x="-120" y="-25" width="240" height="50" rx="25" fill="#9966ff" opacity="0.2"/>
+    <text x="0" y="10" font-family="Arial, sans-serif" font-size="24" fill="#9966ff" text-anchor="middle" font-weight="bold">
+      ⚙️ In Development
+    </text>
+  </g>
+
+  <!-- Features -->
+  <g transform="translate(300, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      🔄 Multi-DEX
+    </text>
+  </g>
+  <g transform="translate(600, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      🤖 24/7 Automation
+    </text>
+  </g>
+  <g transform="translate(900, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      📈 Analytics
+    </text>
+  </g>
+</svg>
