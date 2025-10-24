@@ -1577,30 +1577,104 @@ body::before {
     cursor: grabbing;
 }
 
-/* Mind map nodes */
+/* Mind map nodes - Premium animations */
 .mindmap-node {
-    transition: transform 0.2s ease;
+    transition: none; /* Handled by JS for smoother control */
+    will-change: transform;
 }
 
-.mindmap-node:hover {
+.mindmap-node.hovered .node-circle {
+    stroke-width: 5 !important;
+    filter: drop-shadow(0 0 20px currentColor) !important;
     transform: scale(1.05);
 }
 
+.mindmap-node.hovered .node-description {
+    opacity: 1 !important;
+}
+
+.mindmap-node.hovered .node-label {
+    transform: translateY(-2px);
+}
+
+.mindmap-node.dragging {
+    cursor: grabbing !important;
+    opacity: 0.85;
+}
+
+.mindmap-node.dragging .node-circle {
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.mindmap-node.clicked .node-circle {
+    animation: nodeClickPulse 0.3s ease-out;
+}
+
+@keyframes nodeClickPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 .node-circle {
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    stroke-width: 3;
+    will-change: transform, stroke-width, filter;
+}
+
+.node-icon {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.mindmap-node.hovered .node-icon {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .node-label {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    fill: #fff;
+    font-weight: bold;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
 }
 
 .node-description {
-    transition: opacity 0.3s ease;
+    fill: #aaa;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: opacity, transform;
 }
 
-/* Mind map links */
+/* Mind map links - Premium animations */
 .mindmap-link {
-    transition: all 0.3s ease;
+    stroke: rgba(100, 100, 100, 0.3);
+    stroke-width: 2;
+    fill: none;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: stroke-opacity, stroke-width;
+}
+
+.mindmap-link.highlighted {
+    stroke: rgba(74, 158, 255, 0.8) !important;
+    stroke-width: 3 !important;
+    filter: drop-shadow(0 0 8px rgba(74, 158, 255, 0.6));
+    animation: linkPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes linkPulse {
+    0%, 100% {
+        stroke-opacity: 0.8;
+    }
+    50% {
+        stroke-opacity: 1;
+    }
 }
 
 /* Legend */
