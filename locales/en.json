@@ -8,6 +8,7 @@
   },
   "header": {
     "network_status": "Connecting...",
+    "network_name": "Binance Smart Chain",
     "wallet_label": "Wallet:",
     "email_title": "Contact us",
     "copy_email": "Copy email",

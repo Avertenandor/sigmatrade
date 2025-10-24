@@ -8,6 +8,7 @@
   },
   "header": {
     "network_status": "Подключение...",
+    "network_name": "Binance Smart Chain",
     "wallet_label": "Кошелек:",
     "email_title": "Написать нам",
     "copy_email": "Копировать email",
