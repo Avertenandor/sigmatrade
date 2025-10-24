@@ -93,13 +93,14 @@ class MindMap {
     startAnimationLoop() {
         const animate = () => {
             // Smooth interpolation towards target
-            const alpha = 0.15; // Smoothing factor (lower = smoother)
+            // Higher alpha = faster/more responsive, Lower alpha = smoother/slower
+            const alpha = 0.2; // Optimized for SVG transform
 
             this.currentScale = this.lerp(this.currentScale, this.targetScale, alpha);
             this.currentX = this.lerp(this.currentX, this.targetX, alpha);
             this.currentY = this.lerp(this.currentY, this.targetY, alpha);
 
-            // Apply transform
+            // Apply SVG transform (not CSS transform - SVG elements need setAttribute)
             this.applyTransform();
 
             // Continue animation loop
@@ -110,12 +111,12 @@ class MindMap {
     }
 
     /**
-     * Apply transform to content group using hardware-accelerated CSS
+     * Apply transform to content group using SVG transform (not CSS)
      */
     applyTransform() {
-        const transform = `translate(${this.currentX}px, ${this.currentY}px) scale(${this.currentScale})`;
-        this.contentGroup.style.transform = transform;
-        this.contentGroup.style.transformOrigin = '0 0';
+        // SVG transform uses unitless values, not px
+        const transform = `translate(${this.currentX}, ${this.currentY}) scale(${this.currentScale})`;
+        this.contentGroup.setAttribute('transform', transform);
     }
 
     /**
@@ -392,8 +393,8 @@ class MindMap {
             this.draggedNode.node.x = newX;
             this.draggedNode.node.y = newY;
 
-            // Update visual position with smooth transform
-            this.draggedNode.group.style.transform = `translate(${newX}px, ${newY}px)`;
+            // Update visual position with SVG transform (not CSS)
+            this.draggedNode.group.setAttribute('transform', `translate(${newX}, ${newY})`);
 
             // Update connected links
             this.updateLinksForNode(this.draggedNode.node);
