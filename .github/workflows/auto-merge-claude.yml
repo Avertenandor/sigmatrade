@@ -1,0 +1,76 @@
+name: Auto-merge Claude branches to main
+
+on:
+  push:
+    branches:
+      - 'claude/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "Claude Code Auto-Merge"
+          git config user.email "noreply@anthropic.com"
+
+      - name: Get current branch name
+        id: branch
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
+      - name: Merge to main
+        run: |
+          echo "🤖 Auto-merging ${{ steps.branch.outputs.branch }} to main..."
+
+          # Checkout main
+          git fetch origin main
+          git checkout main
+
+          # Merge the Claude branch
+          git merge --no-ff origin/${{ steps.branch.outputs.branch }} -m "chore(auto-merge): merge ${{ steps.branch.outputs.branch }} to main
+
+          Automatically merged by GitHub Actions from Claude Code session.
+
+          Branch: ${{ steps.branch.outputs.branch }}
+          Commit: ${{ github.sha }}
+          Triggered by: ${{ github.actor }}
+
+          🤖 Auto-merge by Claude Code"
+
+          # Push to main
+          git push origin main
+
+          echo "✅ Successfully merged to main!"
+
+      - name: Post merge summary
+        if: success()
+        run: |
+          echo "## ✅ Auto-merge successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch merged:** \`${{ steps.branch.outputs.branch }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Target:** \`main\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Changes are now live on GitHub Pages: https://sigmatrade.org/" >> $GITHUB_STEP_SUMMARY
+
+      - name: Handle merge failure
+        if: failure()
+        run: |
+          echo "## ❌ Auto-merge failed!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ steps.branch.outputs.branch }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Error:** Merge conflict or permission issue detected" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Please resolve conflicts manually or check repository permissions." >> $GITHUB_STEP_SUMMARY
+          exit 1
