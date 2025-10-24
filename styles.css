@@ -1579,8 +1579,8 @@ body::before {
 
 /* Mind map nodes - Premium animations */
 .mindmap-node {
-    transition: none; /* Handled by JS for smoother control */
-    will-change: transform;
+    /* SVG transform is handled by JS via setAttribute */
+    /* No CSS transitions on the node itself, only on child elements */
 }
 
 .mindmap-node.hovered .node-circle {
