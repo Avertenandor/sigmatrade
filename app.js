@@ -1160,6 +1160,9 @@ class SigmaTrade {
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new SigmaTrade();
+
+    // Initialize email copy buttons
+    initEmailCopyButtons();
 });
 
 document.addEventListener('visibilitychange', () => {
@@ -1175,3 +1178,71 @@ document.addEventListener('visibilitychange', () => {
         }
     }
 });
+
+// ✉️ Email Copy Functionality
+function initEmailCopyButtons() {
+    const copyButtons = document.querySelectorAll('.copy-email-btn');
+
+    copyButtons.forEach(button => {
+        button.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const email = button.getAttribute('data-email');
+
+            try {
+                // Copy to clipboard
+                await navigator.clipboard.writeText(email);
+
+                // Visual feedback
+                button.classList.add('copied');
+
+                // Show toast notification
+                if (window.showToast) {
+                    showToast(`📧 Email скопирован: ${email}`, 'success');
+                }
+
+                // Reset button state after animation
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 500);
+
+            } catch (err) {
+                console.error('Failed to copy email:', err);
+
+                // Fallback method
+                fallbackCopyEmail(email, button);
+            }
+        });
+    });
+}
+
+// Fallback copy method for older browsers
+function fallbackCopyEmail(email, button) {
+    const textArea = document.createElement('textarea');
+    textArea.value = email;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    try {
+        document.execCommand('copy');
+        button.classList.add('copied');
+
+        if (window.showToast) {
+            showToast(`📧 Email скопирован: ${email}`, 'success');
+        }
+
+        setTimeout(() => {
+            button.classList.remove('copied');
+        }, 500);
+    } catch (err) {
+        console.error('Fallback copy failed:', err);
+        if (window.showToast) {
+            showToast('❌ Не удалось скопировать email', 'error');
+        }
+    } finally {
+        document.body.removeChild(textArea);
+    }
+}
