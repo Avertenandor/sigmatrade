@@ -375,6 +375,58 @@ body::before {
     50% { transform: scale(1.2); }
 }
 
+/* ========== LOGIN BUTTON ========== */
+.login-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #0099cc 100%);
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.login-btn:hover::before {
+    left: 100%;
+}
+
+.login-btn:hover {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.login-icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}
+
+.login-text {
+    white-space: nowrap;
+}
+
 /* ========== MOBILE MENU TOGGLE ========== */
 .mobile-menu-toggle {
     display: none;
@@ -1634,6 +1686,19 @@ body::before {
 
     .email-text {
         font-size: var(--font-xs);
+    }
+
+    .login-btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .login-text {
+        display: none;
+    }
+
+    .login-icon {
+        width: 24px;
+        height: 24px;
     }
     
     .main-nav {
