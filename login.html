@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Вход - SigmaTrade | Безопасный доступ</title>
+
+    <meta name="description" content="Безопасный вход в систему SigmaTrade с верификацией устройства и расширенной аутентификацией">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon-32x32.png">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#0a0a0a">
+
+    <link rel="stylesheet" href="login-styles.css?v=1.0.0">
+</head>
+<body>
+    <div class="login-container">
+        <!-- Background Animation -->
+        <div class="background-animation">
+            <div class="grid-overlay"></div>
+            <canvas id="particleCanvas"></canvas>
+        </div>
+
+        <!-- Logo -->
+        <div class="logo-section">
+            <a href="index.html" class="logo-link">
+                <span class="logo-icon">Σ</span>
+                <span class="logo-text">SIGMA<span class="logo-accent">TRADE</span></span>
+            </a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Warning Banner -->
+            <div class="warning-banner" id="warningBanner">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-content">
+                    <h3 class="warning-title">Неверифицированное устройство</h3>
+                    <p class="warning-text">
+                        К сожалению, вы пытаетесь войти на сайт с неверифицированного устройства.
+                        В случае, если вам необходимо войти не со своего верифицированного устройства,
+                        введите ваш мастер-пароль и укажите хеш крайней выплаты вам на кошелек нашей системы.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Device Info Section -->
+            <div class="device-info-section">
+                <h2 class="section-title">
+                    <span class="icon">🔍</span>
+                    Информация о вашем подключении
+                </h2>
+                <div class="info-grid" id="deviceInfoGrid">
+                    <div class="info-card loading">
+                        <div class="info-label">IP адрес</div>
+                        <div class="info-value" id="ipAddress">
+                            <div class="spinner-small"></div>
+                            <span>Определение...</span>
+                        </div>
+                    </div>
+                    <div class="info-card loading">
+                        <div class="info-label">Провайдер</div>
+                        <div class="info-value" id="ispProvider">
+                            <div class="spinner-small"></div>
+                            <span>Определение...</span>
+                        </div>
+                    </div>
+                    <div class="info-card loading">
+                        <div class="info-label">Местоположение</div>
+                        <div class="info-value" id="location">
+                            <div class="spinner-small"></div>
+                            <span>Определение...</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Операционная система</div>
+                        <div class="info-value" id="osInfo">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Браузер</div>
+                        <div class="info-value" id="browserInfo">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Устройство</div>
+                        <div class="info-value" id="deviceType">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Разрешение экрана</div>
+                        <div class="info-value" id="screenResolution">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Язык</div>
+                        <div class="info-value" id="languageInfo">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Часовой пояс</div>
+                        <div class="info-value" id="timezoneInfo">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">WebGL</div>
+                        <div class="info-value" id="webglInfo">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Canvas Fingerprint</div>
+                        <div class="info-value fingerprint" id="canvasFingerprint">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">User Agent</div>
+                        <div class="info-value fingerprint" id="userAgent">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <div class="login-form-section">
+                <h2 class="section-title">
+                    <span class="icon">🔐</span>
+                    Вход в систему
+                </h2>
+
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="username" class="form-label">
+                            <span class="label-icon">👤</span>
+                            Логин
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-input"
+                            placeholder="Введите логин"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <span class="label-icon">🔑</span>
+                            Пароль
+                        </label>
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-input"
+                                placeholder="Введите пароль"
+                                autocomplete="current-password"
+                                required
+                            >
+                            <button type="button" class="toggle-password" data-target="password">
+                                <span class="eye-icon">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-divider">
+                        <span class="divider-text">Дополнительная верификация</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="masterPassword" class="form-label">
+                            <span class="label-icon">🛡️</span>
+                            Мастер-пароль
+                            <span class="optional-badge">для неверифицированных устройств</span>
+                        </label>
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="masterPassword"
+                                name="masterPassword"
+                                class="form-input"
+                                placeholder="Введите мастер-пароль"
+                                autocomplete="off"
+                            >
+                            <button type="button" class="toggle-password" data-target="masterPassword">
+                                <span class="eye-icon">👁️</span>
+                            </button>
+                        </div>
+                        <div class="form-hint">
+                            Требуется для входа с нового или неверифицированного устройства
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionHash" class="form-label">
+                            <span class="label-icon">🔗</span>
+                            Хеш последней транзакции
+                            <span class="optional-badge">для неверифицированных устройств</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="transactionHash"
+                            name="transactionHash"
+                            class="form-input"
+                            placeholder="0x..."
+                            autocomplete="off"
+                            pattern="^0x[a-fA-F0-9]{64}$"
+                        >
+                        <div class="form-hint">
+                            Введите хеш крайней выплаты на ваш кошелек в нашей системе
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-icon">🚀</span>
+                        <span class="btn-text">Войти в систему</span>
+                        <div class="btn-loader"></div>
+                    </button>
+
+                    <div class="form-footer">
+                        <a href="index.html" class="back-link">
+                            ← Вернуться на главную
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <div class="notice-icon">🔒</div>
+                <div class="notice-content">
+                    <h4>Безопасность превыше всего</h4>
+                    <p>
+                        Все данные передаются по защищенному соединению.
+                        Мы не храним ваши пароли в открытом виде и используем современные методы шифрования.
+                        Информация о вашем устройстве используется исключительно для верификации и безопасности вашего аккаунта.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="login-footer">
+            <p>&copy; 2025 SigmaTrade. Все права защищены.</p>
+            <p class="footer-contact">
+                Вопросы? Напишите нам:
+                <a href="mailto:trdgood00@gmail.com">trdgood00@gmail.com</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="login-script.js?v=1.0.0"></script>
+</body>
+</html>
