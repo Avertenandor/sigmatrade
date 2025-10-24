@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Ментальная карта | SigmaTrade</title>
+    <meta name="description" content="Ментальная карта проекта SigmaTrade - визуализация архитектуры и связей системы мониторинга торговых ботов">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #151515;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent-blue: #00d4ff;
+            --accent-purple: #a855f7;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --border-color: #333333;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            color: var(--accent-blue);
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            color: var(--text-primary);
+        }
+
+        .logo-accent {
+            color: var(--accent-blue);
+        }
+
+        .back-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent-blue);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .mindmap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+        }
+
+        .mindmap-center {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .mindmap-center h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mindmap-center p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .mindmap-branches {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .branch {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .branch::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .branch:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .branch:hover::before {
+            transform: scaleX(1);
+        }
+
+        .branch-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .branch-icon {
+            font-size: 2rem;
+        }
+
+        .branch-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .branch-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .branch-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .branch-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .branch-item:hover {
+            background: var(--bg-primary);
+            transform: translateX(5px);
+        }
+
+        .branch-item-icon {
+            color: var(--accent-blue);
+        }
+
+        .connections-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .tech-stack {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tech-stack h3 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--accent-blue);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tech-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .tech-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+        }
+
+        .tech-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-card-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+        }
+
+        .status-dev {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-orange);
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .mindmap-branches {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mindmap-center {
+                padding: 1.5rem;
+            }
+
+            .mindmap-center h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .version {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">Σ</span>
+                    <span class="logo-text">SIGMA<span class="logo-accent">TRADE</span></span>
+                </div>
+                <a href="index.html" class="back-btn">← Вернуться на главную</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Ментальная карта проекта</h1>
+            <p class="page-subtitle">Архитектура и взаимосвязи системы мониторинга торговых ботов</p>
+
+            <div class="mindmap-container">
+                <!-- Center Node -->
+                <div class="mindmap-center">
+                    <h2>🎯 SIGMATRADE</h2>
+                    <p>Мониторинг семейства торговых ботов</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">Binance Smart Chain (BSC)</p>
+                </div>
+
+                <!-- Main Branches -->
+                <div class="mindmap-branches">
+                    <!-- Bots Family -->
+                    <div class="branch">
+                        <div class="branch-header">
+                            <span class="branch-icon">🤖</span>
+                            <h3 class="branch-title">Семейство ботов</h3>
+                        </div>
+                        <p class="branch-description">Автоматизированные торговые агенты на BSC</p>
+                        <div class="branch-items">
+                            <div class="branch-item">
+                                <span class="branch-item-icon">🔄</span>
+                                <span>Бот-обменник</span>
+                                <span class="status-badge status-active">Активен</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">💼</span>
+                                <span>МЭВ-бот</span>
+                                <span class="status-badge status-active">Активен</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">📊</span>
+                                <span>Арбитражный бот</span>
+                                <span class="status-badge status-dev">Разработка</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Features -->
+                    <div class="branch">
+                        <div class="branch-header">
+                            <span class="branch-icon">⚡</span>
+                            <h3 class="branch-title">Основные функции</h3>
+                        </div>
+                        <p class="branch-description">Real-time мониторинг и аналитика</p>
+                        <div class="branch-items">
+                            <div class="branch-item">
+                                <span class="branch-item-icon">📡</span>
+                                <span>Мониторинг транзакций</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">💰</span>
+                                <span>Отслеживание балансов</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">📊</span>
+                                <span>История операций</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">🔔</span>
+                                <span>Уведомления</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technology -->
+                    <div class="branch">
+                        <div class="branch-header">
+                            <span class="branch-icon">🛠️</span>
+                            <h3 class="branch-title">Технологии</h3>
+                        </div>
+                        <p class="branch-description">Современный стек разработки</p>
+                        <div class="branch-items">
+                            <div class="branch-item">
+                                <span class="branch-item-icon">📄</span>
+                                <span>HTML5 + CSS3</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">⚙️</span>
+                                <span>JavaScript ES6+</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">💾</span>
+                                <span>IndexedDB</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">🌐</span>
+                                <span>WebSocket</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API & Services -->
+                    <div class="branch">
+                        <div class="branch-header">
+                            <span class="branch-icon">🔌</span>
+                            <h3 class="branch-title">API & Сервисы</h3>
+                        </div>
+                        <p class="branch-description">Внешние интеграции</p>
+                        <div class="branch-items">
+                            <div class="branch-item">
+                                <span class="branch-item-icon">⚡</span>
+                                <span>QuickNode RPC</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">🔍</span>
+                                <span>BscScan API</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">🔗</span>
+                                <span>Web3 Provider</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tokens -->
+                    <div class="branch">
+                        <div class="branch-header">
+                            <span class="branch-icon">🪙</span>
+                            <h3 class="branch-title">Токены</h3>
+                        </div>
+                        <p class="branch-description">Поддерживаемые криптовалюты</p>
+                        <div class="branch-items">
+                            <div class="branch-item">
+                                <span class="branch-item-icon">💎</span>
+                                <span>BNB (Native)</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">💵</span>
+                                <span>USDT (BEP-20)</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">🥞</span>
+                                <span>CAKE</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">💲</span>
+                                <span>BUSD</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance -->
+                    <div class="branch">
+                        <div class="branch-header">
+                            <span class="branch-icon">🚀</span>
+                            <h3 class="branch-title">Оптимизация</h3>
+                        </div>
+                        <p class="branch-description">Производительность и UX</p>
+                        <div class="branch-items">
+                            <div class="branch-item">
+                                <span class="branch-item-icon">📜</span>
+                                <span>Virtual Scrolling</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">💾</span>
+                                <span>Агрессивное кеширование</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">⚡</span>
+                                <span>RPC Batching</span>
+                            </div>
+                            <div class="branch-item">
+                                <span class="branch-item-icon">🎯</span>
+                                <span>Rate Limiting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tech Stack Details -->
+                <div class="tech-stack">
+                    <h3>🎨 Технический стек</h3>
+                    <div class="tech-grid">
+                        <div class="tech-card">
+                            <div class="tech-card-icon">📱</div>
+                            <div class="tech-card-title">Frontend</div>
+                            <div class="tech-card-desc">HTML5, CSS3, JavaScript, Responsive Design</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-card-icon">🔗</div>
+                            <div class="tech-card-title">Blockchain</div>
+                            <div class="tech-card-desc">BSC, QuickNode, Etherscan API</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-card-icon">💾</div>
+                            <div class="tech-card-title">Storage</div>
+                            <div class="tech-card-desc">IndexedDB, Memory Cache, LocalStorage</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-card-icon">🌐</div>
+                            <div class="tech-card-title">Hosting</div>
+                            <div class="tech-card-desc">GitHub Pages, CloudFlare CDN</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-card-icon">📊</div>
+                            <div class="tech-card-title">Analytics</div>
+                            <div class="tech-card-desc">Real-time TX monitoring, Stats</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-card-icon">🔒</div>
+                            <div class="tech-card-title">Security</div>
+                            <div class="tech-card-desc">Read-only, No private keys</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>SigmaTrade - Пока все болтают, мы работаем</p>
+                <div class="version">v11.1.1</div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
