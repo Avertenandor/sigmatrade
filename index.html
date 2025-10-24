@@ -78,75 +78,89 @@
     <link rel="preconnect" href="https://old-patient-butterfly.bsc.quiknode.pro">
     
     <link rel="stylesheet" href="styles.css?v=11.1.5">
-    <link rel="stylesheet" href="header-two-level.css?v=1.1.0">
-    <link rel="stylesheet" href="lang-switcher.css?v=2.1.0">
+    <link rel="stylesheet" href="fixed-header.css?v=1.0.0">
     <link rel="stylesheet" href="premium-nav.css?v=1.0.0">
+    <link rel="stylesheet" href="modals-toasts.css?v=1.0.0">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
+    <!-- Фиксированный хедер -->
+    <header class="site-header" id="siteHeader">
         <div class="container">
-            <!-- Level 1: Branding -->
-            <div class="header-brand">
-                <div class="logo">
-                    <span class="logo-icon">Σ</span>
-                    <span class="logo-text">SIGMA<span class="logo-accent">TRADE</span></span>
-                </div>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+            <!-- Левая часть: Логотип -->
+            <div class="site-header-left">
+                <a href="/" class="site-logo" id="siteLogo">
+                    <span class="site-logo-icon">⏳</span>
+                    <span class="site-logo-text">SIGMA<span class="site-logo-accent">TRADE</span></span>
+                </a>
             </div>
 
-            <!-- Level 2: Functional Controls -->
-            <div class="header-controls">
-                <div class="network-status">
-                    <span class="status-dot" id="networkStatus"></span>
-                    <span id="networkName" data-i18n="header.network_status">Подключение...</span>
+            <!-- Правая часть: Элементы управления -->
+            <div class="site-header-right">
+                <!-- Индикатор сети -->
+                <div class="header-element network-indicator" id="networkIndicator">
+                    <span class="network-status-dot"></span>
+                    <span class="network-name" data-i18n="header.network_name">Binance Smart Chain</span>
+                    <span class="network-dropdown-icon">▼</span>
                 </div>
-                <div class="wallet-short">
+
+                <!-- Кошелёк -->
+                <div class="header-element wallet-element">
                     <span class="wallet-label" data-i18n="header.wallet_label">Кошелек:</span>
-                    <span class="wallet-address" id="walletShort">0xB685...895b</span>
-                </div>
-                <div class="header-contact">
-                    <svg class="email-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 8L10.89 13.26C11.5 13.67 12.5 13.67 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <a href="mailto:trdgood00@gmail.com" class="header-email" title="Написать нам">
-                        <span class="email-text">trdgood00@gmail.com</span>
-                    </a>
-                    <button class="copy-email-btn" data-email="trdgood00@gmail.com" title="Копировать email">
+                    <span class="wallet-address" id="walletAddress">0xB685...895b</span>
+                    <button class="wallet-copy-btn" id="walletCopyBtn" title="Копировать адрес">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
                 </div>
-                <!-- Language Switcher -->
-                <div class="lang-switcher" data-lang-switcher>
-                    <label class="lang-label">🌐</label>
-                    <select id="lang-select" class="lang-select"></select>
+
+                <!-- Email -->
+                <a href="mailto:trdgood00@gmail.com" class="header-element email-element">
+                    <svg class="email-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8L10.89 13.26C11.5 13.67 12.5 13.67 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="email-text">trdgood00@gmail.com</span>
+                </a>
+
+                <!-- Селектор языка -->
+                <div class="header-element language-selector" id="languageSelector">
+                    <span class="language-icon">🌐</span>
+                    <span class="language-code" id="languageCode">RU</span>
+                    <span class="language-dropdown-icon">▼</span>
                 </div>
-                <a href="login.html" class="login-btn" title="Вход в систему">
+
+                <!-- Кнопка ВОЙТИ -->
+                <a href="login.html" class="header-element login-button">
                     <svg class="login-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <span class="login-text" data-i18n="header.login_btn">Войти</span>
+                    <span data-i18n="header.login_btn">ВОЙТИ</span>
                 </a>
-            </div>
 
-            <!-- Premium Navigation -->
+                <!-- Мобильное меню (гамбургер) -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Навигационные карточки (первая секция) -->
+    <section class="navigation-cards-section" id="navigationCards">
+        <div class="container">
             <nav class="premium-nav" id="premiumNav">
                 <div class="premium-nav-container">
                     <!-- Group 1: Trading Systems -->
                     <div class="premium-nav-group">
                         <div class="premium-nav-group-header">
                             <span class="premium-nav-group-icon">🤖</span>
-                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_trading">Торговые системы</span>
+                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_trading">ТОРГОВЫЕ СИСТЕМЫ</span>
                         </div>
                         <div class="premium-nav-items">
                             <!-- Exchange Bot -->
-                            <button class="premium-nav-item active" data-page="exchange">
+                            <button class="premium-nav-item active" data-page="exchange" data-section="page-exchange">
                                 <div class="premium-nav-item-icon-container">
                                     <span>🔄</span>
                                 </div>
@@ -156,11 +170,11 @@
                                 </div>
                                 <div class="premium-nav-status status-active">
                                     <span class="premium-nav-status-dot"></span>
-                                    <span data-i18n="premium_nav.status_active">Работает</span>
+                                    <span data-i18n="premium_nav.status_active">РАБОТАЕТ</span>
                                 </div>
                             </button>
                             <!-- MEV Bot -->
-                            <button class="premium-nav-item" data-page="mev">
+                            <button class="premium-nav-item" data-page="mev" data-section="page-mev" data-status="soon">
                                 <div class="premium-nav-item-icon-container">
                                     <span>💼</span>
                                 </div>
@@ -170,11 +184,11 @@
                                 </div>
                                 <div class="premium-nav-status status-soon">
                                     <span class="premium-nav-status-dot"></span>
-                                    <span data-i18n="premium_nav.status_soon">Скоро</span>
+                                    <span data-i18n="premium_nav.status_soon">СКОРО</span>
                                 </div>
                             </button>
                             <!-- Arbitrage Bot -->
-                            <button class="premium-nav-item" data-page="arbitrage">
+                            <button class="premium-nav-item" data-page="arbitrage" data-section="page-arbitrage" data-status="soon">
                                 <div class="premium-nav-item-icon-container">
                                     <span>📊</span>
                                 </div>
@@ -184,7 +198,7 @@
                                 </div>
                                 <div class="premium-nav-status status-soon">
                                     <span class="premium-nav-status-dot"></span>
-                                    <span data-i18n="premium_nav.status_soon">Скоро</span>
+                                    <span data-i18n="premium_nav.status_soon">СКОРО</span>
                                 </div>
                             </button>
                         </div>
@@ -194,11 +208,11 @@
                     <div class="premium-nav-group">
                         <div class="premium-nav-group-header">
                             <span class="premium-nav-group-icon">🤝</span>
-                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_community">Сообщество</span>
+                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_community">СООБЩЕСТВО</span>
                         </div>
                         <div class="premium-nav-items">
                             <!-- Partner Program -->
-                            <button class="premium-nav-item" data-page="partner-rewards">
+                            <button class="premium-nav-item" data-page="partner-rewards" data-section="page-partner-rewards">
                                 <div class="premium-nav-item-icon-container">
                                     <span>💎</span>
                                 </div>
@@ -215,11 +229,11 @@
                     <div class="premium-nav-group">
                         <div class="premium-nav-group-header">
                             <span class="premium-nav-group-icon">📚</span>
-                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_info">Информация</span>
+                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_info">ИНФОРМАЦИЯ</span>
                         </div>
                         <div class="premium-nav-items">
                             <!-- How to Start -->
-                            <button class="premium-nav-item" data-page="cooperation">
+                            <button class="premium-nav-item" data-page="cooperation" data-section="page-cooperation">
                                 <div class="premium-nav-item-icon-container">
                                     <span>🚀</span>
                                 </div>
@@ -229,7 +243,7 @@
                                 </div>
                             </button>
                             <!-- Site Map -->
-                            <button class="premium-nav-item" data-page="mindmap">
+                            <button class="premium-nav-item" data-page="mindmap" data-section="page-mindmap">
                                 <div class="premium-nav-item-icon-container">
                                     <span>🗺️</span>
                                 </div>
@@ -243,7 +257,7 @@
                 </div>
             </nav>
         </div>
-    </header>
+    </section>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -1246,6 +1260,7 @@
     <script src="i18n.js?v=2.1.0"></script>
     <script src="i18n-auto-apply.js?v=2.1.0"></script>
     <script src="lang-switcher.js?v=2.1.0"></script>
+    <script src="site-interactions.js?v=1.0.0"></script>
     <script src="premium-nav.js?v=1.0.0"></script>
     <script src="particle-effects.js?v=1.0.0"></script>
     <script src="mindmap.js?v=11.1.5"></script>
