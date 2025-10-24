@@ -80,6 +80,7 @@
     <link rel="stylesheet" href="styles.css?v=11.1.5">
     <link rel="stylesheet" href="header-two-level.css?v=1.1.0">
     <link rel="stylesheet" href="lang-switcher.css?v=2.1.0">
+    <link rel="stylesheet" href="premium-nav.css?v=1.0.0">
 </head>
 <body>
     <!-- Header -->
@@ -134,32 +135,112 @@
                 </a>
             </div>
 
-            <!-- Navigation Tabs -->
-            <nav class="main-nav" id="mainNav">
-                <button class="nav-tab active" data-page="exchange">
-                    <span class="nav-icon">🔄</span>
-                    <span class="nav-label" data-i18n="nav.exchange">Бот-обменник</span>
-                </button>
-                <button class="nav-tab" data-page="mev">
-                    <span class="nav-icon">💼</span>
-                    <span class="nav-label" data-i18n="nav.mev">МЭВ-бот</span>
-                </button>
-                <button class="nav-tab" data-page="arbitrage">
-                    <span class="nav-icon">📊</span>
-                    <span class="nav-label" data-i18n="nav.arbitrage">Арбитраж</span>
-                </button>
-                <button class="nav-tab" data-page="partner-rewards">
-                    <span class="nav-icon">🤝</span>
-                    <span class="nav-label" data-i18n="nav.partner_rewards">Партнерская программа</span>
-                </button>
-                <button class="nav-tab" data-page="cooperation">
-                    <span class="nav-icon">🚀</span>
-                    <span class="nav-label" data-i18n="nav.cooperation">Как начать</span>
-                </button>
-                <button class="nav-tab" data-page="mindmap">
-                    <span class="nav-icon">🗺️</span>
-                    <span class="nav-label" data-i18n="nav.mindmap">Карта сайта</span>
-                </button>
+            <!-- Premium Navigation -->
+            <nav class="premium-nav" id="premiumNav">
+                <div class="premium-nav-container">
+                    <!-- Group 1: Trading Systems -->
+                    <div class="premium-nav-group">
+                        <div class="premium-nav-group-header">
+                            <span class="premium-nav-group-icon">🤖</span>
+                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_trading">Торговые системы</span>
+                        </div>
+                        <div class="premium-nav-items">
+                            <!-- Exchange Bot -->
+                            <button class="premium-nav-item active" data-page="exchange">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>🔄</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name" data-i18n="nav.exchange">Бот-обменник</div>
+                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.exchange_subtitle">Автообмен 24/7</div>
+                                </div>
+                                <div class="premium-nav-status status-active">
+                                    <span class="premium-nav-status-dot"></span>
+                                    <span data-i18n="premium_nav.status_active">Работает</span>
+                                </div>
+                            </button>
+                            <!-- MEV Bot -->
+                            <button class="premium-nav-item" data-page="mev">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>💼</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name" data-i18n="nav.mev">МЭВ-бот</div>
+                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.mev_subtitle">Извлечение MEV</div>
+                                </div>
+                                <div class="premium-nav-status status-soon">
+                                    <span class="premium-nav-status-dot"></span>
+                                    <span data-i18n="premium_nav.status_soon">Скоро</span>
+                                </div>
+                            </button>
+                            <!-- Arbitrage Bot -->
+                            <button class="premium-nav-item" data-page="arbitrage">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>📊</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name" data-i18n="nav.arbitrage">Арбитражный бот</div>
+                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.arbitrage_subtitle">Межбиржевой арбитраж</div>
+                                </div>
+                                <div class="premium-nav-status status-soon">
+                                    <span class="premium-nav-status-dot"></span>
+                                    <span data-i18n="premium_nav.status_soon">Скоро</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Group 2: Community -->
+                    <div class="premium-nav-group">
+                        <div class="premium-nav-group-header">
+                            <span class="premium-nav-group-icon">🤝</span>
+                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_community">Сообщество</span>
+                        </div>
+                        <div class="premium-nav-items">
+                            <!-- Partner Program -->
+                            <button class="premium-nav-item" data-page="partner-rewards">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>💎</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name" data-i18n="nav.partner_rewards">Партнерская программа</div>
+                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.partner_subtitle">Заработок на партнерах</div>
+                                </div>
+                                <div class="premium-nav-badge" data-i18n="premium_nav.partner_levels">3 уровня</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Group 3: Information -->
+                    <div class="premium-nav-group">
+                        <div class="premium-nav-group-header">
+                            <span class="premium-nav-group-icon">📚</span>
+                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_info">Информация</span>
+                        </div>
+                        <div class="premium-nav-items">
+                            <!-- How to Start -->
+                            <button class="premium-nav-item" data-page="cooperation">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>🚀</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name" data-i18n="nav.cooperation">Как начать</div>
+                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.cooperation_subtitle">Процесс сотрудничества</div>
+                                </div>
+                            </button>
+                            <!-- Site Map -->
+                            <button class="premium-nav-item" data-page="mindmap">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>🗺️</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name" data-i18n="nav.mindmap">Карта сайта</div>
+                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.mindmap_subtitle">Структура платформы</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -1165,6 +1246,8 @@
     <script src="i18n.js?v=2.1.0"></script>
     <script src="i18n-auto-apply.js?v=2.1.0"></script>
     <script src="lang-switcher.js?v=2.1.0"></script>
+    <script src="premium-nav.js?v=1.0.0"></script>
+    <script src="particle-effects.js?v=1.0.0"></script>
     <script src="mindmap.js?v=11.1.5"></script>
     <script src="partner-rewards-map.js?v=11.1.5"></script>
     <script src="cooperation-map.js?v=11.1.5"></script>

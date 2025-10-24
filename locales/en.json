@@ -21,6 +21,20 @@
     "cooperation": "Get Started",
     "mindmap": "Site Map"
   },
+  "premium_nav": {
+    "group_trading": "Trading Systems",
+    "group_community": "Community",
+    "group_info": "Information",
+    "exchange_subtitle": "Auto-exchange 24/7",
+    "mev_subtitle": "MEV Extraction",
+    "arbitrage_subtitle": "Cross-exchange Arbitrage",
+    "partner_subtitle": "Earn from Partners",
+    "cooperation_subtitle": "Cooperation Process",
+    "mindmap_subtitle": "Platform Structure",
+    "status_active": "Active",
+    "status_soon": "Soon",
+    "partner_levels": "3 Levels"
+  },
   "hero": {
     "title": "While others talk, we work",
     "subtitle": "Automatic cryptocurrency exchange 24/7 on Binance Smart Chain"

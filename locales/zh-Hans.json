@@ -15,5 +15,19 @@
     "partner_rewards": "合作伙伴计划",
     "cooperation": "开始使用",
     "mindmap": "网站地图"
+  },
+  "premium_nav": {
+    "group_trading": "交易系统",
+    "group_community": "社区",
+    "group_info": "信息",
+    "exchange_subtitle": "自动交换 24/7",
+    "mev_subtitle": "MEV提取",
+    "arbitrage_subtitle": "跨交易所套利",
+    "partner_subtitle": "从合作伙伴赚取",
+    "cooperation_subtitle": "合作流程",
+    "mindmap_subtitle": "平台结构",
+    "status_active": "活跃",
+    "status_soon": "即将推出",
+    "partner_levels": "3个级别"
   }
 }

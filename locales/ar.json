@@ -15,5 +15,19 @@
     "partner_rewards": "برنامج الشراكة",
     "cooperation": "البدء",
     "mindmap": "خريطة الموقع"
+  },
+  "premium_nav": {
+    "group_trading": "أنظمة التداول",
+    "group_community": "المجتمع",
+    "group_info": "معلومات",
+    "exchange_subtitle": "تبادل تلقائي 24/7",
+    "mev_subtitle": "استخراج MEV",
+    "arbitrage_subtitle": "المراجحة بين البورصات",
+    "partner_subtitle": "اربح من الشركاء",
+    "cooperation_subtitle": "عملية التعاون",
+    "mindmap_subtitle": "هيكل المنصة",
+    "status_active": "نشط",
+    "status_soon": "قريباً",
+    "partner_levels": "3 مستويات"
   }
 }

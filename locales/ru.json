@@ -21,6 +21,20 @@
     "cooperation": "Как начать",
     "mindmap": "Карта сайта"
   },
+  "premium_nav": {
+    "group_trading": "Торговые системы",
+    "group_community": "Сообщество",
+    "group_info": "Информация",
+    "exchange_subtitle": "Автообмен 24/7",
+    "mev_subtitle": "Извлечение MEV",
+    "arbitrage_subtitle": "Межбиржевой арбитраж",
+    "partner_subtitle": "Заработок на партнерах",
+    "cooperation_subtitle": "Процесс сотрудничества",
+    "mindmap_subtitle": "Структура платформы",
+    "status_active": "Работает",
+    "status_soon": "Скоро",
+    "partner_levels": "3 уровня"
+  },
   "hero": {
     "title": "Пока все болтают, мы работаем",
     "subtitle": "Автоматический обмен криптовалют 24/7 на Binance Smart Chain"
