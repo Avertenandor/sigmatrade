@@ -1,0 +1,107 @@
+/* header-two-level.css - Двухуровневая структура header */
+
+/* Уровень 1: Брендинг */
+.header-brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    min-height: 60px;
+}
+
+/* Уровень 2: Функциональные элементы */
+.header-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-md, 20px);
+    padding: 12px 0;
+    min-height: 50px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Network Status */
+.header-controls .network-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Wallet */
+.header-controls .wallet-short {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Email Contact */
+.header-controls .header-contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Language Switcher */
+.header-controls .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    transition: all 0.2s ease;
+}
+
+.header-controls .lang-switcher:hover {
+    background: rgba(0,212,255,0.12);
+    border-color: rgba(0,212,255,0.4);
+    box-shadow: 0 0 12px rgba(0,212,255,0.2);
+}
+
+/* Login Button */
+.header-controls .login-btn {
+    margin-left: auto;
+}
+
+/* Mobile Adaptations */
+@media (max-width: 1024px) {
+    .header-controls {
+        gap: 15px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-brand {
+        padding: 10px 0;
+        min-height: 50px;
+    }
+
+    .header-controls {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 0;
+    }
+
+    .header-controls .network-status,
+    .header-controls .wallet-short {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .header-controls > * {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-controls .login-btn {
+        margin-left: 0;
+    }
+}
