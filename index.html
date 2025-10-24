@@ -78,13 +78,15 @@
     <link rel="preconnect" href="https://old-patient-butterfly.bsc.quiknode.pro">
     
     <link rel="stylesheet" href="styles.css?v=11.1.5">
-    <link rel="stylesheet" href="lang-switcher.css?v=1.0.0">
+    <link rel="stylesheet" href="header-two-level.css?v=1.0.0">
+    <link rel="stylesheet" href="lang-switcher.css?v=2.0.0">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="container">
-            <div class="header-top">
+            <!-- Level 1: Branding -->
+            <div class="header-brand">
                 <div class="logo">
                     <span class="logo-icon">Σ</span>
                     <span class="logo-text">SIGMA<span class="logo-accent">TRADE</span></span>
@@ -94,42 +96,44 @@
                     <span></span>
                     <span></span>
                 </button>
-                <div class="header-info">
-                    <div class="network-status">
-                        <span class="status-dot" id="networkStatus"></span>
-                        <span id="networkName" data-i18n="header.network_status">Подключение...</span>
-                    </div>
-                    <div class="wallet-short">
-                        <span class="wallet-label" data-i18n="header.wallet_label">Кошелек:</span>
-                        <span class="wallet-address" id="walletShort">0xB685...895b</span>
-                    </div>
-                    <div class="header-contact">
-                        <svg class="email-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 8L10.89 13.26C11.5 13.67 12.5 13.67 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <a href="mailto:trdgood00@gmail.com" class="header-email" title="Написать нам">
-                            <span class="email-text">trdgood00@gmail.com</span>
-                        </a>
-                        <button class="copy-email-btn" data-email="trdgood00@gmail.com" title="Копировать email">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <!-- Language Switcher -->
-                    <div class="lang-switcher" data-lang-switcher>
-                        <label class="lang-label">🌐</label>
-                        <select id="lang-select" class="lang-select"></select>
-                    </div>
-                    <a href="login.html" class="login-btn" title="Вход в систему">
-                        <svg class="login-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span class="login-text" data-i18n="header.login_btn">Войти</span>
-                    </a>
-                </div>
             </div>
-            
+
+            <!-- Level 2: Functional Controls -->
+            <div class="header-controls">
+                <div class="network-status">
+                    <span class="status-dot" id="networkStatus"></span>
+                    <span id="networkName" data-i18n="header.network_status">Подключение...</span>
+                </div>
+                <div class="wallet-short">
+                    <span class="wallet-label" data-i18n="header.wallet_label">Кошелек:</span>
+                    <span class="wallet-address" id="walletShort">0xB685...895b</span>
+                </div>
+                <div class="header-contact">
+                    <svg class="email-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8L10.89 13.26C11.5 13.67 12.5 13.67 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <a href="mailto:trdgood00@gmail.com" class="header-email" title="Написать нам">
+                        <span class="email-text">trdgood00@gmail.com</span>
+                    </a>
+                    <button class="copy-email-btn" data-email="trdgood00@gmail.com" title="Копировать email">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Language Switcher -->
+                <div class="lang-switcher" data-lang-switcher>
+                    <label class="lang-label">🌐</label>
+                    <select id="lang-select" class="lang-select"></select>
+                </div>
+                <a href="login.html" class="login-btn" title="Вход в систему">
+                    <svg class="login-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="login-text" data-i18n="header.login_btn">Войти</span>
+                </a>
+            </div>
+
             <!-- Navigation Tabs -->
             <nav class="main-nav" id="mainNav">
                 <button class="nav-tab active" data-page="exchange">
@@ -1154,14 +1158,14 @@
         </div>
     </footer>
 
-    <link rel="stylesheet" href="lang-switcher.css" />
+    <link rel="stylesheet" href="lang-switcher.css?v=2.0.0" />
     <script src="config.js?v=11.1.5"></script>
     <script src="db.js?v=11.1.5"></script>
     <script src="virtual-scroll.js?v=11.1.5"></script>
     <script src="toast.js?v=11.1.5"></script>
-    <script src="i18n.js"></script>
-    <script src="i18n-auto-apply.js"></script>
-    <script src="lang-switcher.js"></script>
+    <script src="i18n.js?v=2.0.0"></script>
+    <script src="i18n-auto-apply.js?v=2.0.0"></script>
+    <script src="lang-switcher.js?v=2.0.0"></script>
     <script src="mindmap.js?v=11.1.5"></script>
     <script src="partner-rewards-map.js?v=11.1.5"></script>
     <script src="cooperation-map.js?v=11.1.5"></script>
