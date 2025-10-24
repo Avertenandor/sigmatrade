@@ -1279,7 +1279,7 @@ body::before {
 
 .footer-content {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr auto;
+    grid-template-columns: 2fr 1fr auto;
     gap: var(--spacing-2xl);
     align-items: start;
 }
