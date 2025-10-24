@@ -1,6 +1,8 @@
 /**
- * Interactive Mind Map for SigmaTrade
- * Visualizes the entire user interaction concept
+ * Interactive Mind Map for SigmaTrade - Premium Edition
+ * Smooth 60fps animations with requestAnimationFrame
+ * Hardware-accelerated transforms
+ * Easing functions for buttery smooth interactions
  */
 
 class MindMap {
@@ -9,15 +11,57 @@ class MindMap {
         this.contentGroup = null;
         this.nodes = [];
         this.links = [];
-        this.scale = 1;
-        this.offsetX = 0;
-        this.offsetY = 0;
+
+        // Transform state
+        this.currentScale = 1;
+        this.targetScale = 1;
+        this.currentX = 0;
+        this.currentY = 0;
+        this.targetX = 0;
+        this.targetY = 0;
+
+        // Animation state
+        this.animationFrame = null;
+        this.isAnimating = false;
+
+        // Drag state
         this.isDragging = false;
+        this.isPanning = false;
         this.draggedNode = null;
+        this.dragStartX = 0;
+        this.dragStartY = 0;
+
+        // Viewport
         this.viewBoxWidth = 1400;
         this.viewBoxHeight = 900;
 
+        // Throttle state
+        this.lastWheelTime = 0;
+        this.wheelThrottle = 16; // ~60fps
+
         this.initialized = false;
+    }
+
+    /**
+     * Smooth easing functions
+     */
+    easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+    }
+
+    easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    }
+
+    easeOutQuart(t) {
+        return 1 - Math.pow(1 - t, 4);
+    }
+
+    /**
+     * Interpolate between current and target values
+     */
+    lerp(start, end, alpha) {
+        return start + (end - start) * alpha;
     }
 
     /**
@@ -38,8 +82,40 @@ class MindMap {
         this.render();
         this.setupEventListeners();
         this.centerView();
+        this.startAnimationLoop();
 
         this.initialized = true;
+    }
+
+    /**
+     * Main animation loop for smooth 60fps animations
+     */
+    startAnimationLoop() {
+        const animate = () => {
+            // Smooth interpolation towards target
+            const alpha = 0.15; // Smoothing factor (lower = smoother)
+
+            this.currentScale = this.lerp(this.currentScale, this.targetScale, alpha);
+            this.currentX = this.lerp(this.currentX, this.targetX, alpha);
+            this.currentY = this.lerp(this.currentY, this.targetY, alpha);
+
+            // Apply transform
+            this.applyTransform();
+
+            // Continue animation loop
+            this.animationFrame = requestAnimationFrame(animate);
+        };
+
+        animate();
+    }
+
+    /**
+     * Apply transform to content group using hardware-accelerated CSS
+     */
+    applyTransform() {
+        const transform = `translate(${this.currentX}px, ${this.currentY}px) scale(${this.currentScale})`;
+        this.contentGroup.style.transform = transform;
+        this.contentGroup.style.transformOrigin = '0 0';
     }
 
     /**
@@ -101,34 +177,29 @@ class MindMap {
             { source: 'exchange', target: 'bsc' },
 
             // MEV bot features
+            { source: 'mev', target: 'websocket' },
             { source: 'mev', target: 'transactions' },
-            { source: 'mev', target: 'balances' },
-            { source: 'mev', target: 'stats' },
             { source: 'mev', target: 'bsc' },
 
             // Arbitrage bot features
+            { source: 'arbitrage', target: 'websocket' },
             { source: 'arbitrage', target: 'stats' },
             { source: 'arbitrage', target: 'bsc' },
 
-            // Real-time features
-            { source: 'core', target: 'websocket' },
-            { source: 'websocket', target: 'quicknode' },
-
-            // Transaction interactions
+            // Common features
             { source: 'transactions', target: 'copy' },
             { source: 'transactions', target: 'explorer' },
+            { source: 'transactions', target: 'virtual-scroll' },
 
-            // Data flow
+            // Data connections
+            { source: 'transactions', target: 'cache' },
+            { source: 'balances', target: 'cache' },
+            { source: 'websocket', target: 'quicknode' },
             { source: 'transactions', target: 'etherscan' },
             { source: 'balances', target: 'etherscan' },
-            { source: 'etherscan', target: 'cache' },
-            { source: 'quicknode', target: 'cache' },
 
-            // Mobile support
-            { source: 'core', target: 'mobile' },
-
-            // Stats connection
-            { source: 'stats', target: 'etherscan' },
+            // Mobile
+            { source: 'mindmap', target: 'mobile' },
         ];
     }
 
@@ -136,69 +207,51 @@ class MindMap {
      * Render the mind map
      */
     render() {
+        // Clear existing content
         this.contentGroup.innerHTML = '';
 
-        // Draw links first (so they appear behind nodes)
-        this.links.forEach(link => {
-            const sourceNode = this.nodes.find(n => n.id === link.source);
-            const targetNode = this.nodes.find(n => n.id === link.target);
+        // Render links first (so they appear behind nodes)
+        this.links.forEach(link => this.renderLink(link));
 
-            if (sourceNode && targetNode) {
-                this.drawLink(sourceNode, targetNode);
-            }
-        });
-
-        // Draw nodes
-        this.nodes.forEach(node => {
-            this.drawNode(node);
-        });
+        // Render nodes
+        this.nodes.forEach(node => this.renderNode(node));
     }
 
     /**
-     * Draw a link between two nodes
+     * Render a link between nodes
      */
-    drawLink(source, target) {
+    renderLink(link) {
+        const sourceNode = this.nodes.find(n => n.id === link.source);
+        const targetNode = this.nodes.find(n => n.id === link.target);
+
+        if (!sourceNode || !targetNode) return;
+
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', source.x);
-        line.setAttribute('y1', source.y);
-        line.setAttribute('x2', target.x);
-        line.setAttribute('y2', target.y);
         line.setAttribute('class', 'mindmap-link');
-        line.setAttribute('data-source', source.id);
-        line.setAttribute('data-target', target.id);
-        line.setAttribute('stroke', '#4a9eff');
-        line.setAttribute('stroke-width', '2');
-        line.setAttribute('stroke-opacity', '0.3');
-        line.setAttribute('marker-end', 'url(#arrowhead)');
+        line.setAttribute('x1', sourceNode.x);
+        line.setAttribute('y1', sourceNode.y);
+        line.setAttribute('x2', targetNode.x);
+        line.setAttribute('y2', targetNode.y);
+        line.setAttribute('data-source', link.source);
+        line.setAttribute('data-target', link.target);
 
         this.contentGroup.appendChild(line);
     }
 
     /**
-     * Draw a node
+     * Render a node
      */
-    drawNode(node) {
+    renderNode(node) {
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        group.setAttribute('class', `mindmap-node mindmap-node-${node.type}`);
-        group.setAttribute('data-id', node.id);
+        group.setAttribute('class', `mindmap-node node-${node.type}`);
         group.setAttribute('transform', `translate(${node.x}, ${node.y})`);
-        group.style.cursor = 'pointer';
+        group.setAttribute('data-node-id', node.id);
+        group.style.cursor = node.action ? 'pointer' : 'move';
 
-        // Node circle
+        // Node circle with smooth transitions
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('class', 'node-circle');
         circle.setAttribute('r', this.getNodeRadius(node.type));
-        circle.setAttribute('class', `node-circle node-${node.type}`);
-
-        // Set colors based on type
-        const colors = {
-            core: '#ff6b6b',
-            page: '#4a9eff',
-            feature: '#51cf66',
-            data: '#ffd93d'
-        };
-        circle.setAttribute('fill', colors[node.type] || '#888');
-        circle.setAttribute('stroke', '#fff');
-        circle.setAttribute('stroke-width', '3');
 
         // Add glow effect for core node
         if (node.type === 'core') {
@@ -207,7 +260,7 @@ class MindMap {
 
         group.appendChild(circle);
 
-        // Node icon (as text)
+        // Node icon
         const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         icon.setAttribute('text-anchor', 'middle');
         icon.setAttribute('dy', '0.35em');
@@ -222,9 +275,6 @@ class MindMap {
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('dy', this.getNodeRadius(node.type) + 20);
         label.setAttribute('class', 'node-label');
-        label.setAttribute('fill', '#fff');
-        label.setAttribute('font-size', '14');
-        label.setAttribute('font-weight', 'bold');
         label.textContent = node.label;
         label.setAttribute('pointer-events', 'none');
         group.appendChild(label);
@@ -234,18 +284,21 @@ class MindMap {
         desc.setAttribute('text-anchor', 'middle');
         desc.setAttribute('dy', this.getNodeRadius(node.type) + 40);
         desc.setAttribute('class', 'node-description');
-        desc.setAttribute('fill', '#aaa');
-        desc.setAttribute('font-size', '12');
         desc.textContent = node.description;
-        desc.setAttribute('opacity', '0');
         desc.setAttribute('pointer-events', 'none');
         group.appendChild(desc);
 
-        // Add event listeners
+        // Event listeners
         group.addEventListener('mouseenter', () => this.onNodeHover(node, group, true));
         group.addEventListener('mouseleave', () => this.onNodeHover(node, group, false));
         group.addEventListener('mousedown', (e) => this.onNodeDragStart(e, node, group));
         group.addEventListener('click', () => this.onNodeClick(node));
+
+        // Touch support
+        group.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.onNodeDragStart(e.touches[0], node, group);
+        });
 
         this.contentGroup.appendChild(group);
     }
@@ -264,19 +317,14 @@ class MindMap {
     }
 
     /**
-     * Handle node hover
+     * Handle node hover with smooth animations
      */
     onNodeHover(node, group, isHover) {
-        // Show/hide description
-        const desc = group.querySelector('.node-description');
-        if (desc) {
-            desc.setAttribute('opacity', isHover ? '1' : '0');
-        }
-
-        // Highlight node
-        const circle = group.querySelector('.node-circle');
-        if (circle) {
-            circle.setAttribute('stroke-width', isHover ? '5' : '3');
+        // Add/remove hover class for CSS transitions
+        if (isHover) {
+            group.classList.add('hovered');
+        } else {
+            group.classList.remove('hovered');
         }
 
         // Highlight connected links
@@ -286,8 +334,11 @@ class MindMap {
             const target = link.getAttribute('data-target');
 
             if (source === node.id || target === node.id) {
-                link.setAttribute('stroke-opacity', isHover ? '0.8' : '0.3');
-                link.setAttribute('stroke-width', isHover ? '3' : '2');
+                if (isHover) {
+                    link.classList.add('highlighted');
+                } else {
+                    link.classList.remove('highlighted');
+                }
             }
         });
     }
@@ -297,20 +348,96 @@ class MindMap {
      */
     onNodeDragStart(event, node, group) {
         event.stopPropagation();
+
         this.isDragging = true;
         this.draggedNode = { node, group };
 
-        // Store initial mouse position
-        const svg = this.svg;
-        const pt = svg.createSVGPoint();
-        pt.x = event.clientX;
-        pt.y = event.clientY;
-        const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+        // Get mouse/touch position
+        const clientX = event.clientX || event.touches?.[0]?.clientX;
+        const clientY = event.clientY || event.touches?.[0]?.clientY;
 
-        this.dragOffset = {
-            x: svgP.x - node.x,
-            y: svgP.y - node.y
-        };
+        // Convert to SVG coordinates
+        const pt = this.svg.createSVGPoint();
+        pt.x = clientX;
+        pt.y = clientY;
+        const svgP = pt.matrixTransform(this.contentGroup.getScreenCTM().inverse());
+
+        this.dragStartX = svgP.x - node.x;
+        this.dragStartY = svgP.y - node.y;
+
+        // Add dragging class for visual feedback
+        group.classList.add('dragging');
+    }
+
+    /**
+     * Handle mouse move
+     */
+    onMouseMove(event) {
+        if (!this.isDragging && !this.isPanning) return;
+
+        const clientX = event.clientX || event.touches?.[0]?.clientX;
+        const clientY = event.clientY || event.touches?.[0]?.clientY;
+
+        if (this.isDragging && this.draggedNode) {
+            // Node dragging
+            const pt = this.svg.createSVGPoint();
+            pt.x = clientX;
+            pt.y = clientY;
+            const svgP = pt.matrixTransform(this.contentGroup.getScreenCTM().inverse());
+
+            const newX = svgP.x - this.dragStartX;
+            const newY = svgP.y - this.dragStartY;
+
+            // Update node position
+            this.draggedNode.node.x = newX;
+            this.draggedNode.node.y = newY;
+
+            // Update visual position with smooth transform
+            this.draggedNode.group.style.transform = `translate(${newX}px, ${newY}px)`;
+
+            // Update connected links
+            this.updateLinksForNode(this.draggedNode.node);
+        } else if (this.isPanning) {
+            // Pan the view
+            const dx = clientX - this.panStartX;
+            const dy = clientY - this.panStartY;
+
+            this.targetX = this.panStartOffsetX + dx;
+            this.targetY = this.panStartOffsetY + dy;
+        }
+    }
+
+    /**
+     * Update links connected to a node
+     */
+    updateLinksForNode(node) {
+        const links = this.contentGroup.querySelectorAll('.mindmap-link');
+        links.forEach(link => {
+            const source = link.getAttribute('data-source');
+            const target = link.getAttribute('data-target');
+
+            if (source === node.id) {
+                link.setAttribute('x1', node.x);
+                link.setAttribute('y1', node.y);
+            }
+            if (target === node.id) {
+                link.setAttribute('x2', node.x);
+                link.setAttribute('y2', node.y);
+            }
+        });
+    }
+
+    /**
+     * Handle mouse up
+     */
+    onMouseUp() {
+        if (this.draggedNode) {
+            this.draggedNode.group.classList.remove('dragging');
+        }
+
+        this.isDragging = false;
+        this.isPanning = false;
+        this.draggedNode = null;
     }
 
     /**
@@ -321,7 +448,16 @@ class MindMap {
 
         // Navigate to page if action is defined
         if (node.action && window.app) {
-            window.app.switchPage(node.action);
+            // Add click animation
+            const nodeGroup = this.contentGroup.querySelector(`[data-node-id="${node.id}"]`);
+            if (nodeGroup) {
+                nodeGroup.classList.add('clicked');
+                setTimeout(() => nodeGroup.classList.remove('clicked'), 300);
+            }
+
+            setTimeout(() => {
+                window.app.switchPage(node.action);
+            }, 150);
         }
     }
 
@@ -329,168 +465,102 @@ class MindMap {
      * Setup event listeners
      */
     setupEventListeners() {
-        // Zoom buttons
-        document.getElementById('mindmapZoomIn')?.addEventListener('click', () => this.zoom(1.2));
-        document.getElementById('mindmapZoomOut')?.addEventListener('click', () => this.zoom(0.8));
+        // Zoom buttons with smooth animation
+        document.getElementById('mindmapZoomIn')?.addEventListener('click', () => this.smoothZoom(1.3));
+        document.getElementById('mindmapZoomOut')?.addEventListener('click', () => this.smoothZoom(0.7));
         document.getElementById('mindmapReset')?.addEventListener('click', () => this.reset());
         document.getElementById('mindmapCenter')?.addEventListener('click', () => this.centerView());
 
-        // Mouse wheel zoom
-        this.svg.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            this.zoom(delta);
-        });
+        // Mouse wheel zoom (throttled)
+        this.svg.addEventListener('wheel', (e) => this.onWheel(e), { passive: false });
 
-        // Drag and pan
+        // Mouse events
         document.addEventListener('mousemove', (e) => this.onMouseMove(e));
         document.addEventListener('mouseup', () => this.onMouseUp());
 
-        // Pan on SVG drag
-        let isPanning = false;
-        let panStart = { x: 0, y: 0 };
+        // Touch events
+        document.addEventListener('touchmove', (e) => {
+            if (this.isDragging || this.isPanning) {
+                e.preventDefault();
+                this.onMouseMove(e);
+            }
+        }, { passive: false });
+        document.addEventListener('touchend', () => this.onMouseUp());
 
+        // Pan on SVG background
         this.svg.addEventListener('mousedown', (e) => {
-            if (e.target === this.svg || e.target === this.contentGroup) {
-                isPanning = true;
-                panStart = { x: e.clientX - this.offsetX, y: e.clientY - this.offsetY };
+            if (e.target === this.svg || e.target.closest('#mindmapContent') === this.contentGroup) {
+                this.isPanning = true;
+                this.panStartX = e.clientX;
+                this.panStartY = e.clientY;
+                this.panStartOffsetX = this.currentX;
+                this.panStartOffsetY = this.currentY;
+                this.svg.style.cursor = 'grabbing';
             }
         });
 
-        document.addEventListener('mousemove', (e) => {
-            if (isPanning) {
-                this.offsetX = e.clientX - panStart.x;
-                this.offsetY = e.clientY - panStart.y;
-                this.updateTransform();
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            isPanning = false;
+        this.svg.addEventListener('mouseup', () => {
+            this.svg.style.cursor = 'default';
         });
     }
 
     /**
-     * Handle mouse move for node dragging
+     * Handle mouse wheel with throttling
      */
-    onMouseMove(event) {
-        if (!this.isDragging || !this.draggedNode) return;
+    onWheel(event) {
+        event.preventDefault();
 
-        const svg = this.svg;
-        const pt = svg.createSVGPoint();
-        pt.x = event.clientX;
-        pt.y = event.clientY;
-        const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+        const now = Date.now();
+        if (now - this.lastWheelTime < this.wheelThrottle) {
+            return;
+        }
+        this.lastWheelTime = now;
 
-        // Update node position
-        const newX = svgP.x - this.dragOffset.x;
-        const newY = svgP.y - this.dragOffset.y;
-
-        this.draggedNode.node.x = newX;
-        this.draggedNode.node.y = newY;
-
-        // Update node visual position
-        this.draggedNode.group.setAttribute('transform', `translate(${newX}, ${newY})`);
-
-        // Update connected links
-        this.updateLinks(this.draggedNode.node.id);
+        const delta = event.deltaY > 0 ? 0.9 : 1.1;
+        this.smoothZoom(delta);
     }
 
     /**
-     * Handle mouse up
+     * Smooth zoom with target interpolation
      */
-    onMouseUp() {
-        this.isDragging = false;
-        this.draggedNode = null;
+    smoothZoom(factor) {
+        this.targetScale = Math.max(0.3, Math.min(3, this.targetScale * factor));
     }
 
     /**
-     * Update links connected to a node
-     */
-    updateLinks(nodeId) {
-        const links = this.contentGroup.querySelectorAll('.mindmap-link');
-        links.forEach(link => {
-            const source = link.getAttribute('data-source');
-            const target = link.getAttribute('data-target');
-
-            if (source === nodeId) {
-                const sourceNode = this.nodes.find(n => n.id === source);
-                if (sourceNode) {
-                    link.setAttribute('x1', sourceNode.x);
-                    link.setAttribute('y1', sourceNode.y);
-                }
-            }
-
-            if (target === nodeId) {
-                const targetNode = this.nodes.find(n => n.id === target);
-                if (targetNode) {
-                    link.setAttribute('x2', targetNode.x);
-                    link.setAttribute('y2', targetNode.y);
-                }
-            }
-        });
-    }
-
-    /**
-     * Zoom the view
-     */
-    zoom(factor) {
-        this.scale *= factor;
-        this.scale = Math.max(0.5, Math.min(3, this.scale)); // Limit scale
-        this.updateTransform();
-    }
-
-    /**
-     * Reset the view
+     * Reset view
      */
     reset() {
-        this.scale = 1;
-        this.offsetX = 0;
-        this.offsetY = 0;
-        this.updateTransform();
+        this.targetScale = 1;
+        this.targetX = 0;
+        this.targetY = 0;
     }
 
     /**
-     * Center the view
+     * Center view on the core node
      */
     centerView() {
-        const container = document.getElementById('mindmapContainer');
-        if (!container) return;
+        const coreNode = this.nodes.find(n => n.id === 'core');
+        if (!coreNode) return;
 
-        const containerRect = container.getBoundingClientRect();
-        const centerX = containerRect.width / 2;
-        const centerY = containerRect.height / 2;
-
-        // Calculate center of all nodes
-        const nodesCenterX = this.nodes.reduce((sum, n) => sum + n.x, 0) / this.nodes.length;
-        const nodesCenterY = this.nodes.reduce((sum, n) => sum + n.y, 0) / this.nodes.length;
-
-        this.offsetX = centerX - nodesCenterX * this.scale;
-        this.offsetY = centerY - nodesCenterY * this.scale;
-
-        this.updateTransform();
+        const svgRect = this.svg.getBoundingClientRect();
+        this.targetX = svgRect.width / 2 - coreNode.x;
+        this.targetY = svgRect.height / 2 - coreNode.y;
+        this.targetScale = 1;
     }
 
     /**
-     * Update transform
-     */
-    updateTransform() {
-        if (!this.contentGroup) return;
-        this.contentGroup.setAttribute('transform',
-            `translate(${this.offsetX}, ${this.offsetY}) scale(${this.scale})`
-        );
-    }
-
-    /**
-     * Destroy the mind map
+     * Cleanup
      */
     destroy() {
-        this.initialized = false;
-        if (this.contentGroup) {
-            this.contentGroup.innerHTML = '';
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
         }
+        this.initialized = false;
     }
 }
 
-// Create global instance
-window.mindMap = new MindMap();
+// Initialize mind map when page loads
+if (typeof window !== 'undefined') {
+    window.mindMap = new MindMap();
+}
