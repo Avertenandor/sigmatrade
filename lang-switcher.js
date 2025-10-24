@@ -171,11 +171,20 @@ function updateCurrentLanguageDisplay() {
     }
 }
 
-// Автоматическая инициализация при загрузке DOM
+// Автоматическая инициализация после загрузки i18n
+function waitForI18nAndInit() {
+    if (window.i18n && window.i18n.getCurrentLanguage) {
+        initLanguageSwitcher();
+    } else {
+        console.log('Waiting for i18n to load...');
+        setTimeout(waitForI18nAndInit, 100);
+    }
+}
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLanguageSwitcher);
+    document.addEventListener('DOMContentLoaded', waitForI18nAndInit);
 } else {
-    initLanguageSwitcher();
+    waitForI18nAndInit();
 }
 
 // Слушаем событие изменения языка для обновления интерфейса

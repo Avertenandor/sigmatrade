@@ -251,9 +251,10 @@ window.i18n = new I18n();
 // Инициализация при загрузке DOM
 document.addEventListener('DOMContentLoaded', async () => {
     await window.i18n.init();
+    console.log('✅ i18n initialized successfully');
 
-    // Инициализируем переключатель языка
-    if (typeof initLanguageSwitcher === 'function') {
-        initLanguageSwitcher();
-    }
+    // Отправляем событие о готовности i18n
+    window.dispatchEvent(new CustomEvent('i18nReady', {
+        detail: { language: window.i18n.getCurrentLanguage() }
+    }));
 });
