@@ -1,38 +1,37 @@
 /* lang-switcher.css */
 .lang-switcher{
-  position:fixed; bottom:20px; right:20px; z-index:9999;
-  display:flex; align-items:center; gap:8px;
-  padding:8px 14px; border-radius:12px;
-  background:rgba(20,20,20,0.85);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+  display:flex; align-items:center; gap:6px;
+  padding:8px 12px; border-radius:8px;
+  background:rgba(0,212,255,0.08);
+  border:1px solid rgba(0,212,255,0.2);
   color:#e8e8e8; font-size:14px; line-height:1;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 .lang-switcher:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,212,255,0.3);
-}
-.lang-switcher select{
-  background:rgba(255,255,255,0.05); color:#e8e8e8;
-  border:1px solid rgba(255,255,255,0.2);
-  border-radius:8px; padding:6px 10px; outline:none;
-  cursor:pointer; font-size:13px; font-weight:500;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-.lang-switcher select:hover{
-  background:rgba(255,255,255,0.1);
+  background:rgba(0,212,255,0.12);
   border-color:rgba(0,212,255,0.4);
+  box-shadow: 0 0 12px rgba(0,212,255,0.2);
 }
-.lang-switcher select:focus{
-  border-color:rgba(0,212,255,0.6);
-  box-shadow: 0 0 0 2px rgba(0,212,255,0.2);
+.lang-label{
+  font-size:16px; line-height:1; margin:0; user-select:none;
+}
+.lang-select{
+  background:transparent; color:#e8e8e8;
+  border:none; outline:none;
+  cursor:pointer; font-size:13px; font-weight:600;
+  padding:2px 4px;
+  text-transform:uppercase;
+}
+.lang-select:focus{
+  outline:none;
 }
 @media (max-width: 768px){
-  .lang-switcher{ bottom:16px; right:16px; padding:6px 12px; font-size:13px; }
-  .lang-switcher select{ padding:5px 8px; font-size:12px; }
+  .lang-switcher{ padding:6px 10px; font-size:13px; gap:4px; }
+  .lang-label{ font-size:14px; }
+  .lang-select{ font-size:12px; }
 }
 @media (max-width: 480px){
-  .lang-switcher{ bottom:12px; right:12px; padding:5px 10px; font-size:12px; gap:6px; }
-  .lang-switcher select{ padding:4px 6px; font-size:11px; }
+  .lang-switcher{ padding:5px 8px; font-size:12px; }
+  .lang-label{ font-size:13px; }
+  .lang-select{ font-size:11px; }
 }

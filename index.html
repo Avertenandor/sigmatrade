@@ -116,6 +116,11 @@
                             </svg>
                         </button>
                     </div>
+                    <!-- Language Switcher -->
+                    <div class="lang-switcher" data-lang-switcher>
+                        <label class="lang-label">🌐</label>
+                        <select id="lang-select" class="lang-select"></select>
+                    </div>
                     <a href="login.html" class="login-btn" title="Вход в систему">
                         <svg class="login-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -162,54 +167,54 @@
             <div class="container">
                 <!-- Hero Section -->
                 <div class="hero-section">
-                    <h1 class="hero-title">Пока все болтают, мы работаем</h1>
-                    <p class="hero-subtitle">Автоматический обмен криптовалют 24/7 на Binance Smart Chain</p>
+                    <h1 class="hero-title" data-i18n="hero.title">Пока все болтают, мы работаем</h1>
+                    <p class="hero-subtitle" data-i18n="hero.subtitle">Автоматический обмен криптовалют 24/7 на Binance Smart Chain</p>
                 </div>
 
                 <!-- Bots Family Section -->
                 <div class="bots-family-section">
                     <h2 class="section-title">
                         <span class="icon">🤖</span>
-                        Семейство торговых ботов Sigma Trade
+                        <span data-i18n="bots_family.title">Семейство торговых ботов Sigma Trade</span>
                     </h2>
                     <div class="bots-grid">
                         <div class="bot-card exchange-bot" data-page="exchange">
                             <div class="bot-icon">🔄</div>
-                            <h3 class="bot-name">Бот-обменник</h3>
-                            <p class="bot-description">Автоматический обмен криптовалют с оптимальными курсами 24/7</p>
+                            <h3 class="bot-name" data-i18n="bots_family.exchange_bot.name">Бот-обменник</h3>
+                            <p class="bot-description" data-i18n="bots_family.exchange_bot.description">Автоматический обмен криптовалют с оптимальными курсами 24/7</p>
                             <div class="bot-stats">
                                 <div class="bot-stat">
-                                    <span class="stat-label">Статус:</span>
-                                    <span class="stat-value active-badge">Активен</span>
+                                    <span class="stat-label" data-i18n="bots_family.exchange_bot.status_label">Статус:</span>
+                                    <span class="stat-value active-badge" data-i18n="bots_family.exchange_bot.status_active">Активен</span>
                                 </div>
                             </div>
-                            <button class="bot-btn" onclick="app.switchPage('exchange')">Смотреть детали →</button>
+                            <button class="bot-btn" onclick="app.switchPage('exchange')" data-i18n="bots_family.exchange_bot.button">Смотреть детали →</button>
                         </div>
 
                         <div class="bot-card mev-bot" data-page="mev">
                             <div class="bot-icon">💼</div>
-                            <h3 class="bot-name">МЭВ-бот</h3>
-                            <p class="bot-description">Максимальная извлекаемая ценность через мониторинг мемпула</p>
+                            <h3 class="bot-name" data-i18n="bots_family.mev_bot.name">МЭВ-бот</h3>
+                            <p class="bot-description" data-i18n="bots_family.mev_bot.description">Максимальная извлекаемая ценность через мониторинг мемпула</p>
                             <div class="bot-stats">
                                 <div class="bot-stat">
-                                    <span class="stat-label">Статус:</span>
-                                    <span class="stat-value active-badge">Активен</span>
+                                    <span class="stat-label" data-i18n="bots_family.mev_bot.status_label">Статус:</span>
+                                    <span class="stat-value active-badge" data-i18n="bots_family.mev_bot.status_active">Активен</span>
                                 </div>
                             </div>
-                            <button class="bot-btn" onclick="app.switchPage('mev')">Смотреть детали →</button>
+                            <button class="bot-btn" onclick="app.switchPage('mev')" data-i18n="bots_family.mev_bot.button">Смотреть детали →</button>
                         </div>
 
                         <div class="bot-card arb-bot" data-page="arbitrage">
                             <div class="bot-icon">📊</div>
-                            <h3 class="bot-name">Арбитражный бот</h3>
-                            <p class="bot-description">Межбиржевой арбитраж и поиск ценовых аномалий</p>
+                            <h3 class="bot-name" data-i18n="bots_family.arb_bot.name">Арбитражный бот</h3>
+                            <p class="bot-description" data-i18n="bots_family.arb_bot.description">Межбиржевой арбитраж и поиск ценовых аномалий</p>
                             <div class="bot-stats">
                                 <div class="bot-stat">
-                                    <span class="stat-label">Статус:</span>
-                                    <span class="stat-value development-badge">В разработке</span>
+                                    <span class="stat-label" data-i18n="bots_family.arb_bot.status_label">Статус:</span>
+                                    <span class="stat-value development-badge" data-i18n="bots_family.arb_bot.status_development">В разработке</span>
                                 </div>
                             </div>
-                            <button class="bot-btn" onclick="app.switchPage('arbitrage')">Подробнее →</button>
+                            <button class="bot-btn" onclick="app.switchPage('arbitrage')" data-i18n="bots_family.arb_bot.button">Подробнее →</button>
                         </div>
                     </div>
                 </div>
