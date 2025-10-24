@@ -1073,6 +1073,13 @@ class SigmaTrade {
                 filterPanel.classList.toggle('hidden');
             });
         }
+
+        const mentalMapBtn = document.getElementById('mentalMapBtn');
+        if (mentalMapBtn) {
+            mentalMapBtn.addEventListener('click', () => {
+                this.showMentalMap();
+            });
+        }
         
         // MEV page buttons
         const mevRefreshBtn = document.getElementById('mevRefreshBtn');
@@ -1120,9 +1127,9 @@ class SigmaTrade {
         const isMevPage = this.currentActivePage === 'mev';
         const txType = document.getElementById(isMevPage ? 'mevTxTypeFilter' : 'txTypeFilter')?.value || 'all';
         const period = document.getElementById(isMevPage ? 'mevPeriodFilter' : 'periodFilter')?.value || 'all';
-        
+
         let filtered = [...this.allTransactions];
-        
+
         if (txType !== 'all') {
             const wallet = this.getCurrentWallet();
             filtered = filtered.filter(tx => {
@@ -1133,7 +1140,7 @@ class SigmaTrade {
                 return true;
             });
         }
-        
+
         if (period !== 'all') {
             const now = Date.now() / 1000;
             const periods = {
@@ -1141,12 +1148,22 @@ class SigmaTrade {
                 '7d': 604800,
                 '30d': 2592000
             };
-            
+
             const threshold = now - periods[period];
             filtered = filtered.filter(tx => tx.timeStamp >= threshold);
         }
-        
+
         this.displayTransactions(filtered);
+    }
+
+    showMentalMap() {
+        this.log('Opening Mental Map...', 'info');
+
+        if (window.showToast) {
+            showToast('🧠 Ментальная карта - функция в разработке', 'info');
+        } else {
+            alert('🧠 Ментальная карта\n\nЭта функция находится в разработке и скоро будет доступна!');
+        }
     }
 }
 
