@@ -17,22 +17,35 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://sigmatrade.org/">
     
-    <!-- Open Graph / Facebook / VK -->
+    <!-- Open Graph / Facebook / VK / Telegram -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://sigmatrade.org/">
+    <meta property="og:url" content="https://sigmatrade.org/" id="og-url">
     <meta property="og:site_name" content="SigmaTrade">
-    <meta property="og:title" content="SigmaTrade - Мониторинг семейства торговых ботов">
-    <meta property="og:description" content="Мониторинг работы семейства торговых ботов Sigma Trade. Боты обмена, арбитража и МЭФ-деятельности. Real-time отслеживание транзакций и балансов на BSC.">
-    <meta property="og:image" content="https://sigmatrade.org/og-image.jpg?v=5.1.0">
-    <meta property="og:image:secure_url" content="https://sigmatrade.org/og-image.jpg?v=5.1.0">
-    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:title" content="SigmaTrade - Мониторинг семейства торговых ботов" id="og-title">
+    <meta property="og:description" content="Мониторинг работы семейства торговых ботов Sigma Trade. Боты обмена, арбитража и МЭФ-деятельности. Real-time отслеживание транзакций и балансов на BSC." id="og-description">
+    <meta property="og:image" content="https://sigmatrade.org/og-images/home.svg?v=11.2.0" id="og-image">
+    <meta property="og:image:secure_url" content="https://sigmatrade.org/og-images/home.svg?v=11.2.0" id="og-image-secure">
+    <meta property="og:image:type" content="image/svg+xml">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="SigmaTrade - Мониторинг семейства торговых ботов. Real-time отслеживание транзакций">
+    <meta property="og:image:alt" content="SigmaTrade - Мониторинг семейства торговых ботов" id="og-image-alt">
     <meta property="og:locale" content="ru_RU">
-    
+
     <!-- VK Specific Tags -->
-    <meta property="vk:image" content="https://sigmatrade.org/og-image.jpg?v=5.1.0">
+    <meta property="vk:image" content="https://sigmatrade.org/og-images/home.svg?v=11.2.0" id="vk-image">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SigmaTrade">
+    <meta name="twitter:creator" content="@SigmaTrade">
+    <meta name="twitter:title" content="SigmaTrade - Мониторинг семейства торговых ботов" id="twitter-title">
+    <meta name="twitter:description" content="Мониторинг работы семейства торговых ботов Sigma Trade. Боты обмена, арбитража и МЭФ-деятельности." id="twitter-description">
+    <meta name="twitter:image" content="https://sigmatrade.org/og-images/home.svg?v=11.2.0" id="twitter-image">
+    <meta name="twitter:image:alt" content="SigmaTrade - Мониторинг семейства торговых ботов" id="twitter-image-alt">
+
+    <!-- Telegram Instant View -->
+    <meta property="telegram:channel" content="@sigmatrade">
+    <meta name="telegram:card" content="summary_large_image">
 
     <!-- Favicon and Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -634,6 +647,154 @@
                         <div class="info-icon">💎</div>
                         <h3>Доходность</h3>
                         <p>Оптимальное извлечение ценности</p>
+                    </div>
+                </div>
+
+                <!-- MEV Bot Map Section -->
+                <div class="exchange-bot-section">
+                    <h2 class="section-title">
+                        <span class="icon">🥪</span>
+                        Как работает МЭВ-бот (Sandwich Attack)
+                    </h2>
+
+                    <!-- MEV Strategy Info Cards -->
+                    <div class="partner-info-cards">
+                        <div class="partner-info-card">
+                            <div class="partner-info-icon">👁️</div>
+                            <div class="partner-info-content">
+                                <h3 class="partner-info-card-title">Мониторинг Mempool</h3>
+                            </div>
+                            <p class="partner-info-card-description">
+                                МЭВ-бот <span class="partner-info-highlight">сканирует mempool BSC</span> в режиме реального времени,
+                                отслеживая pending транзакции и выявляя крупные сделки, которые существенно повлияют на цену.
+                            </p>
+                        </div>
+
+                        <div class="partner-info-card">
+                            <div class="partner-info-icon">🥪</div>
+                            <div class="partner-info-content">
+                                <h3 class="partner-info-card-title">Sandwich Attack</h3>
+                            </div>
+                            <p class="partner-info-card-description">
+                                При обнаружении цели бот выполняет <span class="partner-info-highlight">сендвич-атаку</span>:
+                                покупает перед транзакцией жертвы (front-run), дожидается роста цены, затем продает после (back-run).
+                            </p>
+                        </div>
+
+                        <div class="partner-info-card">
+                            <div class="partner-info-icon">💰</div>
+                            <div class="partner-info-content">
+                                <h3 class="partner-info-card-title">Распределение прибыли</h3>
+                            </div>
+                            <p class="partner-info-card-description">
+                                Прибыль от разницы цен <span class="partner-info-highlight">распределяется между участниками</span>,
+                                чьи средства используются для проведения MEV-операций. Доход зависит от волатильности рынка.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Map Controls -->
+                    <div class="partner-rewards-controls">
+                        <button class="partner-rewards-btn" id="mevBotZoomIn" title="Приблизить">
+                            <span class="icon">🔍</span> +
+                        </button>
+                        <button class="partner-rewards-btn" id="mevBotZoomOut" title="Отдалить">
+                            <span class="icon">🔍</span> −
+                        </button>
+                        <button class="partner-rewards-btn" id="mevBotReset" title="Сбросить вид">
+                            <span class="icon">🔄</span> Сброс
+                        </button>
+                        <button class="partner-rewards-btn" id="mevBotCenter" title="Центрировать">
+                            <span class="icon">🎯</span> Центр
+                        </button>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div class="partner-rewards-container" id="mevBotContainer">
+                        <svg id="mevBotSvg" class="partner-rewards-svg">
+                            <defs>
+                                <!-- Arrow markers for different types -->
+                                <marker id="mev-arrow-process" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00d4ff" />
+                                </marker>
+                                <marker id="mev-arrow-attack" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ff6600" />
+                                </marker>
+                                <marker id="mev-arrow-sandwich" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ff00ff" />
+                                </marker>
+                                <marker id="mev-arrow-money" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ffd700" />
+                                </marker>
+                                <marker id="mev-arrow-success" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ff88" />
+                                </marker>
+                                <marker id="mev-arrow-pool" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ccff" />
+                                </marker>
+                                <marker id="mev-arrow-info" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                                    <polygon points="0 0, 8 3, 0 6" fill="#888888" />
+                                </marker>
+                                <marker id="mev-arrow-warning" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#ffaa00" />
+                                </marker>
+
+                                <!-- Glow filters -->
+                                <filter id="mev-core-glow">
+                                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <filter id="mev-attack-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g id="mevBotContent"></g>
+                        </svg>
+                        <div class="partner-rewards-legend">
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ff6600 0%, #ff0066 100%);"></span>
+                                <span>МЭВ-бот (центр)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);"></span>
+                                <span>Мониторинг и анализ</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ff6600 0%, #cc0000 100%);"></span>
+                                <span>Атака (Front/Back-run)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #9966ff 0%, #6633cc 100%);"></span>
+                                <span>Транзакция жертвы</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);"></span>
+                                <span>Прибыль MEV</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00ccff 0%, #0088cc 100%);"></span>
+                                <span>Капитал участников</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Usage Info -->
+                    <div class="mindmap-info">
+                        <h3>Как использовать карту:</h3>
+                        <ul>
+                            <li><strong>Перетаскивание:</strong> Зажмите и перемещайте узлы для изменения расположения</li>
+                            <li><strong>Масштабирование:</strong> Используйте кнопки +/− или колесико мыши</li>
+                            <li><strong>Наведение:</strong> Наведите курсор на узел для просмотра деталей и подсветки связей</li>
+                            <li><strong>Цветовая кодировка:</strong> Оранжевые узлы — атаки, фиолетовые — жертва, золотые — прибыль</li>
+                            <li><strong>Мобильная версия:</strong> Используйте жесты масштабирования для удобной навигации</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -1267,6 +1428,8 @@
     <script src="partner-rewards-map.js?v=11.1.5"></script>
     <script src="cooperation-map.js?v=11.1.5"></script>
     <script src="exchange-bot-map.js?v=11.1.5"></script>
+    <script src="mev-bot-map.js?v=11.1.5"></script>
+    <script src="meta-updater.js?v=11.2.0"></script>
     <script src="app.js?v=11.1.5"></script>
 </body>
 </html>

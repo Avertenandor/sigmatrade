@@ -1,0 +1,69 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="mev-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0a0f;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2a1520;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a0a0f;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="mev-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6600;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff0066;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6600;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#mev-bg)"/>
+
+  <!-- Decorative elements -->
+  <circle cx="150" cy="120" r="100" fill="#ff6600" opacity="0.08"/>
+  <circle cx="1050" cy="510" r="150" fill="#ff0066" opacity="0.08"/>
+
+  <!-- Main Icon -->
+  <g transform="translate(600, 200)">
+    <circle cx="0" cy="0" r="70" fill="url(#mev-accent)" opacity="0.3" filter="url(#glow)"/>
+    <text x="0" y="25" font-size="60" text-anchor="middle">💼</text>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="330" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="url(#mev-accent)" text-anchor="middle">
+    MEV Bot
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="390" font-family="Arial, sans-serif" font-size="32" fill="#ffffff" text-anchor="middle" opacity="0.9">
+    Maximal Extractable Value
+  </text>
+
+  <!-- Sandwich Attack indicator -->
+  <g transform="translate(600, 470)">
+    <rect x="-150" y="-25" width="300" height="50" rx="25" fill="#ff6600" opacity="0.2"/>
+    <text x="0" y="10" font-family="Arial, sans-serif" font-size="24" fill="#ff6600" text-anchor="middle" font-weight="bold">
+      🥪 SANDWICH ATTACK
+    </text>
+  </g>
+
+  <!-- Features -->
+  <g transform="translate(300, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      ⚡ Speed
+    </text>
+  </g>
+  <g transform="translate(600, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      🎯 Accuracy
+    </text>
+  </g>
+  <g transform="translate(900, 560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" opacity="0.7">
+      💎 Profitability
+    </text>
+  </g>
+</svg>

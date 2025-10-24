@@ -132,7 +132,24 @@
     "profitability_title": "収益性",
     "profitability_desc": "最適な価値抽出",
     "stats_title": "MEVボット統計",
-    "history_title": "MEV操作履歴"
+    "history_title": "MEV操作履歴",
+    "how_it_works": "How the MEV Bot Works (Sandwich Attack)",
+    "mempool_monitoring_title": "Mempool Monitoring",
+    "mempool_monitoring_desc": "The MEV bot scans the BSC mempool in real-time, tracking pending transactions and identifying large trades that will significantly impact the price.",
+    "sandwich_attack_title": "Sandwich Attack",
+    "sandwich_attack_desc": "When a target is detected, the bot executes a sandwich attack: buys before the victim's transaction (front-run), waits for the price increase, then sells after (back-run).",
+    "profit_distribution_title": "Profit Distribution",
+    "profit_distribution_desc": "Profits from price differences are distributed among participants whose funds are used for MEV operations. Income depends on market volatility.",
+    "map_zoom_in": "Zoom In",
+    "map_zoom_out": "Zoom Out",
+    "map_reset": "Reset",
+    "map_center": "Center",
+    "map_usage_title": "How to use the map:",
+    "map_usage_drag": "Drag: Press and move nodes to change layout",
+    "map_usage_zoom": "Zoom: Use +/− buttons or mouse wheel",
+    "map_usage_hover": "Hover: Hover over a node to view details and highlight connections",
+    "map_usage_color": "Color coding: Orange nodes — attacks, purple — victim, gold — profit",
+    "map_usage_mobile": "Mobile: Use pinch gestures for convenient navigation"
   },
   "arbitrage": {
     "title": "アービトラージボット",
@@ -275,6 +292,12 @@
     "process_stages": "プロセスステージ",
     "success_result": "成功結果",
     "refusal": "拒否",
-    "bonus_recommendations": "ボーナス(推薦)"
+    "bonus_recommendations": "ボーナス(推薦)",
+    "mev_bot_center": "MEV Bot (center)",
+    "mev_monitoring": "Monitoring and Analysis",
+    "mev_attack": "Attack (Front/Back-run)",
+    "mev_victim": "Victim Transaction",
+    "mev_profit": "MEV Profit",
+    "mev_capital": "Participants' Capital"
   }
 }
