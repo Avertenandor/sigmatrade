@@ -263,6 +263,118 @@ body::before {
     font-size: var(--font-sm);
 }
 
+/* Header Contact with Email */
+.header-contact {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-primary);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.header-contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.header-contact:hover::before {
+    left: 100%;
+}
+
+.header-contact:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.email-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--accent-primary);
+    flex-shrink: 0;
+    animation: emailBounce 2s infinite;
+}
+
+@keyframes emailBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.header-email {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: var(--font-sm);
+    font-weight: 500;
+    position: relative;
+}
+
+.email-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    animation: gradientShift 3s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.copy-email-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    color: var(--text-secondary);
+}
+
+.copy-email-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.copy-email-btn:hover {
+    background: var(--bg-primary);
+    color: var(--accent-primary);
+    transform: scale(1.1);
+}
+
+.copy-email-btn:active {
+    transform: scale(0.95);
+}
+
+.copy-email-btn.copied {
+    color: var(--accent-success);
+    animation: copySuccess 0.5s ease;
+}
+
+@keyframes copySuccess {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
 /* ========== MOBILE MENU TOGGLE ========== */
 .mobile-menu-toggle {
     display: none;
@@ -1204,36 +1316,142 @@ body::before {
     margin: 0 0 var(--spacing-sm) 0;
 }
 
-.footer-email {
-    color: var(--text-secondary);
-    font-size: var(--font-sm);
-    margin: 0;
+.footer-email-wrapper {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
 }
 
-.footer-email a {
-    color: var(--accent-primary);
+.footer-email {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-primary);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-email::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.footer-email:hover::before {
+    left: 100%;
+}
+
+.footer-email:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+    transform: translateX(5px);
+}
+
+.email-link {
     text-decoration: none;
-    transition: color var(--transition-fast);
+    flex: 1;
 }
 
-.footer-email a:hover {
-    color: var(--accent-secondary);
-    text-decoration: underline;
+.email-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+    font-size: var(--font-base);
+    letter-spacing: 0.5px;
+    animation: gradientShift 3s ease infinite;
+    background-size: 200% 200%;
+    display: inline-block;
+}
+
+.footer-copy {
+    flex-shrink: 0;
+}
+
+.label-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: var(--spacing-xs);
+    vertical-align: middle;
 }
 
 .footer-social {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
-    color: var(--text-secondary);
-    font-size: var(--font-sm);
+    gap: var(--spacing-sm);
 }
 
-.footer-social .footer-link {
-    margin-left: 0;
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-primary);
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.social-link:hover::before {
+    left: 100%;
+}
+
+.social-link svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.social-link.telegram:hover {
+    border-color: #0088cc;
+    box-shadow: 0 0 20px rgba(0, 136, 204, 0.4);
+    transform: translateX(5px);
+}
+
+.social-link.telegram:hover svg {
+    color: #0088cc;
+}
+
+.social-link.twitter:hover {
+    border-color: #1da1f2;
+    box-shadow: 0 0 20px rgba(29, 161, 242, 0.4);
+    transform: translateX(5px);
+}
+
+.social-link.twitter:hover svg {
+    color: #1da1f2;
 }
 
 .footer-label {
