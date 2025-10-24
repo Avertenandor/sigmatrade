@@ -15,5 +15,19 @@
     "partner_rewards": "合作夥伴計劃",
     "cooperation": "開始使用",
     "mindmap": "網站地圖"
+  },
+  "premium_nav": {
+    "group_trading": "交易系統",
+    "group_community": "社區",
+    "group_info": "資訊",
+    "exchange_subtitle": "自動交換 24/7",
+    "mev_subtitle": "MEV提取",
+    "arbitrage_subtitle": "跨交易所套利",
+    "partner_subtitle": "從合作夥伴賺取",
+    "cooperation_subtitle": "合作流程",
+    "mindmap_subtitle": "平台結構",
+    "status_active": "活躍",
+    "status_soon": "即將推出",
+    "partner_levels": "3個級別"
   }
 }

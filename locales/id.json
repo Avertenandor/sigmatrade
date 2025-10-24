@@ -15,5 +15,19 @@
     "partner_rewards": "Program Mitra",
     "cooperation": "Mulai",
     "mindmap": "Peta Situs"
+  },
+  "premium_nav": {
+    "group_trading": "Sistem Perdagangan",
+    "group_community": "Komunitas",
+    "group_info": "Informasi",
+    "exchange_subtitle": "Auto-tukar 24/7",
+    "mev_subtitle": "Ekstraksi MEV",
+    "arbitrage_subtitle": "Arbitrase Lintas Bursa",
+    "partner_subtitle": "Dapatkan dari Mitra",
+    "cooperation_subtitle": "Proses Kerjasama",
+    "mindmap_subtitle": "Struktur Platform",
+    "status_active": "Aktif",
+    "status_soon": "Segera",
+    "partner_levels": "3 Level"
   }
 }
