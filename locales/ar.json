@@ -1,0 +1,19 @@
+{
+  "meta.title": "SigmaTrade | مراقبة عائلة روبوتات التداول",
+  "meta.description": "SigmaTrade - مراقبة احترافية لعائلة روبوتات التداول. تتبع روبوتات التبادل والمراجحة ونشاط MEV في الوقت الفعلي على Binance Smart Chain.",
+  "header": {
+    "network_status": "جارٍ الاتصال...",
+    "wallet_label": "المحفظة:",
+    "email_title": "اتصل بنا",
+    "copy_email": "نسخ البريد الإلكتروني",
+    "login_btn": "تسجيل الدخول"
+  },
+  "nav": {
+    "exchange": "روبوت التبادل",
+    "mev": "روبوت MEV",
+    "arbitrage": "المراجحة",
+    "partner_rewards": "برنامج الشراكة",
+    "cooperation": "البدء",
+    "mindmap": "خريطة الموقع"
+  }
+}

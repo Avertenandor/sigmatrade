@@ -1,0 +1,19 @@
+{
+  "meta.title": "SigmaTrade | 交易机器人家族监控",
+  "meta.description": "SigmaTrade - 专业的交易机器人家族监控。实时追踪币安智能链上的交换机器人、套利和MEV活动。",
+  "header": {
+    "network_status": "连接中...",
+    "wallet_label": "钱包:",
+    "email_title": "联系我们",
+    "copy_email": "复制邮箱",
+    "login_btn": "登录"
+  },
+  "nav": {
+    "exchange": "交换机器人",
+    "mev": "MEV机器人",
+    "arbitrage": "套利",
+    "partner_rewards": "合作伙伴计划",
+    "cooperation": "开始使用",
+    "mindmap": "网站地图"
+  }
+}
