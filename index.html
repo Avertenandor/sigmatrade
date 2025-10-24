@@ -132,6 +132,10 @@
                     <span class="nav-icon">📊</span>
                     <span class="nav-label">Арбитраж</span>
                 </button>
+                <button class="nav-tab" data-page="partner-rewards">
+                    <span class="nav-icon">🤝</span>
+                    <span class="nav-label">Партнерская программа</span>
+                </button>
                 <button class="nav-tab" data-page="mindmap">
                     <span class="nav-icon">🗺️</span>
                     <span class="nav-label">Карта сайта</span>
@@ -467,6 +471,181 @@
             </div>
         </div>
 
+        <!-- Page: Partner Rewards -->
+        <div class="page" id="page-partner-rewards">
+            <div class="container">
+                <div class="hero-section">
+                    <h1 class="hero-title">Партнерская программа</h1>
+                    <p class="hero-subtitle">Зарабатывайте на 3 уровнях партнерской сети</p>
+                </div>
+
+                <!-- Partner Info Cards -->
+                <div class="partner-info-section">
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">🎯</span>
+                            <span>3 уровня в глубину</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            Получайте вознаграждение не только от прямых партнеров, но и от партнеров второго и третьего уровней.
+                            Ваша партнерская сеть приносит доход на <span class="partner-info-highlight">трех уровнях глубины</span>.
+                        </p>
+                    </div>
+
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">💰</span>
+                            <span>От дохода и вложений</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            Зарабатывайте процент <span class="partner-info-highlight">от дохода партнеров</span> и
+                            <span class="partner-info-highlight">от их вложений</span> в торговые операции.
+                            Двойной источник вознаграждения на каждом уровне.
+                        </p>
+                    </div>
+
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">📈</span>
+                            <span>Растущие проценты</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            Уникальная прогрессивная система: начните с <span class="partner-info-highlight">3%</span> на первом уровне,
+                            получите <span class="partner-info-highlight">2%</span> на втором и
+                            <span class="partner-info-highlight">5%</span> на третьем уровне.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Partner Explanation -->
+                <div class="partner-explanation">
+                    <h3>💡 Как работает партнерская программа</h3>
+                    <div class="partner-explanation-content">
+                        <div class="partner-level-block level-1">
+                            <div class="partner-level-title">1 уровень - Прямые партнеры</div>
+                            <div class="partner-level-percentage">3%</div>
+                            <div class="partner-level-description">
+                                Вы получаете <strong>3% от дохода и вложений</strong> каждого партнера, которого пригласили напрямую.
+                                Это ваши прямые рефералы первого уровня. Чем активнее они торгуют, тем больше вы зарабатываете.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-2">
+                            <div class="partner-level-title">2 уровень - Партнеры партнеров</div>
+                            <div class="partner-level-percentage">2%</div>
+                            <div class="partner-level-description">
+                                Когда ваши партнеры приглашают своих партнеров, вы получаете <strong>2% от их дохода и вложений</strong>.
+                                Это второй уровень вашей партнерской сети. Ваша сеть растет и приносит стабильный доход.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-3">
+                            <div class="partner-level-title">3 уровень - Максимальное вознаграждение</div>
+                            <div class="partner-level-percentage">5%</div>
+                            <div class="partner-level-description">
+                                На третьем уровне действует <strong>максимальная ставка 5%</strong> от дохода и вложений.
+                                Это партнеры, приглашенные партнерами второго уровня. Чем глубже ваша сеть, тем больше потенциальный доход!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partner Rewards Interactive Map -->
+                <div class="partner-rewards-section">
+                    <h2 class="section-title">
+                        <span class="icon">🗺️</span>
+                        Интерактивная карта партнерской программы
+                    </h2>
+
+                    <!-- Map Controls -->
+                    <div class="partner-rewards-controls">
+                        <button class="partner-rewards-btn" id="partnerZoomIn" title="Приблизить">
+                            <span class="icon">🔍</span> +
+                        </button>
+                        <button class="partner-rewards-btn" id="partnerZoomOut" title="Отдалить">
+                            <span class="icon">🔍</span> −
+                        </button>
+                        <button class="partner-rewards-btn" id="partnerReset" title="Сбросить вид">
+                            <span class="icon">🔄</span> Сброс
+                        </button>
+                        <button class="partner-rewards-btn" id="partnerCenter" title="Центрировать">
+                            <span class="icon">🎯</span> Центр
+                        </button>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div class="partner-rewards-container" id="partnerRewardsContainer">
+                        <svg id="partnerRewardsSvg" class="partner-rewards-svg">
+                            <defs>
+                                <marker id="partner-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00d4ff" />
+                                </marker>
+                                <filter id="partner-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g id="partnerRewardsContent"></g>
+                        </svg>
+                        <div class="partner-rewards-legend">
+                            <div class="partner-legend-title">Легенда</div>
+                            <div class="legend-item">
+                                <span class="legend-color legend-level-you"></span>
+                                <span>Вы (центр сети)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color legend-level-1"></span>
+                                <span>1 уровень - 3%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color legend-level-2"></span>
+                                <span>2 уровень - 2%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color legend-level-3"></span>
+                                <span>3 уровень - 5%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Usage Info -->
+                    <div class="mindmap-info">
+                        <h3>Как использовать карту:</h3>
+                        <ul>
+                            <li><strong>Перетаскивание:</strong> Зажмите и перемещайте узлы для изменения расположения</li>
+                            <li><strong>Масштабирование:</strong> Используйте кнопки +/− или колесико мыши</li>
+                            <li><strong>Наведение:</strong> Наведите курсор на узел для подсветки связей и процентов</li>
+                            <li><strong>Мобильная версия:</strong> Используйте жесты масштабирования для удобной навигации</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="partner-explanation">
+                    <h3>📊 Примеры расчета вознаграждения</h3>
+                    <div class="partner-explanation-content">
+                        <div style="padding: var(--spacing-lg); background: var(--bg-secondary); border-radius: var(--radius-md); line-height: var(--leading-relaxed);">
+                            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                <strong style="color: var(--text-primary);">Пример 1:</strong> Ваш партнер 1-го уровня заработал $1000 и вложил $500 в торговлю.
+                                Вы получаете: <span style="color: var(--accent-primary); font-weight: 700;">3% от $1500 = $45</span>
+                            </p>
+                            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                <strong style="color: var(--text-primary);">Пример 2:</strong> Партнер 2-го уровня (партнер вашего партнера) заработал $800 и вложил $300.
+                                Вы получаете: <span style="color: #ffd700; font-weight: 700;">2% от $1100 = $22</span>
+                            </p>
+                            <p style="color: var(--text-secondary);">
+                                <strong style="color: var(--text-primary);">Пример 3:</strong> Партнер 3-го уровня заработал $600 и вложил $400.
+                                Вы получаете: <span style="color: #00ff88; font-weight: 700;">5% от $1000 = $50</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Page: Mind Map -->
         <div class="page" id="page-mindmap">
             <div class="container">
@@ -587,6 +766,7 @@
     <script src="virtual-scroll.js?v=11.1.4"></script>
     <script src="toast.js?v=11.1.4"></script>
     <script src="mindmap.js?v=11.1.4"></script>
+    <script src="partner-rewards-map.js?v=11.1.4"></script>
     <script src="app.js?v=11.1.4"></script>
 </body>
 </html>
