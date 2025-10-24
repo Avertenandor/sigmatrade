@@ -135,6 +135,10 @@
                     <span class="nav-icon">📊</span>
                     <span class="nav-label">Арбитраж</span>
                 </button>
+                <button class="nav-tab" data-page="mindmap">
+                    <span class="nav-icon">🗺️</span>
+                    <span class="nav-label">Карта сайта</span>
+                </button>
             </nav>
         </div>
     </header>
@@ -465,6 +469,80 @@
                 </div>
             </div>
         </div>
+
+        <!-- Page: Mind Map -->
+        <div class="page" id="page-mindmap">
+            <div class="container">
+                <div class="hero-section">
+                    <h1 class="hero-title">Интерактивная карта сайта</h1>
+                    <p class="hero-subtitle">Визуализация всей концепции взаимодействия с платформой SigmaTrade</p>
+                </div>
+
+                <!-- Mind Map Controls -->
+                <div class="mindmap-controls">
+                    <button class="mindmap-btn" id="mindmapZoomIn" title="Приблизить">
+                        <span class="icon">🔍</span> +
+                    </button>
+                    <button class="mindmap-btn" id="mindmapZoomOut" title="Отдалить">
+                        <span class="icon">🔍</span> −
+                    </button>
+                    <button class="mindmap-btn" id="mindmapReset" title="Сбросить вид">
+                        <span class="icon">🔄</span> Сброс
+                    </button>
+                    <button class="mindmap-btn" id="mindmapCenter" title="Центрировать">
+                        <span class="icon">🎯</span> Центр
+                    </button>
+                </div>
+
+                <!-- Mind Map Canvas -->
+                <div class="mindmap-container" id="mindmapContainer">
+                    <svg id="mindmapSvg" class="mindmap-svg">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#4a9eff" />
+                            </marker>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <g id="mindmapContent"></g>
+                    </svg>
+                    <div class="mindmap-legend">
+                        <div class="legend-item">
+                            <span class="legend-color legend-core"></span>
+                            <span>Главная страница</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-page"></span>
+                            <span>Страницы ботов</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-feature"></span>
+                            <span>Функции</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-data"></span>
+                            <span>Данные</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mind Map Info -->
+                <div class="mindmap-info">
+                    <h3>Как использовать карту:</h3>
+                    <ul>
+                        <li><strong>Перетаскивание:</strong> Зажмите и перемещайте узлы для изменения расположения</li>
+                        <li><strong>Масштабирование:</strong> Используйте кнопки +/− или колесико мыши</li>
+                        <li><strong>Клик по узлу:</strong> Нажмите на узел для перехода на соответствующую страницу</li>
+                        <li><strong>Наведение:</strong> Наведите курсор на узел для подсветки связей</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -486,6 +564,7 @@
     <script src="db.js"></script>
     <script src="virtual-scroll.js"></script>
     <script src="toast.js"></script>
+    <script src="mindmap.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

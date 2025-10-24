@@ -90,8 +90,8 @@ class SigmaTrade {
     
     handleHashChange() {
         const hash = window.location.hash.slice(1);
-        const validPages = ['exchange', 'mev', 'arbitrage'];
-        
+        const validPages = ['exchange', 'mev', 'arbitrage', 'mindmap'];
+
         if (validPages.includes(hash)) {
             this.switchPage(hash);
         } else {
@@ -128,7 +128,14 @@ class SigmaTrade {
         
         window.location.hash = pageName;
         this.currentActivePage = pageName;
-        
+
+        // Initialize mind map if switching to mindmap page
+        if (pageName === 'mindmap' && window.mindMap) {
+            setTimeout(() => {
+                window.mindMap.init();
+            }, 100);
+        }
+
         // Переключение кошелька и перезапуск мониторинга
         if (CONFIG.MULTI_WALLET.AUTO_SWITCH && CONFIG.WALLETS[pageName]) {
             if (this.currentWalletId !== pageName && CONFIG.WALLETS[pageName]?.address) {
@@ -139,7 +146,7 @@ class SigmaTrade {
                 this.startMonitoring();
             }
         }
-        
+
         this.log(`Switched to page: ${pageName}`, 'info');
     }
     
