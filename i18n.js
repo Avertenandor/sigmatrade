@@ -1,8 +1,11 @@
 /* i18n.js */
 (() => {
-  const AVAILABLE_LOCALES = ["ru","en","de","tr","uk","ro","es","fr","it","pl","vi","id","ar","zh-Hans","zh-Hant"];
+  const AVAILABLE_LOCALES = [
+    "ru", "en", "de", "tr", "uk", "ro", "es", "fr", "it", "pl", 
+    "vi", "id", "ar", "zh", "zh-Hans", "zh-Hant", "ja", "kk", "pt"
+  ];
   const DEFAULT_LOCALE = "ru";
-  const I18N_VERSION = "2025-10-24";
+  const I18N_VERSION = "2025-10-25";
   const DEBUG = true; // Включить debug mode
 
   const cacheKey = (lang) => `i18n:${lang}:${I18N_VERSION}`;
