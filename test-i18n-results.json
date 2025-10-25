@@ -1,0 +1,216 @@
+{
+  "files": {
+    "status": "success",
+    "files_checked": 11,
+    "files_found": 11,
+    "files_missing": [],
+    "details": {
+      "JS": {
+        "i18n.js": {
+          "exists": true,
+          "size": 4171
+        },
+        "lang-switcher.js": {
+          "exists": true,
+          "size": 1451
+        },
+        "premium-nav.js": {
+          "exists": true,
+          "size": 3038
+        },
+        "site-interactions.js": {
+          "exists": true,
+          "size": 8822
+        }
+      },
+      "CSS": {
+        "fixed-header.css": {
+          "exists": true,
+          "size": 9090
+        },
+        "premium-nav.css": {
+          "exists": true,
+          "size": 11049
+        },
+        "lang-switcher.css": {
+          "exists": true,
+          "size": 1060
+        }
+      },
+      "HTML": {
+        "index.html": {
+          "exists": true,
+          "size": 103312
+        },
+        "login.html": {
+          "exists": true,
+          "size": 13015
+        },
+        "test-i18n-full.html": {
+          "exists": true,
+          "size": 20376
+        },
+        "test-lang-button-pages.html": {
+          "exists": true,
+          "size": 15445
+        }
+      }
+    }
+  },
+  "locales": {
+    "status": "success",
+    "locales_found": 19,
+    "locales_expected": 19,
+    "locales_missing": [],
+    "details": {
+      "ru": {
+        "exists": true,
+        "keys": 21,
+        "size": 27223
+      },
+      "en": {
+        "exists": true,
+        "keys": 21,
+        "size": 17790
+      },
+      "de": {
+        "exists": true,
+        "keys": 6,
+        "size": 3527
+      },
+      "tr": {
+        "exists": true,
+        "keys": 18,
+        "size": 17971
+      },
+      "uk": {
+        "exists": true,
+        "keys": 6,
+        "size": 3734
+      },
+      "ro": {
+        "exists": true,
+        "keys": 6,
+        "size": 3554
+      },
+      "es": {
+        "exists": true,
+        "keys": 18,
+        "size": 18793
+      },
+      "fr": {
+        "exists": true,
+        "keys": 6,
+        "size": 3533
+      },
+      "it": {
+        "exists": true,
+        "keys": 6,
+        "size": 3519
+      },
+      "pl": {
+        "exists": true,
+        "keys": 6,
+        "size": 3525
+      },
+      "vi": {
+        "exists": true,
+        "keys": 18,
+        "size": 20913
+      },
+      "id": {
+        "exists": true,
+        "keys": 7,
+        "size": 3982
+      },
+      "ar": {
+        "exists": true,
+        "keys": 7,
+        "size": 4287
+      },
+      "zh": {
+        "exists": true,
+        "keys": 18,
+        "size": 15865
+      },
+      "zh-Hans": {
+        "exists": true,
+        "keys": 7,
+        "size": 3953
+      },
+      "zh-Hant": {
+        "exists": true,
+        "keys": 7,
+        "size": 3953
+      },
+      "ja": {
+        "exists": true,
+        "keys": 18,
+        "size": 20361
+      },
+      "kk": {
+        "exists": true,
+        "keys": 18,
+        "size": 25537
+      },
+      "pt": {
+        "exists": true,
+        "keys": 18,
+        "size": 18569
+      }
+    }
+  },
+  "config": {
+    "status": "success",
+    "available_locales": [
+      "ru",
+      "en",
+      "de",
+      "tr",
+      "uk",
+      "ro",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "vi",
+      "id",
+      "ar",
+      "zh",
+      "zh-Hans",
+      "zh-Hant",
+      "ja",
+      "kk",
+      "pt"
+    ],
+    "default_locale": "ru",
+    "version": "2025-10-25",
+    "details": {
+      "locales_count": 19,
+      "debug_mode": true
+    }
+  },
+  "html": {
+    "status": "success",
+    "pages_checked": 2,
+    "pages_with_i18n": 2,
+    "details": {
+      "index.html": {
+        "exists": true,
+        "has_i18n_js": true,
+        "has_lang_switcher_js": true,
+        "has_premium_nav_js": true,
+        "has_premium_nav_css": true,
+        "data_i18n_count": 40
+      },
+      "login.html": {
+        "exists": true,
+        "has_i18n_js": true,
+        "has_lang_switcher_js": true,
+        "has_premium_nav_js": false,
+        "has_premium_nav_css": false,
+        "data_i18n_count": 0
+      }
+    }
+  }
+}
