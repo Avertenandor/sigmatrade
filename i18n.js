@@ -111,6 +111,14 @@
         applyTranslations(dict);
       }
 
+      // Обновляем текущий язык в публичном API и UI
+      if (window.I18N) {
+        window.I18N.current = lang;
+      }
+      if (window.updateLangSwitcher) {
+        try { window.updateLangSwitcher(); } catch(_) {}
+      }
+
       log(`Language switched to ${lang} successfully`);
     } catch (e) {
       console.error("[i18n] Error:", e);
@@ -127,8 +135,12 @@
     log(`Available locales:`, AVAILABLE_LOCALES);
 
     await set(lang);
+    if (window.updateLangSwitcher) {
+      try { window.updateLangSwitcher(); } catch(_) {}
+    }
   }
 
-  window.I18N = { init, set, AVAILABLE_LOCALES, DEFAULT_LOCALE, I18N_VERSION };
+  // Публичный API, требуемый для тестов и внешних модулей
+  window.I18N = { init, set, loadDict, current: currentLang, AVAILABLE_LOCALES, DEFAULT_LOCALE, I18N_VERSION };
   log("i18n.js loaded successfully");
 })();
