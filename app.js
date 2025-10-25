@@ -1189,6 +1189,9 @@ let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new SigmaTrade();
 
+    // Export to window for footer navigation
+    window.app = app;
+
     // Initialize email copy buttons
     initEmailCopyButtons();
 });
