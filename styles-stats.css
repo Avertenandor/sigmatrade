@@ -1,0 +1,122 @@
+/* ========================================
+   SigmaTrade v4.0.0 - Stats Module
+   Balances and Statistics
+   ======================================== */
+
+/* ========== BALANCES SECTION ========== */
+.balances-section {
+    margin-bottom: var(--spacing-3xl);
+}
+
+.balances-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.balance-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.balance-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.balance-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-md);
+}
+
+.balance-card:hover::before {
+    opacity: 1;
+}
+
+.balance-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.balance-icon {
+    font-size: 36px;
+    line-height: 1;
+}
+
+.balance-token {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.balance-amount {
+    font-size: var(--font-3xl);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-xs);
+    line-height: var(--leading-tight);
+}
+
+.balance-usd {
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+}
+
+/* ========== STATS BAR - SCANNABILITY ========== */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    transition: all var(--transition-base);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: var(--font-4xl); /* 48px - Strong emphasis */
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: var(--leading-tight);
+}

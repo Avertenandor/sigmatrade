@@ -1,0 +1,139 @@
+/* premium-nav-responsive.css - Responsive Design, Accessibility & Print Styles */
+
+/* === RESPONSIVE DESIGN === */
+
+/* Tablet (1024px and below) */
+@media (max-width: 1024px) {
+  .navigation-cards-section .container {
+    padding: 0 24px;
+  }
+
+  .premium-nav-container {
+    gap: 16px;
+  }
+
+  .premium-nav-group {
+    min-width: 240px;
+    max-width: 280px;
+  }
+
+  .premium-nav-item {
+    padding: 12px 14px;
+  }
+
+  .premium-nav-item-icon-container {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .premium-nav-item-name {
+    font-size: 14px;
+  }
+}
+
+/* Mobile (768px and below) */
+@media (max-width: 768px) {
+  .navigation-cards-section {
+    padding: 80px 0 60px;
+  }
+
+  .navigation-cards-section .container {
+    padding: 0 20px;
+  }
+
+  .premium-nav-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .premium-nav-group {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .premium-nav-group::after {
+    display: none;
+  }
+
+  .premium-nav-group-header {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .premium-nav-item {
+    padding: 10px 12px;
+  }
+
+  .premium-nav-item-icon-container {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .premium-nav-item-name {
+    font-size: 13px;
+  }
+
+  .premium-nav-item-subtitle {
+    font-size: 10px;
+  }
+
+  .premium-nav-status,
+  .premium-nav-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+/* Small Mobile (480px and below) */
+@media (max-width: 480px) {
+  .navigation-cards-section {
+    padding: 70px 0 50px;
+  }
+
+  .navigation-cards-section .container {
+    padding: 0 16px;
+  }
+
+  .premium-nav-group-header {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .premium-nav-item {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .premium-nav-item-icon-container {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .premium-nav-item-name {
+    font-size: 12px;
+  }
+
+  .premium-nav-item-subtitle {
+    display: none;
+  }
+}
+
+/* === ACCESSIBILITY === */
+.premium-nav-item:focus {
+  outline: 2px solid var(--nav-color-blue-primary);
+  outline-offset: 2px;
+}
+
+.premium-nav-item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* === PRINT STYLES === */
+@media print {
+  .premium-nav {
+    display: none;
+  }
+}

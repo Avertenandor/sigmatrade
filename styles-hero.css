@@ -1,0 +1,167 @@
+/* ========================================
+   SigmaTrade v4.0.0 - Hero Module
+   Hero Section, Info Cards
+   ======================================== */
+
+/* ========== MAIN CONTENT - GENEROUS SPACING ========== */
+.main-content {
+    padding: var(--spacing-3xl) 0;
+    min-height: calc(100vh - 200px);
+}
+
+/* ========== PAGES WITH SMOOTH TRANSITIONS ========== */
+.page {
+    display: none;
+    animation: fadeInUp var(--transition-base);
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== HERO SECTION - VISUAL HIERARCHY ========== */
+.hero-section {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-3xl);
+    background: linear-gradient(135deg,
+        rgba(0, 212, 255, 0.05) 0%,
+        rgba(124, 58, 237, 0.05) 100%);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+    animation: heroGlow 10s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes heroGlow {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(10%, 10%); }
+}
+
+.hero-title {
+    font-size: var(--font-5xl); /* 64px - Strong visual hierarchy */
+    font-weight: 900;
+    margin-bottom: var(--spacing-lg);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -2px;
+    line-height: var(--leading-tight);
+}
+
+.hero-subtitle {
+    font-size: var(--font-2xl); /* 24px - Clear hierarchy */
+    color: var(--text-secondary);
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: var(--leading-relaxed);
+    font-weight: 400;
+}
+
+/* ========== SECTION TITLES - CONSISTENT HIERARCHY ========== */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-3xl); /* 32px */
+    font-weight: 800;
+    margin-bottom: var(--spacing-xl);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+}
+
+.section-title .icon {
+    font-size: 36px;
+    line-height: 1;
+}
+
+/* ========== INFO CARDS - BREATHING ROOM ========== */
+.info-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-3xl);
+}
+
+.info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    text-align: center;
+    transition: all var(--transition-slow);
+    position: relative;
+    overflow: hidden;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.info-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow);
+}
+
+.info-card:hover::before {
+    opacity: 1;
+}
+
+.info-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-lg);
+    display: inline-block;
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3));
+    line-height: 1;
+}
+
+.info-card h3 {
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+}
+
+.info-card p {
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    font-size: var(--font-base);
+}
