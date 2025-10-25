@@ -81,6 +81,10 @@
     opacity: 1 !important;
 }
 
+.partner-node.hovered .node-detail {
+    opacity: 1 !important;
+}
+
 .partner-node.hovered .node-label {
     transform: translateY(-2px);
 }
@@ -125,6 +129,26 @@
 
 .partner-node.hovered .node-icon {
     transform: scale(1.1) rotate(5deg);
+}
+
+.node-icon {
+    fill: #fff;
+}
+
+.node-label {
+    fill: #fff;
+    font-weight: bold;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.node-description {
+    fill: #aaa;
+    opacity: 0;
+}
+
+.node-detail {
+    fill: #999;
+    opacity: 0;
 }
 
 .node-percentage {
