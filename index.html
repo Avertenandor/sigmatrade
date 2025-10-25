@@ -1384,6 +1384,113 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
+            <!-- Footer Widgets Navigation -->
+            <div class="footer-widgets">
+                <!-- Колонка 1: ТОРГОВЫЕ СИСТЕМЫ -->
+                <div class="footer-widget-group">
+                    <div class="footer-widget-group-header">
+                        <span class="footer-widget-group-icon">🤖</span>
+                        <span class="footer-widget-group-title">ТОРГОВЫЕ СИСТЕМЫ</span>
+                    </div>
+                    <div class="footer-widget-items">
+                        <!-- Бот-обменник -->
+                        <button class="footer-widget" data-page="exchange" data-status="active">
+                            <div class="footer-widget-icon-container">
+                                <span>🔄</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">Бот-обменник</div>
+                                <div class="footer-widget-subtitle">Автообмен 24/7</div>
+                            </div>
+                            <div class="footer-widget-status status-active">
+                                <span class="footer-widget-status-dot"></span>
+                                <span>РАБОТАЕТ</span>
+                            </div>
+                        </button>
+                        <!-- МЭВ-бот -->
+                        <button class="footer-widget" data-page="mev" data-status="coming-soon">
+                            <div class="footer-widget-icon-container">
+                                <span>💼</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">МЭВ-бот</div>
+                                <div class="footer-widget-subtitle">Извлечение MEV</div>
+                            </div>
+                            <div class="footer-widget-status status-soon">
+                                <span class="footer-widget-status-dot"></span>
+                                <span>СКОРО</span>
+                            </div>
+                        </button>
+                        <!-- Арбитражный бот -->
+                        <button class="footer-widget" data-page="arbitrage" data-status="coming-soon">
+                            <div class="footer-widget-icon-container">
+                                <span>📊</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">Арбитражный бот</div>
+                                <div class="footer-widget-subtitle">Межбиржевой арбитраж</div>
+                            </div>
+                            <div class="footer-widget-status status-soon">
+                                <span class="footer-widget-status-dot"></span>
+                                <span>СКОРО</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Колонка 2: СООБЩЕСТВО -->
+                <div class="footer-widget-group">
+                    <div class="footer-widget-group-header">
+                        <span class="footer-widget-group-icon">🤝</span>
+                        <span class="footer-widget-group-title">СООБЩЕСТВО</span>
+                    </div>
+                    <div class="footer-widget-items">
+                        <!-- Партнерская программа -->
+                        <button class="footer-widget" data-page="partner-rewards" data-status="active">
+                            <div class="footer-widget-icon-container">
+                                <span>💎</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">Партнерская программа</div>
+                                <div class="footer-widget-subtitle">Заработок на партнерах</div>
+                            </div>
+                            <div class="footer-widget-badge">3 уровня</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Колонка 3: ИНФОРМАЦИЯ -->
+                <div class="footer-widget-group">
+                    <div class="footer-widget-group-header">
+                        <span class="footer-widget-group-icon">📚</span>
+                        <span class="footer-widget-group-title">ИНФОРМАЦИЯ</span>
+                    </div>
+                    <div class="footer-widget-items">
+                        <!-- Как начать -->
+                        <button class="footer-widget" data-page="cooperation">
+                            <div class="footer-widget-icon-container">
+                                <span>🚀</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">Как начать</div>
+                                <div class="footer-widget-subtitle">Процесс сотрудничества</div>
+                            </div>
+                        </button>
+                        <!-- Карта сайта -->
+                        <button class="footer-widget" data-page="mindmap" data-highlight="true">
+                            <div class="footer-widget-icon-container">
+                                <span>🗺️</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">Карта сайта</div>
+                                <div class="footer-widget-subtitle">Структура платформы</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Content -->
             <div class="footer-content">
                 <div class="footer-about">
                     <p class="footer-slogan">&copy; 2025 SigmaTrade. Мониторинг блокчейн транзакций</p>
@@ -1416,7 +1523,7 @@
                     </div>
                 </div>
 
-                <div class="footer-version">v11.1.5</div>
+                <div class="footer-version">v12.0.0</div>
             </div>
         </div>
     </footer>
@@ -1438,5 +1545,44 @@
     <script src="mev-bot-map.js?v=11.1.5"></script>
     <script src="meta-updater.js?v=11.2.0"></script>
     <script src="app.js?v=11.1.5"></script>
+
+    <!-- Footer Navigation Script -->
+    <script>
+        (()=>{
+            'use strict';
+
+            // Initialize footer widget navigation
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFooterNav);
+            } else {
+                initFooterNav();
+            }
+
+            function initFooterNav() {
+                const footerWidgets = document.querySelectorAll('.footer-widget[data-page]');
+
+                footerWidgets.forEach(widget => {
+                    widget.addEventListener('click', function() {
+                        const page = this.getAttribute('data-page');
+
+                        // Trigger page switch via global app
+                        if (window.app && typeof window.app.switchPage === 'function') {
+                            window.app.switchPage(page);
+
+                            // Scroll to top smoothly
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
+                        }
+
+                        console.log('[footer-nav] Switched to page:', page);
+                    });
+                });
+
+                console.log('[footer-nav] Footer navigation initialized');
+            }
+        })();
+    </script>
 </body>
 </html>
