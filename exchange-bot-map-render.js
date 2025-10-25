@@ -94,6 +94,7 @@ const ExchangeBotMapRender = {
         icon.setAttribute('dy', '0.35em');
         icon.setAttribute('class', 'node-icon');
         icon.setAttribute('font-size', node.type === 'core' ? '36' : '28');
+        icon.setAttribute('fill', '#fff');
         icon.textContent = node.icon;
         icon.setAttribute('pointer-events', 'none');
         group.appendChild(icon);
@@ -111,6 +112,8 @@ const ExchangeBotMapRender = {
         // Special color for danger labels
         if (node.type === 'danger' || node.type === 'warning') {
             label.setAttribute('fill', '#ff4444');
+        } else {
+            label.setAttribute('fill', '#fff');
         }
 
         group.appendChild(label);
@@ -121,6 +124,7 @@ const ExchangeBotMapRender = {
         desc.setAttribute('dy', this.getNodeRadius(node.type) + 35);
         desc.setAttribute('class', 'node-description');
         desc.setAttribute('font-size', '11');
+        desc.setAttribute('fill', '#aaa');
         desc.textContent = node.description;
         desc.setAttribute('pointer-events', 'none');
         group.appendChild(desc);
@@ -132,6 +136,7 @@ const ExchangeBotMapRender = {
         detail.setAttribute('class', 'node-detail');
         detail.setAttribute('font-size', '10');
         detail.setAttribute('font-style', 'italic');
+        detail.setAttribute('fill', '#999');
         detail.textContent = node.detail;
         detail.setAttribute('pointer-events', 'none');
         group.appendChild(detail);

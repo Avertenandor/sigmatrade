@@ -68,6 +68,7 @@ const PartnerRewardsMapRender = {
         icon.setAttribute('dy', '0.35em');
         icon.setAttribute('class', 'node-icon');
         icon.setAttribute('font-size', node.type === 'core' ? '36' : '24');
+        icon.setAttribute('fill', '#fff');
         icon.textContent = node.icon;
         icon.setAttribute('pointer-events', 'none');
         group.appendChild(icon);
@@ -93,6 +94,7 @@ const PartnerRewardsMapRender = {
             label.setAttribute('dy', this.getNodeRadius(node.type) + 20);
             label.setAttribute('class', 'node-label');
             label.setAttribute('font-size', core.isMobile ? '11' : '13');
+            label.setAttribute('fill', '#fff');
             label.textContent = core.isMobile && node.type !== 'core' ? '' : node.label;
             label.setAttribute('pointer-events', 'none');
             group.appendChild(label);
@@ -104,6 +106,7 @@ const PartnerRewardsMapRender = {
         desc.setAttribute('dy', this.getNodeRadius(node.type) + 40);
         desc.setAttribute('class', 'node-description');
         desc.setAttribute('font-size', '12');
+        desc.setAttribute('fill', '#aaa');
         desc.textContent = node.income || node.description;
         desc.setAttribute('pointer-events', 'none');
         group.appendChild(desc);

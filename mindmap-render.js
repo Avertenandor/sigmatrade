@@ -67,6 +67,7 @@ const MindMapRender = {
         icon.setAttribute('dy', '0.35em');
         icon.setAttribute('class', 'node-icon');
         icon.setAttribute('font-size', node.type === 'core' ? '36' : '24');
+        icon.setAttribute('fill', '#fff');
         icon.textContent = node.icon;
         icon.setAttribute('pointer-events', 'none');
         group.appendChild(icon);
