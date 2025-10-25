@@ -1,0 +1,347 @@
+/* ========================================
+   SigmaTrade v4.0.0 - Responsive Design Module
+   Mobile-First Responsive Styles & Accessibility
+   ======================================== */
+
+/* ========== RESPONSIVE DESIGN - MOBILE FIRST ========== */
+
+@media (max-width: 768px) {
+    /* Mobile Menu */
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    .header-top {
+        flex-wrap: wrap;
+        min-height: auto;
+    }
+
+    .header-info {
+        flex-direction: column;
+        width: 100%;
+        gap: var(--spacing-sm);
+    }
+
+    .network-status,
+    .wallet-short {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-contact {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .email-text {
+        font-size: var(--font-xs);
+    }
+
+    .login-btn {
+        padding: 10px 20px;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+    }
+
+    .login-text {
+        display: none;
+    }
+
+    .login-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .login-btn:hover::after {
+        width: 200px;
+        height: 200px;
+    }
+
+    .main-nav {
+        flex-direction: column;
+        display: none;
+    }
+
+    .main-nav.mobile-open {
+        display: flex;
+    }
+
+    .nav-tab {
+        justify-content: flex-start;
+        padding: var(--spacing-lg);
+        border-bottom: 1px solid var(--border-primary);
+        min-height: 60px;
+    }
+
+    /* Typography adjustments */
+    .hero-title {
+        font-size: var(--font-4xl); /* 48px on mobile */
+    }
+
+    .hero-subtitle {
+        font-size: var(--font-lg); /* 18px on mobile */
+    }
+
+    .section-title {
+        font-size: var(--font-2xl); /* 24px */
+    }
+
+    .section-title .icon {
+        font-size: 28px;
+    }
+
+    /* Spacing adjustments */
+    .main-content {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .hero-section {
+        padding: var(--spacing-2xl) var(--spacing-lg);
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    /* Grids to single column */
+    .info-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bots-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .balances-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    .stats-bar {
+        grid-template-columns: 1fr;
+    }
+
+    /* Filters stack */
+    .filters {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    /* Footer */
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    /* Transaction details stack */
+    .tx-details {
+        grid-template-columns: 1fr;
+    }
+
+    /* Toast adjustments */
+    .toast-container {
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+        left: var(--spacing-sm);
+        align-items: center;
+    }
+
+    .toast {
+        min-width: unset;
+        max-width: 100%;
+        width: 100%;
+        transform: translateY(-100px);
+    }
+
+    .toast-show {
+        transform: translateY(0);
+    }
+
+    /* Mindmap responsive adjustments */
+    .mindmap-container {
+        min-height: 500px;
+    }
+
+    .mindmap-svg {
+        height: 500px;
+    }
+
+    .mindmap-legend {
+        font-size: var(--font-xs);
+        padding: var(--spacing-sm);
+    }
+
+    .legend-color {
+        width: 16px;
+        height: 16px;
+    }
+
+    .mindmap-controls {
+        gap: var(--spacing-sm);
+    }
+
+    .mindmap-btn {
+        font-size: var(--font-sm);
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    /* Partner rewards responsive adjustments */
+    .partner-rewards-container {
+        min-height: 500px;
+    }
+
+    .partner-rewards-svg {
+        height: 500px;
+    }
+
+    .partner-rewards-legend {
+        font-size: var(--font-xs);
+        padding: var(--spacing-sm);
+    }
+
+    .partner-rewards-controls {
+        gap: var(--spacing-sm);
+    }
+
+    .partner-rewards-btn {
+        font-size: var(--font-sm);
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    .partner-info-section {
+        grid-template-columns: 1fr;
+    }
+
+    .partner-level-percentage {
+        font-size: var(--font-2xl);
+    }
+
+    /* Home button responsive */
+    .home-button {
+        top: 10px;
+        left: 10px;
+        padding: var(--spacing-xs) var(--spacing-md);
+        font-size: var(--font-sm);
+    }
+
+    .home-button-icon {
+        font-size: var(--font-xl);
+    }
+
+    .home-button-text {
+        display: none;
+    }
+
+    .home-button:hover {
+        transform: translateY(-1px) scale(1.03);
+    }
+}
+
+@media (max-width: 480px) {
+    /* Even smaller adjustments */
+    .logo-text {
+        font-size: var(--font-xl); /* 20px */
+    }
+
+    .logo-icon {
+        font-size: 28px;
+    }
+
+    .hero-title {
+        font-size: var(--font-3xl); /* 32px */
+    }
+
+    .hero-subtitle {
+        font-size: var(--font-base); /* 16px */
+    }
+
+    .stat-value {
+        font-size: var(--font-3xl); /* 32px */
+    }
+
+    .window-header h2 {
+        font-size: var(--font-lg); /* 18px */
+    }
+
+    .nav-label {
+        font-size: var(--font-sm);
+    }
+
+    /* Partner rewards mobile adjustments */
+    .partner-rewards-container {
+        min-height: 400px;
+    }
+
+    .partner-rewards-svg {
+        height: 400px;
+    }
+
+    .partner-info-card-title {
+        font-size: var(--font-lg);
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .partner-info-card-icon {
+        font-size: var(--font-2xl);
+    }
+
+    .partner-level-percentage {
+        font-size: var(--font-xl);
+    }
+
+    .partner-level-title {
+        font-size: var(--font-base);
+    }
+
+    .mindmap-container {
+        min-height: 400px;
+    }
+
+    .mindmap-svg {
+        height: 400px;
+    }
+
+    .mindmap-placeholder {
+        padding: 40px 20px;
+    }
+
+    .mindmap-placeholder p {
+        font-size: 18px;
+    }
+}
+
+/* ========== ACCESSIBILITY IMPROVEMENTS ========== */
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode improvements */
+@media (prefers-contrast: high) {
+    :root {
+        --border-primary: #555555;
+        --border-secondary: #666666;
+    }
+}

@@ -1,0 +1,76 @@
+/* ========================================
+   SigmaTrade v4.0.0 - Toast Notifications Module
+   ======================================== */
+
+/* ========== TOAST NOTIFICATIONS ========== */
+.toast-container {
+    position: fixed;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    z-index: var(--z-popover);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xl);
+    min-width: 320px;
+    max-width: 420px;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all var(--transition-slow);
+    pointer-events: auto;
+}
+
+.toast-show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast-icon {
+    font-size: var(--font-2xl);
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.toast-message {
+    color: var(--text-primary);
+    font-size: var(--font-base);
+    line-height: var(--leading-relaxed);
+    flex: 1;
+}
+
+/* Toast Types */
+.toast-success {
+    border-left: 4px solid var(--accent-success);
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, var(--bg-elevated) 10%);
+}
+
+.toast-error {
+    border-left: 4px solid var(--accent-danger);
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, var(--bg-elevated) 10%);
+}
+
+.toast-warning {
+    border-left: 4px solid var(--accent-warning);
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, var(--bg-elevated) 10%);
+}
+
+.toast-info {
+    border-left: 4px solid var(--accent-primary);
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, var(--bg-elevated) 10%);
+}
+
+.toast-transaction {
+    border-left: 4px solid var(--accent-secondary);
+    background: linear-gradient(90deg, rgba(124, 58, 237, 0.1) 0%, var(--bg-elevated) 10%);
+}

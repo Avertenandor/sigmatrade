@@ -24,5 +24,20 @@
 /* Footer - Footer content and navigation */
 @import url('styles-footer.css');
 
-/* Utilities - Toast, responsive, animations, mind map, partner rewards */
+/* Animations - Keyframes and animation definitions */
+@import url('styles-animations.css');
+
+/* Toast - Toast notification system */
+@import url('styles-toast.css');
+
+/* Mind Map - Interactive mind map visualization */
+@import url('styles-mindmap.css');
+
+/* Partner Rewards - Multi-level referral system */
+@import url('styles-partner-rewards.css');
+
+/* Responsive - Mobile-first responsive styles & accessibility */
+@import url('styles-responsive.css');
+
+/* Utilities - Virtual scroll, bot indicators, and misc utilities */
 @import url('styles-utils.css');
