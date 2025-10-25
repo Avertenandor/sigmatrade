@@ -3,41 +3,69 @@
   let selectElement = null;
 
   function updateSelectedLang() {
-    if (selectElement) {
-      const current = localStorage.getItem("i18n:lang") || window.I18N?.DEFAULT_LOCALE || "ru";
-      selectElement.value = current;
-    }
+    const current = localStorage.getItem("i18n:lang") || (window.I18N && window.I18N.DEFAULT_LOCALE) || "ru";
+    // Обновляем select и видимый код языка в хедере
+    if (selectElement) selectElement.value = current;
+    const codeEl = document.getElementById('languageCode');
+    if (codeEl) codeEl.textContent = (current || 'ru').toUpperCase();
   }
 
   function ensureSwitcher() {
-    let holder = document.querySelector("[data-lang-switcher]");
+    // Монтируем ТОЛЬКО в шапку сайта — рядом с кнопкой «ВОЙТИ»
+    const holder = document.getElementById('languageSelector');
     if (!holder) {
-      holder = document.createElement("div");
-      holder.setAttribute("data-lang-switcher", "");
-      holder.className = "lang-switcher";
-      holder.innerHTML = `<label style="margin-right:8px;">🌐</label><select id="lang-select"></select>`;
-      document.body.appendChild(holder);
+      // На странице нет шапки — не создаём ничего
+      return;
     }
-    const select = holder.querySelector("#lang-select");
+
+    // Если селект уже создан — не дублируем
+    let select = holder.querySelector('select.header-lang-select');
+    if (!select) {
+      select = document.createElement('select');
+      select.className = 'header-lang-select';
+      holder.appendChild(select);
+
+      // Клик по блоку должен открывать селект
+      holder.addEventListener('click', () => {
+        select.focus();
+        select.click();
+      });
+    }
+
     selectElement = select;
-    select.innerHTML = "";
-    (window.I18N?.AVAILABLE_LOCALES || ["ru","en"]).forEach(l => {
-      const o = document.createElement("option");
-      o.value = l; o.textContent = l.toUpperCase();
+    select.innerHTML = '';
+
+    const locales = (window.I18N && window.I18N.AVAILABLE_LOCALES) || ['ru','en'];
+    locales.forEach(l => {
+      const o = document.createElement('option');
+      o.value = l;
+      o.textContent = l.toUpperCase();
       select.appendChild(o);
     });
+
     updateSelectedLang();
-    select.addEventListener("change", async (e) => {
+
+    // Обработчик изменения языка
+    select.addEventListener('change', async (e) => {
       const lang = e.target.value;
-      if (window.I18N?.set) {
-        await window.I18N.set(lang);
-        updateSelectedLang();
+      if (window.I18N && window.I18N.set) {
+        try {
+          await window.I18N.set(lang);
+          updateSelectedLang();
+        } catch (err) {
+          console.error('[lang-switcher] Failed to change language:', err);
+        }
       }
     });
   }
 
-  // Expose function globally so I18N can call it after set()
+  // Экспортируем функцию — i18n вызывает её после смены языка
   window.updateLangSwitcher = updateSelectedLang;
 
-  document.addEventListener("DOMContentLoaded", ensureSwitcher);
+  // Инициализация после загрузки DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(ensureSwitcher, 50));
+  } else {
+    setTimeout(ensureSwitcher, 50);
+  }
 })();
