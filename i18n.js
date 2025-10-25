@@ -47,6 +47,21 @@
     document.documentElement.setAttribute("lang", currentLang);
   }
 
+  // Преобразуем вложенный объект перевода в плоские ключи: section.key -> value
+  function flattenDict(obj, prefix = '', out = {}) {
+    if (!obj || typeof obj !== 'object') return out;
+    Object.keys(obj).forEach(k => {
+      const v = obj[k];
+      const p = prefix ? `${prefix}.${k}` : k;
+      if (v && typeof v === 'object' && !Array.isArray(v)) {
+        flattenDict(v, p, out);
+      } else {
+        out[p] = v;
+      }
+    });
+    return out;
+  }
+
   function applyTranslations(dict) {
     applyMeta(dict);
     const nodes = document.querySelectorAll("[data-i18n]");
@@ -60,7 +75,7 @@
       const key = el.getAttribute("data-i18n");
       if (!key) return;
 
-      const raw = dict[key];
+  const raw = dict[key];
       const attrs = (el.getAttribute("data-i18n-attr") || "").split(",").map(s => s.trim()).filter(Boolean);
       const asHtml = el.hasAttribute("data-i18n-html");
 
@@ -98,17 +113,18 @@
     log(`Switching to language: ${lang}`);
 
     try {
-      const dict = await loadDict(lang);
+  const dict = await loadDict(lang);
 
       // fallback к ru
       if (lang !== "ru") {
         log(`Loading Russian fallback...`);
         const ru = await loadDict("ru");
-        const merged = Object.assign({}, ru, dict);
+  // Объединяем и ПЛОСКО превращаем ключи, чтобы data-i18n="a.b" работало
+  const merged = flattenDict(Object.assign({}, ru, dict));
         log(`Merged dict has ${Object.keys(merged).length} keys`);
         applyTranslations(merged);
       } else {
-        applyTranslations(dict);
+  applyTranslations(flattenDict(dict));
       }
 
       // Обновляем текущий язык в публичном API и UI
