@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OG Image PNG Generator - SigmaTrade</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 10px;
+        }
+        button {
+            padding: 12px 24px;
+            margin: 5px;
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        canvas {
+            border: 2px solid #00d4ff;
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+        .info {
+            text-align: center;
+            margin-top: 20px;
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h1>🎨 SigmaTrade OG Image Generator</h1>
+        <p>Генератор изображений для социальных сетей (1200x630 PNG)</p>
+        <button onclick="generateImage('home')">🏠 Home</button>
+        <button onclick="generateImage('exchange')">🔄 Exchange Bot</button>
+        <button onclick="generateImage('mev')">💼 MEV Bot</button>
+        <button onclick="generateImage('arbitrage')">📊 Arbitrage</button>
+        <button onclick="generateImage('cooperation')">🤝 Cooperation</button>
+        <button onclick="generateImage('rewards')">🎁 Rewards</button>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="canvas" width="1200" height="630"></canvas>
+    </div>
+
+    <div class="info">
+        <p>Кликните правой кнопкой мыши на изображение → "Сохранить изображение как..."</p>
+        <p id="filename"></p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const themes = {
+            home: {
+                title: 'SigmaTrade',
+                subtitle: 'Мониторинг семейства торговых ботов',
+                description: 'Real-time BSC blockchain monitoring',
+                icons: ['🔄', '💼', '📊'],
+                labels: ['Exchange', 'MEV Bot', 'Arbitrage'],
+                colors: ['#00d4ff', '#ff6600', '#9966ff']
+            },
+            exchange: {
+                title: 'Exchange Bot',
+                subtitle: 'Автоматическая торговля и обмен',
+                description: 'Мониторинг операций обмена в реальном времени',
+                icons: ['🔄'],
+                labels: ['Exchange Bot'],
+                colors: ['#00d4ff']
+            },
+            mev: {
+                title: 'MEV Bot',
+                subtitle: 'Максимальная извлекаемая стоимость',
+                description: 'MEV стратегии и мониторинг прибыли',
+                icons: ['💼'],
+                labels: ['MEV Bot'],
+                colors: ['#ff6600']
+            },
+            arbitrage: {
+                title: 'Arbitrage Bot',
+                subtitle: 'Арбитражные возможности',
+                description: 'Поиск и исполнение арбитражных сделок',
+                icons: ['📊'],
+                labels: ['Arbitrage'],
+                colors: ['#9966ff']
+            },
+            cooperation: {
+                title: 'Cooperation Map',
+                subtitle: 'Карта сотрудничества',
+                description: 'Визуализация связей и партнёрства',
+                icons: ['🤝'],
+                labels: ['Cooperation'],
+                colors: ['#00ff88']
+            },
+            rewards: {
+                title: 'Partner Rewards',
+                subtitle: 'Партнёрская программа',
+                description: 'Система вознаграждений для партнёров',
+                icons: ['🎁'],
+                labels: ['Rewards'],
+                colors: ['#ffcc00']
+            }
+        };
+
+        function generateImage(type) {
+            const theme = themes[type];
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Background gradient
+            const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+            bgGradient.addColorStop(0, '#0a0e27');
+            bgGradient.addColorStop(0.5, '#1a1f3a');
+            bgGradient.addColorStop(1, '#0a0e27');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // Decorative circles
+            ctx.fillStyle = 'rgba(0, 212, 255, 0.05)';
+            ctx.beginPath();
+            ctx.arc(100, 100, 150, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(0, 102, 255, 0.05)';
+            ctx.beginPath();
+            ctx.arc(1100, 530, 200, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Grid pattern
+            ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < width; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < height; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(width, i);
+                ctx.stroke();
+            }
+
+            // Logo symbol
+            ctx.font = 'bold 60px Arial';
+            ctx.fillStyle = '#00d4ff';
+            ctx.textAlign = 'left';
+            ctx.fillText('Σ', 60, 80);
+
+            // Title
+            ctx.font = 'bold 72px Arial';
+            const titleGradient = ctx.createLinearGradient(0, 0, width, 0);
+            titleGradient.addColorStop(0, '#00d4ff');
+            titleGradient.addColorStop(0.5, '#0066ff');
+            titleGradient.addColorStop(1, '#00d4ff');
+            ctx.fillStyle = titleGradient;
+            ctx.textAlign = 'center';
+            ctx.fillText(theme.title, width / 2, 180);
+
+            // Subtitle
+            ctx.font = '32px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillText(theme.subtitle, width / 2, 240);
+
+            // Icons and labels
+            const iconY = 380;
+            const spacing = theme.icons.length === 1 ? 0 : 300;
+            const startX = theme.icons.length === 1 ? width / 2 : (width - (spacing * (theme.icons.length - 1))) / 2;
+
+            theme.icons.forEach((icon, index) => {
+                const x = startX + (index * spacing);
+
+                // Icon background circle
+                ctx.fillStyle = theme.colors[index] + '33';
+                ctx.beginPath();
+                ctx.arc(x, iconY, 60, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Icon
+                ctx.font = '60px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(icon, x, iconY);
+
+                // Label
+                ctx.font = 'bold 24px Arial';
+                ctx.fillStyle = theme.colors[index];
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillText(theme.labels[index], x, iconY + 100);
+            });
+
+            // Description
+            ctx.font = '28px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.textAlign = 'center';
+            ctx.fillText(theme.description, width / 2, 560);
+
+            // Website URL
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = '#00d4ff';
+            ctx.fillText('sigmatrade.org', width / 2, 600);
+
+            // Update filename
+            document.getElementById('filename').textContent = `Файл: og-${type}.png`;
+        }
+
+        // Generate home image by default
+        generateImage('home');
+    </script>
+</body>
+</html>
