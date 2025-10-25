@@ -90,8 +90,8 @@
     <link rel="preconnect" href="https://api.etherscan.io">
     <link rel="preconnect" href="https://old-patient-butterfly.bsc.quiknode.pro">
     
-    <link rel="stylesheet" href="styles.css?v=11.1.5">
-    <link rel="stylesheet" href="fixed-header.css?v=1.0.0">
+    <link rel="stylesheet" href="styles.css?v=11.1.6">
+    <link rel="stylesheet" href="fixed-header.css?v=1.0.1">
     <link rel="stylesheet" href="premium-nav.css?v=1.0.0">
     <link rel="stylesheet" href="modals-toasts.css?v=1.0.0">
 </head>
@@ -112,13 +112,13 @@
                 <!-- Индикатор сети -->
                 <div class="header-element network-indicator" id="networkIndicator">
                     <span class="network-status-dot"></span>
-                    <span class="network-name" data-i18n="header.network_name">Binance Smart Chain</span>
+                    <span class="network-name">Binance Smart Chain</span>
                     <span class="network-dropdown-icon">▼</span>
                 </div>
 
                 <!-- Кошелёк -->
                 <div class="header-element wallet-element">
-                    <span class="wallet-label" data-i18n="header.wallet_label">Кошелек:</span>
+                    <span class="wallet-label">Кошелек:</span>
                     <span class="wallet-address" id="walletAddress">0xB685...895b</span>
                     <button class="wallet-copy-btn" id="walletCopyBtn" title="Копировать адрес">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -142,19 +142,12 @@
                     </button>
                 </div>
 
-                <!-- Селектор языка -->
-                <div class="header-element language-selector" id="languageSelector">
-                    <span class="language-icon">🌐</span>
-                    <span class="language-code" id="languageCode">RU</span>
-                    <span class="language-dropdown-icon">▼</span>
-                </div>
-
                 <!-- Кнопка ВОЙТИ -->
                 <a href="login.html" class="header-element login-button">
                     <svg class="login-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <span data-i18n="header.login_btn">ВОЙТИ</span>
+                    <span>ВОЙТИ</span>
                 </a>
 
                 <!-- Мобильное меню (гамбургер) -->
@@ -176,7 +169,7 @@
                     <div class="premium-nav-group">
                         <div class="premium-nav-group-header">
                             <span class="premium-nav-group-icon">🤖</span>
-                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_trading">ТОРГОВЫЕ СИСТЕМЫ</span>
+                            <span class="premium-nav-group-title">ТОРГОВЫЕ СИСТЕМЫ</span>
                         </div>
                         <div class="premium-nav-items">
                             <!-- Exchange Bot -->
@@ -185,12 +178,12 @@
                                     <span>🔄</span>
                                 </div>
                                 <div class="premium-nav-item-text">
-                                    <div class="premium-nav-item-name" data-i18n="nav.exchange">Бот-обменник</div>
-                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.exchange_subtitle">Автообмен 24/7</div>
+                                    <div class="premium-nav-item-name">Бот-обменник</div>
+                                    <div class="premium-nav-item-subtitle">Автообмен 24/7</div>
                                 </div>
                                 <div class="premium-nav-status status-active">
                                     <span class="premium-nav-status-dot"></span>
-                                    <span data-i18n="premium_nav.status_active">РАБОТАЕТ</span>
+                                    <span>РАБОТАЕТ</span>
                                 </div>
                             </button>
                             <!-- MEV Bot -->
@@ -199,12 +192,12 @@
                                     <span>💼</span>
                                 </div>
                                 <div class="premium-nav-item-text">
-                                    <div class="premium-nav-item-name" data-i18n="nav.mev">МЭВ-бот</div>
-                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.mev_subtitle">Извлечение MEV</div>
+                                    <div class="premium-nav-item-name">МЭВ-бот</div>
+                                    <div class="premium-nav-item-subtitle">Извлечение MEV</div>
                                 </div>
                                 <div class="premium-nav-status status-soon">
                                     <span class="premium-nav-status-dot"></span>
-                                    <span data-i18n="premium_nav.status_soon">СКОРО</span>
+                                    <span>СКОРО</span>
                                 </div>
                             </button>
                             <!-- Arbitrage Bot -->
@@ -213,12 +206,12 @@
                                     <span>📊</span>
                                 </div>
                                 <div class="premium-nav-item-text">
-                                    <div class="premium-nav-item-name" data-i18n="nav.arbitrage">Арбитражный бот</div>
-                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.arbitrage_subtitle">Межбиржевой арбитраж</div>
+                                    <div class="premium-nav-item-name">Арбитражный бот</div>
+                                    <div class="premium-nav-item-subtitle">Межбиржевой арбитраж</div>
                                 </div>
                                 <div class="premium-nav-status status-soon">
                                     <span class="premium-nav-status-dot"></span>
-                                    <span data-i18n="premium_nav.status_soon">СКОРО</span>
+                                    <span>СКОРО</span>
                                 </div>
                             </button>
                         </div>
@@ -228,7 +221,7 @@
                     <div class="premium-nav-group">
                         <div class="premium-nav-group-header">
                             <span class="premium-nav-group-icon">🤝</span>
-                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_community">СООБЩЕСТВО</span>
+                            <span class="premium-nav-group-title">СООБЩЕСТВО</span>
                         </div>
                         <div class="premium-nav-items">
                             <!-- Partner Program -->
@@ -237,10 +230,10 @@
                                     <span>💎</span>
                                 </div>
                                 <div class="premium-nav-item-text">
-                                    <div class="premium-nav-item-name" data-i18n="nav.partner_rewards">Партнерская программа</div>
-                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.partner_subtitle">Заработок на партнерах</div>
+                                    <div class="premium-nav-item-name">Партнерская программа</div>
+                                    <div class="premium-nav-item-subtitle">Заработок на партнерах</div>
                                 </div>
-                                <div class="premium-nav-badge" data-i18n="premium_nav.partner_levels">3 уровня</div>
+                                <div class="premium-nav-badge">3 уровня</div>
                             </button>
                         </div>
                     </div>
@@ -249,7 +242,7 @@
                     <div class="premium-nav-group">
                         <div class="premium-nav-group-header">
                             <span class="premium-nav-group-icon">📚</span>
-                            <span class="premium-nav-group-title" data-i18n="premium_nav.group_info">ИНФОРМАЦИЯ</span>
+                            <span class="premium-nav-group-title">ИНФОРМАЦИЯ</span>
                         </div>
                         <div class="premium-nav-items">
                             <!-- How to Start -->
@@ -258,8 +251,8 @@
                                     <span>🚀</span>
                                 </div>
                                 <div class="premium-nav-item-text">
-                                    <div class="premium-nav-item-name" data-i18n="nav.cooperation">Как начать</div>
-                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.cooperation_subtitle">Процесс сотрудничества</div>
+                                    <div class="premium-nav-item-name">Как начать</div>
+                                    <div class="premium-nav-item-subtitle">Процесс сотрудничества</div>
                                 </div>
                             </button>
                             <!-- Site Map -->
@@ -268,8 +261,8 @@
                                     <span>🗺️</span>
                                 </div>
                                 <div class="premium-nav-item-text">
-                                    <div class="premium-nav-item-name" data-i18n="nav.mindmap">Карта сайта</div>
-                                    <div class="premium-nav-item-subtitle" data-i18n="premium_nav.mindmap_subtitle">Структура платформы</div>
+                                    <div class="premium-nav-item-name">Карта сайта</div>
+                                    <div class="premium-nav-item-subtitle">Структура платформы</div>
                                 </div>
                             </button>
                         </div>
@@ -286,54 +279,54 @@
             <div class="container">
                 <!-- Hero Section -->
                 <div class="hero-section">
-                    <h1 class="hero-title" data-i18n="hero.title">Пока все болтают, мы работаем</h1>
-                    <p class="hero-subtitle" data-i18n="hero.subtitle">Автоматический обмен криптовалют 24/7 на Binance Smart Chain</p>
+                    <h1 class="hero-title">Пока все болтают, мы работаем</h1>
+                    <p class="hero-subtitle">Автоматический обмен криптовалют 24/7 на Binance Smart Chain</p>
                 </div>
 
                 <!-- Bots Family Section -->
                 <div class="bots-family-section">
                     <h2 class="section-title">
                         <span class="icon">🤖</span>
-                        <span data-i18n="bots_family.title">Семейство торговых ботов Sigma Trade</span>
+                        <span>Семейство торговых ботов Sigma Trade</span>
                     </h2>
                     <div class="bots-grid">
                         <div class="bot-card exchange-bot" data-page="exchange">
                             <div class="bot-icon">🔄</div>
-                            <h3 class="bot-name" data-i18n="bots_family.exchange_bot.name">Бот-обменник</h3>
-                            <p class="bot-description" data-i18n="bots_family.exchange_bot.description">Автоматический обмен криптовалют с оптимальными курсами 24/7</p>
+                            <h3 class="bot-name">Бот-обменник</h3>
+                            <p class="bot-description">Автоматический обмен криптовалют с оптимальными курсами 24/7</p>
                             <div class="bot-stats">
                                 <div class="bot-stat">
-                                    <span class="stat-label" data-i18n="bots_family.exchange_bot.status_label">Статус:</span>
-                                    <span class="stat-value active-badge" data-i18n="bots_family.exchange_bot.status_active">Активен</span>
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value active-badge">Активен</span>
                                 </div>
                             </div>
-                            <button class="bot-btn" onclick="app.switchPage('exchange')" data-i18n="bots_family.exchange_bot.button">Смотреть детали →</button>
+                            <button class="bot-btn" onclick="app.switchPage('exchange')">Смотреть детали →</button>
                         </div>
 
                         <div class="bot-card mev-bot" data-page="mev">
                             <div class="bot-icon">💼</div>
-                            <h3 class="bot-name" data-i18n="bots_family.mev_bot.name">МЭВ-бот</h3>
-                            <p class="bot-description" data-i18n="bots_family.mev_bot.description">Максимальная извлекаемая ценность через мониторинг мемпула</p>
+                            <h3 class="bot-name">МЭВ-бот</h3>
+                            <p class="bot-description">Максимальная извлекаемая ценность через мониторинг мемпула</p>
                             <div class="bot-stats">
                                 <div class="bot-stat">
-                                    <span class="stat-label" data-i18n="bots_family.mev_bot.status_label">Статус:</span>
-                                    <span class="stat-value active-badge" data-i18n="bots_family.mev_bot.status_active">Активен</span>
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value active-badge">Активен</span>
                                 </div>
                             </div>
-                            <button class="bot-btn" onclick="app.switchPage('mev')" data-i18n="bots_family.mev_bot.button">Смотреть детали →</button>
+                            <button class="bot-btn" onclick="app.switchPage('mev')">Смотреть детали →</button>
                         </div>
 
                         <div class="bot-card arb-bot" data-page="arbitrage">
                             <div class="bot-icon">📊</div>
-                            <h3 class="bot-name" data-i18n="bots_family.arb_bot.name">Арбитражный бот</h3>
-                            <p class="bot-description" data-i18n="bots_family.arb_bot.description">Межбиржевой арбитраж и поиск ценовых аномалий</p>
+                            <h3 class="bot-name">Арбитражный бот</div>
+                            <p class="bot-description">Межбиржевой арбитраж и поиск ценовых аномалий</p>
                             <div class="bot-stats">
                                 <div class="bot-stat">
-                                    <span class="stat-label" data-i18n="bots_family.arb_bot.status_label">Статус:</span>
-                                    <span class="stat-value development-badge" data-i18n="bots_family.arb_bot.status_development">В разработке</span>
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value development-badge">В разработке</span>
                                 </div>
                             </div>
-                            <button class="bot-btn" onclick="app.switchPage('arbitrage')" data-i18n="bots_family.arb_bot.button">Подробнее →</button>
+                            <button class="bot-btn" onclick="app.switchPage('arbitrage')">Подробнее →</button>
                         </div>
                     </div>
                 </div>
@@ -798,8 +791,7 @@
                         <ul>
                             <li><strong>Перетаскивание:</strong> Зажмите и перемещайте узлы для изменения расположения</li>
                             <li><strong>Масштабирование:</strong> Используйте кнопки +/− или колесико мыши</li>
-                            <li><strong>Наведение:</strong> Наведите курсор на узел для просмотра деталей и подсветки связей</li>
-                            <li><strong>Цветовая кодировка:</strong> Оранжевые узлы — атаки, фиолетовые — жертва, золотые — прибыль</li>
+                            <li><strong>Наведение:</strong> Наведите курсор на узел для подсветки связей и процентов</li>
                             <li><strong>Мобильная версия:</strong> Используйте жесты масштабирования для удобной навигации</li>
                         </ul>
                     </div>
@@ -1532,9 +1524,1608 @@
     <script src="db.js?v=11.1.5"></script>
     <script src="virtual-scroll.js?v=11.1.5"></script>
     <script src="toast.js?v=11.1.5"></script>
-    <script src="i18n.js?v=2.2.0"></script>
-    <script src="i18n-auto-apply.js?v=2.1.0"></script>
-    <script src="lang-switcher.js?v=2.2.0"></script>
+    <script src="site-interactions.js?v=1.0.0"></script>
+    <script src="premium-nav.js?v=1.0.0"></script>
+    <script src="particle-effects.js?v=1.0.0"></script>
+    <script src="mindmap.js?v=11.1.5"></script>
+    <script src="partner-rewards-map.js?v=11.1.5"></script>
+    <script src="cooperation-map.js?v=11.1.5"></script>
+    <script src="exchange-bot-map.js?v=11.1.5"></script>
+    <script src="mev-bot-map.js?v=11.1.5"></script>
+    <script src="meta-updater.js?v=11.2.0"></script>
+    <script src="app.js?v=11.1.5"></script>
+
+    <!-- Footer Navigation Script -->
+    <script>
+        (()=>{
+            'use strict';
+
+            // Initialize footer widget navigation
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFooterNav);
+            } else {
+                initFooterNav();
+            }
+
+            function initFooterNav() {
+                const footerWidgets = document.querySelectorAll('.footer-widget[data-page]');
+
+                footerWidgets.forEach(widget => {
+                    widget.addEventListener('click', function() {
+                        const page = this.getAttribute('data-page');
+
+                        // Trigger page switch via global app
+                        if (window.app && typeof window.app.switchPage === 'function') {
+                            window.app.switchPage(page);
+
+                            // Scroll to top smoothly
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
+                        }
+
+                        console.log('[footer-nav] Switched to page:', page);
+                    });
+                });
+
+                console.log('[footer-nav] Footer navigation initialized');
+            }
+        })();
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Basic Meta -->
+    <meta name="description" content="SigmaTrade - профессиональный мониторинг семейства торговых ботов. Отслеживайте работу ботов обмена, арбитража и МЭФ-деятельности в реальном времени на Binance Smart Chain.">
+    <meta name="keywords" content="sigma trade, торговый бот, арбитраж, обмен криптовалют, МЭФ, blockchain, мониторинг, транзакции, BSC, BNB, BEP-20, Binance Smart Chain, real-time">
+    <meta name="author" content="SigmaTrade">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Russian">
+    <meta name="revisit-after" content="7 days">
+    <title>SigmaTrade | Мониторинг семейства торговых ботов</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://sigmatrade.org/">
+    
+    <!-- Open Graph / Facebook / VK / Telegram -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sigmatrade.org/" id="og-url">
+    <meta property="og:site_name" content="SigmaTrade">
+    <meta property="og:title" content="SigmaTrade - Мониторинг семейства торговых ботов" id="og-title">
+    <meta property="og:description" content="Мониторинг работы семейства торговых ботов Sigma Trade. Боты обмена, арбитража и МЭФ-деятельности. Real-time отслеживание транзакций и балансов на BSC." id="og-description">
+    <meta property="og:image" content="https://sigmatrade.org/og-images/home.svg?v=11.2.0" id="og-image">
+    <meta property="og:image:secure_url" content="https://sigmatrade.org/og-images/home.svg?v=11.2.0" id="og-image-secure">
+    <meta property="og:image:type" content="image/svg+xml">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="SigmaTrade - Мониторинг семейства торговых ботов" id="og-image-alt">
+    <meta property="og:locale" content="ru_RU">
+
+    <!-- VK Specific Tags -->
+    <meta property="vk:image" content="https://sigmatrade.org/og-images/home.svg?v=11.2.0" id="vk-image">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SigmaTrade">
+    <meta name="twitter:creator" content="@SigmaTrade">
+    <meta name="twitter:title" content="SigmaTrade - Мониторинг семейства торговых ботов" id="twitter-title">
+    <meta name="twitter:description" content="Мониторинг работы семейства торговых ботов Sigma Trade. Боты обмена, арбитража и МЭФ-деятельности." id="twitter-description">
+    <meta name="twitter:image" content="https://sigmatrade.org/og-images/home.svg?v=11.2.0" id="twitter-image">
+    <meta name="twitter:image:alt" content="SigmaTrade - Мониторинг семейства торговых ботов" id="twitter-image-alt">
+
+    <!-- Telegram Instant View -->
+    <meta property="telegram:channel" content="@sigmatrade">
+    <meta name="telegram:card" content="summary_large_image">
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon-32x32.png">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SigmaTrade">
+    
+    <!-- Android / Chrome -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="SigmaTrade">
+    
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="msapplication-TileColor" content="#0a0a0a">
+    <meta name="msapplication-navbutton-color" content="#0a0a0a">
+    
+    <!-- Safari Specific -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="date=no">
+    <meta name="format-detection" content="address=no">
+    <meta name="format-detection" content="email=no">
+    
+    <!-- Prevent automatic text size adjustment -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- DNS Prefetch for performance -->
+    <link rel="dns-prefetch" href="https://api.etherscan.io">
+    <link rel="dns-prefetch" href="https://old-patient-butterfly.bsc.quiknode.pro">
+    
+    <!-- Preconnect for faster loading -->
+    <link rel="preconnect" href="https://api.etherscan.io">
+    <link rel="preconnect" href="https://old-patient-butterfly.bsc.quiknode.pro">
+    
+    <link rel="stylesheet" href="styles.css?v=11.1.5">
+    <link rel="stylesheet" href="fixed-header.css?v=1.0.0">
+    <link rel="stylesheet" href="premium-nav.css?v=1.0.0">
+    <link rel="stylesheet" href="modals-toasts.css?v=1.0.0">
+</head>
+<body>
+    <!-- Фиксированный хедер -->
+    <header class="site-header" id="siteHeader">
+        <div class="container">
+            <!-- ����� �����: ������� -->
+            <div class="site-header-left">
+                <a href="/" class="site-logo" id="siteLogo">
+                    <span class="site-logo-icon">?</span>
+                    <span class="site-logo-text">SIGMA<span class="site-logo-accent">TRADE</span></span>
+                </a>
+            </div>
+
+            <!-- ������ �����: �������� ���������� -->
+            <div class="site-header-right">
+                <!-- ��������� ���� -->
+                <div class="header-element network-indicator" id="networkIndicator">
+                    <span class="network-status-dot"></span>
+                    <span class="network-name">Binance Smart Chain</span>
+                    <span class="network-dropdown-icon">�</span>
+                </div>
+
+                <!-- ������ -->
+                <div class="header-element wallet-element">
+                    <span class="wallet-label">Кошелек:</span>
+                    <span class="wallet-address" id="walletAddress">0xB685...895b</span>
+                    <button class="wallet-copy-btn" id="walletCopyBtn" title="���������� �����">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Email -->
+                <div class="header-element email-element">
+                    <svg class="email-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8L10.89 13.26C11.5 13.67 12.5 13.67 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <a href="mailto:trdgood00@gmail.com" class="email-link">
+                        <span class="email-gradient header-email-gradient">trdgood00@gmail.com</span>
+                    </a>
+                    <button class="copy-email-btn header-copy" data-email="trdgood00@gmail.com" title="���������� email">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- ������ ����� -->
+                <a href="login.html" class="header-element login-button">
+                    <svg class="login-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15M10 17L15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>ВОЙТИ</span>
+                </a>
+
+                <!-- ��������� ���� (���������) -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ������������� �������� (������ ������) -->
+    <section class="navigation-cards-section" id="navigationCards">
+        <div class="container">
+            <nav class="premium-nav" id="premiumNav">
+                <div class="premium-nav-container">
+                    <!-- Group 1: Trading Systems -->
+                    <div class="premium-nav-group">
+                        <div class="premium-nav-group-header">
+                            <span class="premium-nav-group-icon">??</span>
+                            <span class="premium-nav-group-title">ТОРГОВЫЕ СИСТЕМЫ</span>
+                        </div>
+                        <div class="premium-nav-items">
+                            <!-- Exchange Bot -->
+                            <button class="premium-nav-item active" data-page="exchange" data-section="page-exchange">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>??</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name">Бот-обменник</div>
+                                    <div class="premium-nav-item-subtitle">Автообмен 24/7</div>
+                                </div>
+                                <div class="premium-nav-status status-active">
+                                    <span class="premium-nav-status-dot"></span>
+                                    <span>РАБОТАЕТ</span>
+                                </div>
+                            </button>
+                            <!-- MEV Bot -->
+                            <button class="premium-nav-item" data-page="mev" data-section="page-mev" data-status="soon">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>??</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name">МЭВ-бот</div>
+                                    <div class="premium-nav-item-subtitle">Извлечение MEV</div>
+                                </div>
+                                <div class="premium-nav-status status-soon">
+                                    <span class="premium-nav-status-dot"></span>
+                                    <span>СКОРО</span>
+                                </div>
+                            </button>
+                            <!-- Arbitrage Bot -->
+                            <button class="premium-nav-item" data-page="arbitrage" data-section="page-arbitrage" data-status="soon">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>??</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name">Арбитражный бот</div>
+                                    <div class="premium-nav-item-subtitle">Межбиржевой арбитраж</div>
+                                </div>
+                                <div class="premium-nav-status status-soon">
+                                    <span class="premium-nav-status-dot"></span>
+                                    <span>СКОРО</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Group 2: Community -->
+                    <div class="premium-nav-group">
+                        <div class="premium-nav-group-header">
+                            <span class="premium-nav-group-icon">??</span>
+                            <span class="premium-nav-group-title">СООБЩЕСТВО</span>
+                        </div>
+                        <div class="premium-nav-items">
+                            <!-- Partner Program -->
+                            <button class="premium-nav-item" data-page="partner-rewards" data-section="page-partner-rewards">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>??</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name">Партнерская программа</div>
+                                    <div class="premium-nav-item-subtitle">Заработок на партнерах</div>
+                                </div>
+                                <div class="premium-nav-badge">3 уровня</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Group 3: Information -->
+                    <div class="premium-nav-group">
+                        <div class="premium-nav-group-header">
+                            <span class="premium-nav-group-icon">??</span>
+                            <span class="premium-nav-group-title">ИНФОРМАЦИЯ</span>
+                        </div>
+                        <div class="premium-nav-items">
+                            <!-- How to Start -->
+                            <button class="premium-nav-item" data-page="cooperation" data-section="page-cooperation">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>??</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name">Как начать</div>
+                                    <div class="premium-nav-item-subtitle">Процесс сотрудничества</div>
+                                </div>
+                            </button>
+                            <!-- Site Map -->
+                            <button class="premium-nav-item" data-page="mindmap" data-section="page-mindmap">
+                                <div class="premium-nav-item-icon-container">
+                                    <span>???</span>
+                                </div>
+                                <div class="premium-nav-item-text">
+                                    <div class="premium-nav-item-name">Карта сайта</div>
+                                    <div class="premium-nav-item-subtitle">Структура платформы</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page: Exchange Bot (Main) -->
+        <div class="page active" id="page-exchange">
+            <div class="container">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <h1 class="hero-title">Пока все болтают, мы работаем</h1>
+                    <p class="hero-subtitle">Автоматический обмен криптовалют 24/7 на Binance Smart Chain</p>
+                </div>
+
+                <!-- Bots Family Section -->
+                <div class="bots-family-section">
+                    <h2 class="section-title">
+                        <span class="icon">??</span>
+                        <span>Семейство торговых ботов Sigma Trade</span>
+                    </h2>
+                    <div class="bots-grid">
+                        <div class="bot-card exchange-bot" data-page="exchange">
+                            <div class="bot-icon">??</div>
+                            <h3 class="bot-name">Бот-обменник</h3>
+                            <p class="bot-description">Автоматический обмен криптовалют с оптимальными курсами 24/7</p>
+                            <div class="bot-stats">
+                                <div class="bot-stat">
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value active-badge">Активен</span>
+                                </div>
+                            </div>
+                            <button class="bot-btn" onclick="app.switchPage('exchange')">Смотреть детали →</button>
+                        </div>
+
+                        <div class="bot-card mev-bot" data-page="mev">
+                            <div class="bot-icon">??</div>
+                            <h3 class="bot-name">МЭВ-бот</h3>
+                            <p class="bot-description">Максимальная извлекаемая ценность через мониторинг мемпула</p>
+                            <div class="bot-stats">
+                                <div class="bot-stat">
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value active-badge">Активен</span>
+                                </div>
+                            </div>
+                            <button class="bot-btn" onclick="app.switchPage('mev')">Смотреть детали →</button>
+                        </div>
+
+                        <div class="bot-card arb-bot" data-page="arbitrage">
+                            <div class="bot-icon">??</div>
+                            <h3 class="bot-name">Арбитражный бот</h3>
+                            <p class="bot-description">Межбиржевой арбитраж и поиск ценовых аномалий</p>
+                            <div class="bot-stats">
+                                <div class="bot-stat">
+                                    <span class="stat-label">Статус:</span>
+                                    <span class="stat-value development-badge">В разработке</span>
+                                </div>
+                            </div>
+                            <button class="bot-btn" onclick="app.switchPage('arbitrage')">Подробнее →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Token Balances Section -->
+                <div class="balances-section">
+                    <h2 class="section-title">
+                        <span class="icon">??</span>
+                        ������� ������� ��������
+                    </h2>
+                    <div class="balances-grid" id="balancesGrid">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>�������� ��������...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Bar -->
+                <div class="stats-bar">
+                    <div class="stat-card">
+                        <div class="stat-label">����� ����������</div>
+                        <div class="stat-value" id="totalTx">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">��������� ����</div>
+                        <div class="stat-value" id="lastBlock">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">������ BNB</div>
+                        <div class="stat-value" id="balance">0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">������ API</div>
+                        <div class="stat-value" id="apiStatus">-</div>
+                    </div>
+                </div>
+
+                <!-- Main Transaction Window -->
+                <div class="transaction-window">
+                    <div class="window-header">
+                        <h2>
+                            <span class="icon">??</span>
+                            ������� ����������
+                        </h2>
+                        <div class="window-controls">
+                            <button class="btn-control" id="refreshBtn" title="��������">
+                                <span class="icon">??</span>
+                            </button>
+                            <button class="btn-control" id="filterBtn" title="�������">
+                                <span class="icon">??</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="filters hidden" id="filterPanel">
+                        <div class="filter-group">
+                            <label>��� ����������:</label>
+                            <select id="txTypeFilter">
+                                <option value="all">���</option>
+                                <option value="in">��������</option>
+                                <option value="out">���������</option>
+                                <option value="token">������</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>������:</label>
+                            <select id="periodFilter">
+                                <option value="24h">24 ����</option>
+                                <option value="7d">7 ����</option>
+                                <option value="30d">30 ����</option>
+                                <option value="all">��� �����</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="transaction-list" id="transactionList">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>�������� ����������...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exchange Bot Interactive Map -->
+                <div class="partner-rewards-section">
+                    <h2 class="section-title">
+                        <span class="icon">???</span>
+                        ��� �������� ���-��������
+                    </h2>
+
+                    <!-- Important Warning Banner -->
+                    <div class="partner-explanation" style="margin-bottom: var(--spacing-xl);">
+                        <div class="partner-explanation-content">
+                            <div style="padding: var(--spacing-lg); background: rgba(255, 68, 68, 0.1); border-radius: var(--radius-md); border-left: 4px solid #ff4444;">
+                                <h3 style="color: #ff4444; margin: 0 0 var(--spacing-md) 0;">?? ���������� �����!</h3>
+                                <p style="color: var(--text-secondary); line-height: var(--leading-relaxed); margin: 0;">
+                                    <strong style="color: #ff4444;">����� ������� ������ �������� �� �����-�������� ��� ���������������� ������������� �������� � ������������� ������ �������!</strong>
+                                    ������, ��������� ����� �������, �� ����� ���������� ������������ �� ��� ����� ���������������.
+                                    ��� ������� � ������ ���� ���������� ������ ������������� � �������� ����������� ������.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exchange Bot Info -->
+                    <div class="partner-info-section">
+                        <div class="partner-info-card">
+                            <div class="partner-info-card-title">
+                                <span class="partner-info-card-icon">??</span>
+                                <span>�������������� �����</span>
+                            </div>
+                            <p class="partner-info-card-description">
+                                ���-�������� �������� <span class="partner-info-highlight">������ ����������� 24/7</span> �� Binance Smart Chain.
+                                ������ �������� ������ ����������� ������������� � ����������� ������ � ������ ��������� �������.
+                            </p>
+                        </div>
+
+                        <div class="partner-info-card">
+                            <div class="partner-info-card-title">
+                                <span class="partner-info-card-icon">??</span>
+                                <span>��������� ��������</span>
+                            </div>
+                            <p class="partner-info-card-description">
+                                � ������� ������ ������������ <span class="partner-info-highlight">�������� �� 0.1% �� 0.8%</span> �� ����� ��������.
+                                ������ �������� ������� �� ������ ������, �������� ������� � ������������� ����.
+                            </p>
+                        </div>
+
+                        <div class="partner-info-card">
+                            <div class="partner-info-card-title">
+                                <span class="partner-info-card-icon">??</span>
+                                <span>������������� �������</span>
+                            </div>
+                            <p class="partner-info-card-description">
+                                �������� <span class="partner-info-highlight">������� ����� �����������</span>, ��� �������� �������� � ������� ����.
+                                ����� �������������� ������ ������ � ����� ��������� ������� �������.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Map Controls -->
+                    <div class="partner-rewards-controls">
+                        <button class="partner-rewards-btn" id="exchangeBotZoomIn" title="����������">
+                            <span class="icon">??</span> +
+                        </button>
+                        <button class="partner-rewards-btn" id="exchangeBotZoomOut" title="��������">
+                            <span class="icon">??</span> ?
+                        </button>
+                        <button class="partner-rewards-btn" id="exchangeBotReset" title="�������� ���">
+                            <span class="icon">??</span> �����
+                        </button>
+                        <button class="partner-rewards-btn" id="exchangeBotCenter" title="������������">
+                            <span class="icon">??</span> �����
+                        </button>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div class="partner-rewards-container" id="exchangeBotContainer">
+                        <svg id="exchangeBotSvg" class="partner-rewards-svg">
+                            <defs>
+                                <!-- Arrow markers for different types -->
+                                <marker id="exchange-arrow-process" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00d4ff" />
+                                </marker>
+                                <marker id="exchange-arrow-money" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ffd700" />
+                                </marker>
+                                <marker id="exchange-arrow-success" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ff88" />
+                                </marker>
+                                <marker id="exchange-arrow-danger" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ff4444" />
+                                </marker>
+                                <marker id="exchange-arrow-pool" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ccff" />
+                                </marker>
+                                <marker id="exchange-arrow-info" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                                    <polygon points="0 0, 8 3, 0 6" fill="#888888" />
+                                </marker>
+
+                                <!-- Glow filters -->
+                                <filter id="exchange-core-glow">
+                                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <filter id="exchange-danger-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g id="exchangeBotContent"></g>
+                        </svg>
+                        <div class="partner-rewards-legend">
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);"></span>
+                                <span>���-�������� (�����)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);"></span>
+                                <span>������� ������</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);"></span>
+                                <span>�������� � �����</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #9966ff 0%, #6633cc 100%);"></span>
+                                <span>��������� �������</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);"></span>
+                                <span>���������� ����</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);"></span>
+                                <span>? ���������</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Usage Info -->
+                    <div class="mindmap-info">
+                        <h3>��� ������������ �����:</h3>
+                        <ul>
+                            <li><strong>��������������:</strong> ������� � ����������� ���� ��� ��������� ������������</li>
+                            <li><strong>���������������:</strong> ����������� ������ +/? ��� �������� ����</li>
+                            <li><strong>���������:</strong> �������� ������ �� ���� ��� ��������� ������� � ��������� ������</li>
+                            <li><strong>�������� ���������:</strong> ������� ���� � �������������� �� ���������, ������� � ���������� ����</li>
+                            <li><strong>��������� ������:</strong> ����������� ����� ��������������� ��� ������� ���������</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- How to Start Section -->
+                <div class="partner-explanation">
+                    <h3>?? ��� ������ ������ � �����-����������</h3>
+                    <div class="partner-explanation-content">
+                        <div class="partner-level-block level-1">
+                            <div class="partner-level-title">��� 1: �������������</div>
+                            <div class="partner-level-description">
+                                �������� �� <strong>trdgood00@gmail.com</strong> � ������� �� �������.
+                                ����� ������������ ������ �� �������� ������ ������������� ��� ���������� ������� ��������������.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-2">
+                            <div class="partner-level-title">��� 2: ��������� �������</div>
+                            <div class="partner-level-description">
+                                ����� ��������� ����������� ������������� �� ��������� ����������� ������ � �������
+                                � ������ ��������� ������ �������� ��� ������� � ������� ����.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-3">
+                            <div class="partner-level-title">��� 3: ��������� �������</div>
+                            <div class="partner-level-description">
+                                ���� �������� �������� �������� � ������� ����. � ������� ������ �� ��������� ���� �� ��������
+                                ��������������� ������ ������. <strong>����� ����������� �������������.</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commission Details -->
+                <div class="partner-explanation">
+                    <h3>?? ������ �������� � �������������</h3>
+                    <div class="partner-explanation-content">
+                        <div style="padding: var(--spacing-lg); background: var(--bg-secondary); border-radius: var(--radius-md); line-height: var(--leading-relaxed);">
+                            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                <strong style="color: var(--text-primary);">������ ��������:</strong> �� <span style="color: var(--accent-primary); font-weight: 700;">0.1%</span>
+                                �� <span style="color: var(--accent-primary); font-weight: 700;">0.8%</span> �� ����� ������� ������.
+                                ���������� ������� ������� �� ������ �������� � ������� �������� �������.
+                            </p>
+                            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                <strong style="color: var(--text-primary);">�������������:</strong> �������� ������� ����� ����� �����������,
+                                ��� �������� ��������� � ������� ����. ��� ������ ��� ����� � ����� ��������� �������,
+                                ��� ������� ���� �� ������ �������� �� ���������.
+                            </p>
+                            <p style="color: var(--text-secondary);">
+                                <strong style="color: var(--text-primary);">������:</strong> ��� ������ �� ����� $10,000 � ��������� 0.5%,
+                                ����� �������� �������� $50. ���� ���� ���� � ������� 10%, �� �������� <span style="color: #00ff88; font-weight: 700;">$5</span>
+                                � ���� ��������. ��� ������ ������� � ���� ����� ���������� ������������.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: MEV Bot -->
+        <div class="page" id="page-mev">
+            <div class="container">
+                <div class="hero-section">
+                    <button class="home-button" data-page="exchange" title="��������� �� �������">
+                        <span class="home-button-icon">??</span>
+                        <span class="home-button-text">�� �������</span>
+                    </button>
+
+                    <h1 class="hero-title">���-���</h1>
+                    <p class="hero-subtitle">������������ ����������� �������� (MEV) �� BSC</p>
+                </div>
+
+                <!-- MEV Info Cards -->
+                <div class="info-cards-grid">
+                    <div class="info-card">
+                        <div class="info-icon">?</div>
+                        <h3>��������</h3>
+                        <p>���������� ��������� ���������� � �������</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">??</div>
+                        <h3>��������</h3>
+                        <p>����� ��������� ������ ������������</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">??</div>
+                        <h3>����������</h3>
+                        <p>����������� ���������� ��������</p>
+                    </div>
+                </div>
+
+                <!-- MEV Bot Map Section -->
+                <div class="exchange-bot-section">
+                    <h2 class="section-title">
+                        <span class="icon">??</span>
+                        ��� �������� ���-��� (Sandwich Attack)
+                    </h2>
+
+                    <!-- MEV Strategy Info Cards -->
+                    <div class="partner-info-cards">
+                        <div class="partner-info-card">
+                            <div class="partner-info-icon">???</div>
+                            <div class="partner-info-content">
+                                <h3 class="partner-info-card-title">���������� Mempool</h3>
+                            </div>
+                            <p class="partner-info-card-description">
+                                ���-��� <span class="partner-info-highlight">��������� mempool BSC</span> � ������ ��������� �������,
+                                ���������� pending ���������� � ������� ������� ������, ������� ����������� �������� �� ����.
+                            </p>
+                        </div>
+
+                        <div class="partner-info-card">
+                            <div class="partner-info-icon">??</div>
+                            <div class="partner-info-content">
+                                <h3 class="partner-info-card-title">Sandwich Attack</h3>
+                            </div>
+                            <p class="partner-info-card-description">
+                                ��� ����������� ���� ��� ��������� <span class="partner-info-highlight">�������-�����</span>:
+                                �������� ����� ����������� ������ (front-run), ���������� ����� ����, ����� ������� ����� (back-run).
+                            </p>
+                        </div>
+
+                        <div class="partner-info-card">
+                            <div class="partner-info-icon">??</div>
+                            <div class="partner-info-content">
+                                <h3 class="partner-info-card-title">������������� �������</h3>
+                            </div>
+                            <p class="partner-info-card-description">
+                                ������� �� ������� ��� <span class="partner-info-highlight">�������������� ����� �����������</span>,
+                                ��� �������� ������������ ��� ���������� MEV-��������. ����� ������� �� ������������� �����.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Map Controls -->
+                    <div class="partner-rewards-controls">
+                        <button class="partner-rewards-btn" id="mevBotZoomIn" title="����������">
+                            <span class="icon">??</span> +
+                        </button>
+                        <button class="partner-rewards-btn" id="mevBotZoomOut" title="��������">
+                            <span class="icon">??</span> ?
+                        </button>
+                        <button class="partner-rewards-btn" id="mevBotReset" title="�������� ���">
+                            <span class="icon">??</span> �����
+                        </button>
+                        <button class="partner-rewards-btn" id="mevBotCenter" title="������������">
+                            <span class="icon">??</span> �����
+                        </button>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div class="partner-rewards-container" id="mevBotContainer">
+                        <svg id="mevBotSvg" class="partner-rewards-svg">
+                            <defs>
+                                <!-- Arrow markers for different types -->
+                                <marker id="mev-arrow-process" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00d4ff" />
+                                </marker>
+                                <marker id="mev-arrow-attack" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ff6600" />
+                                </marker>
+                                <marker id="mev-arrow-sandwich" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ff00ff" />
+                                </marker>
+                                <marker id="mev-arrow-money" markerWidth="12" markerHeight="12" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 12 3.5, 0 7" fill="#ffd700" />
+                                </marker>
+                                <marker id="mev-arrow-success" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ff88" />
+                                </marker>
+                                <marker id="mev-arrow-pool" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ccff" />
+                                </marker>
+                                <marker id="mev-arrow-info" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                                    <polygon points="0 0, 8 3, 0 6" fill="#888888" />
+                                </marker>
+                                <marker id="mev-arrow-warning" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#ffaa00" />
+                                </marker>
+
+                                <!-- Glow filters -->
+                                <filter id="mev-core-glow">
+                                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <filter id="mev-attack-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g id="mevBotContent"></g>
+                        </svg>
+                        <div class="partner-rewards-legend">
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ff6600 0%, #ff0066 100%);"></span>
+                                <span>���-��� (�����)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);"></span>
+                                <span>���������� � ������</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ff6600 0%, #cc0000 100%);"></span>
+                                <span>����� (Front/Back-run)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #9966ff 0%, #6633cc 100%);"></span>
+                                <span>���������� ������</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);"></span>
+                                <span>������� MEV</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00ccff 0%, #0088cc 100%);"></span>
+                                <span>������� ����������</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Usage Info -->
+                    <div class="mindmap-info">
+                        <h3>��� ������������ �����:</h3>
+                        <ul>
+                            <li><strong>��������������:</strong> ������� � ����������� ���� ��� ��������� ������������</li>
+                            <li><strong>���������������:</strong> ����������� ������ +/? ��� �������� ����</li>
+                            <li><strong>���������:</strong> �������� ������ �� ���� ��� ��������� ������� � ��������� ������</li>
+                            <li><strong>�������� ���������:</strong> ��������� ���� � �����, ���������� � ������, ������� � �������</li>
+                            <li><strong>��������� ������:</strong> ����������� ����� ��������������� ��� ������� ���������</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Token Balances Section -->
+                <div class="balances-section">
+                    <h2 class="section-title">
+                        <span class="icon">??</span>
+                        ������� ������� ��������
+                    </h2>
+                    <div class="balances-grid" id="mevBalancesGrid">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>�������� ��������...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MEV Stats -->
+                <div class="mev-stats-section">
+                    <h2 class="section-title">
+                        <span class="icon">??</span>
+                        ���������� ���-����
+                    </h2>
+                    <div class="stats-bar">
+                        <div class="stat-card mev-accent">
+                            <div class="stat-label">����� ����������</div>
+                            <div class="stat-value" id="mevTotalTx">0</div>
+                        </div>
+                        <div class="stat-card mev-accent">
+                            <div class="stat-label">��������� ����</div>
+                            <div class="stat-value" id="mevLastBlock">-</div>
+                        </div>
+                        <div class="stat-card mev-accent">
+                            <div class="stat-label">������ BNB</div>
+                            <div class="stat-value" id="mevBalance">0.00</div>
+                        </div>
+                        <div class="stat-card mev-accent">
+                            <div class="stat-label">������ API</div>
+                            <div class="stat-value" id="mevApiStatus">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MEV Activity -->
+                <div class="transaction-window">
+                    <div class="window-header">
+                        <h2>
+                            <span class="icon">??</span>
+                            ������� ���-��������
+                        </h2>
+                        <div class="window-controls">
+                            <button class="btn-control" id="mevRefreshBtn" title="��������">
+                                <span class="icon">??</span>
+                            </button>
+                            <button class="btn-control" id="mevFilterBtn" title="�������">
+                                <span class="icon">??</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="filters hidden" id="mevFilterPanel">
+                        <div class="filter-group">
+                            <label>��� ����������:</label>
+                            <select id="mevTxTypeFilter">
+                                <option value="all">���</option>
+                                <option value="in">��������</option>
+                                <option value="out">���������</option>
+                                <option value="token">������</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>������:</label>
+                            <select id="mevPeriodFilter">
+                                <option value="24h">24 ����</option>
+                                <option value="7d">7 ����</option>
+                                <option value="30d">30 ����</option>
+                                <option value="all">��� �����</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="transaction-list" id="mevTransactionList">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>�������� ����������...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Arbitrage Bot -->
+        <div class="page" id="page-arbitrage">
+            <div class="container">
+                <div class="hero-section">
+                    <button class="home-button" data-page="exchange" title="��������� �� �������">
+                        <span class="home-button-icon">??</span>
+                        <span class="home-button-text">�� �������</span>
+                    </button>
+
+                    <h1 class="hero-title">����������� ���</h1>
+                    <p class="hero-subtitle">����������� �������� �����������</p>
+                </div>
+
+                <!-- Arbitrage Info Cards -->
+                <div class="info-cards-grid">
+                    <div class="info-card">
+                        <div class="info-icon">??</div>
+                        <h3>������-DEX</h3>
+                        <p>���������� PancakeSwap, BakerySwap, ApeSwap</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">??</div>
+                        <h3>�������������</h3>
+                        <p>24/7 ����� � ���������� ����������� ������</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">??</div>
+                        <h3>���������</h3>
+                        <p>������ ������� � ����������� ���������</p>
+                    </div>
+                </div>
+
+                <!-- Arbitrage Stats -->
+                <div class="arbitrage-stats-section">
+                    <h2 class="section-title">
+                        <span class="icon">??</span>
+                        ���������� ���������
+                    </h2>
+                    <div class="stats-bar">
+                        <div class="stat-card arb-accent">
+                            <div class="stat-label">������� �� �������</div>
+                            <div class="stat-value">�����</div>
+                        </div>
+                        <div class="stat-card arb-accent">
+                            <div class="stat-label">������ ���������</div>
+                            <div class="stat-value">�����</div>
+                        </div>
+                        <div class="stat-card arb-accent">
+                            <div class="stat-label">������� �����</div>
+                            <div class="stat-value">�����</div>
+                        </div>
+                        <div class="stat-card arb-accent">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-value">�����</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arbitrage Activity -->
+                <div class="transaction-window">
+                    <div class="window-header">
+                        <h2>
+                            <span class="icon">??</span>
+                            �������� ����������� ������
+                        </h2>
+                    </div>
+                    <div class="transaction-list">
+                        <div class="loading-state">
+                            <p>���������� ����������� ������������...</p>
+                            <p class="text-secondary">������ ����� ����� ��������</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Partner Rewards -->
+        <div class="page" id="page-partner-rewards">
+            <div class="container">
+                <div class="hero-section">
+                    <button class="home-button" data-page="exchange" title="��������� �� �������">
+                        <span class="home-button-icon">??</span>
+                        <span class="home-button-text">�� �������</span>
+                    </button>
+
+                    <h1 class="hero-title">����������� ���������</h1>
+                    <p class="hero-subtitle">������������� �� 3 ������� ����������� ����</p>
+                </div>
+
+                <!-- Partner Info Cards -->
+                <div class="partner-info-section">
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">??</span>
+                            <span>3 ������ � �������</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            ��������� �������������� �� ������ �� ������ ���������, �� � �� ��������� ������� � �������� �������.
+                            ���� ����������� ���� �������� ����� �� <span class="partner-info-highlight">���� ������� �������</span>.
+                        </p>
+                    </div>
+
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">??</span>
+                            <span>�� ������ � ��������</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            ������������� ������� <span class="partner-info-highlight">�� ������ ���������</span> �
+                            <span class="partner-info-highlight">�� �� ��������</span> � �������� ��������.
+                            ������� �������� �������������� �� ������ ������.
+                        </p>
+                    </div>
+
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">??</span>
+                            <span>�������� ��������</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            ���������� ������������� �������: ������� � <span class="partner-info-highlight">3%</span> �� ������ ������,
+                            �������� <span class="partner-info-highlight">2%</span> �� ������ �
+                            <span class="partner-info-highlight">5%</span> �� ������� ������.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Partner Explanation -->
+                <div class="partner-explanation">
+                    <h3>?? ��� �������� ����������� ���������</h3>
+                    <div class="partner-explanation-content">
+                        <div class="partner-level-block level-1">
+                            <div class="partner-level-title">1 ������� - ������ ��������</div>
+                            <div class="partner-level-percentage">3%</div>
+                            <div class="partner-level-description">
+                                �� ��������� <strong>3% �� ������ � ��������</strong> ������� ��������, �������� ���������� ��������.
+                                ��� ���� ������ �������� ������� ������. ��� �������� ��� �������, ��� ������ �� �������������.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-2">
+                            <div class="partner-level-title">2 ������� - �������� ���������</div>
+                            <div class="partner-level-percentage">2%</div>
+                            <div class="partner-level-description">
+                                ����� ���� �������� ���������� ����� ���������, �� ��������� <strong>2% �� �� ������ � ��������</strong>.
+                                ��� ������ ������� ����� ����������� ����. ���� ���� ������ � �������� ���������� �����.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-3">
+                            <div class="partner-level-title">3 ������� - ������������ ��������������</div>
+                            <div class="partner-level-percentage">5%</div>
+                            <div class="partner-level-description">
+                                �� ������� ������ ��������� <strong>������������ ������ 5%</strong> �� ������ � ��������.
+                                ��� ��������, ������������ ���������� ������� ������. ��� ������ ���� ����, ��� ������ ������������� �����!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partner Rewards Interactive Map -->
+                <div class="partner-rewards-section">
+                    <h2 class="section-title">
+                        <span class="icon">???</span>
+                        ������������� ����� ����������� ���������
+                    </h2>
+
+                    <!-- Map Controls -->
+                    <div class="partner-rewards-controls">
+                        <button class="partner-rewards-btn" id="partnerZoomIn" title="����������">
+                            <span class="icon">??</span> +
+                        </button>
+                        <button class="partner-rewards-btn" id="partnerZoomOut" title="��������">
+                            <span class="icon">??</span> ?
+                        </button>
+                        <button class="partner-rewards-btn" id="partnerReset" title="�������� ���">
+                            <span class="icon">??</span> �����
+                        </button>
+                        <button class="partner-rewards-btn" id="partnerCenter" title="������������">
+                            <span class="icon">??</span> �����
+                        </button>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div class="partner-rewards-container" id="partnerRewardsContainer">
+                        <svg id="partnerRewardsSvg" class="partner-rewards-svg">
+                            <defs>
+                                <marker id="partner-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00d4ff" />
+                                </marker>
+                                <filter id="partner-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g id="partnerRewardsContent"></g>
+                        </svg>
+                        <div class="partner-rewards-legend">
+                            <div class="legend-item">
+                                <span class="legend-color legend-level-you"></span>
+                                <span>�� (����� ����)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color legend-level-1"></span>
+                                <span>1 ������� - 3%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color legend-level-2"></span>
+                                <span>2 ������� - 2%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color legend-level-3"></span>
+                                <span>3 ������� - 5%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Usage Info -->
+                    <div class="mindmap-info">
+                        <h3>��� ������������ �����:</h3>
+                        <ul>
+                            <li><strong>��������������:</strong> ������� � ����������� ���� ��� ��������� ������������</li>
+                            <li><strong>���������������:</strong> ����������� ������ +/? ��� �������� ����</li>
+                            <li><strong>���������:</strong> �������� ������ �� ���� ��� ��������� ������ � ���������</li>
+                            <li><strong>��������� ������:</strong> ����������� ����� ��������������� ��� ������� ���������</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="partner-explanation">
+                    <h3>?? ������� ������� ��������������</h3>
+                    <div class="partner-explanation-content">
+                        <div style="padding: var(--spacing-lg); background: var(--bg-secondary); border-radius: var(--radius-md); line-height: var(--leading-relaxed);">
+                            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                <strong style="color: var(--text-primary);">������ 1:</strong> ��� ������� 1-�� ������ ��������� $1000 � ������ $500 � ��������.
+                                �� ���������: <span style="color: var(--accent-primary); font-weight: 700;">3% �� $1500 = $45</span>
+                            </p>
+                            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                                <strong style="color: var(--text-primary);">������ 2:</strong> ������� 2-�� ������ (������� ������ ��������) ��������� $800 � ������ $300.
+                                �� ���������: <span style="color: #ffd700; font-weight: 700;">2% �� $1100 = $22</span>
+                            </p>
+                            <p style="color: var(--text-secondary);">
+                                <strong style="color: var(--text-primary);">������ 3:</strong> ������� 3-�� ������ ��������� $600 � ������ $400.
+                                �� ���������: <span style="color: #00ff88; font-weight: 700;">5% �� $1000 = $50</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Cooperation Process -->
+        <div class="page" id="page-cooperation">
+            <div class="container">
+                <div class="hero-section">
+                    <button class="home-button" data-page="exchange" title="��������� �� �������">
+                        <span class="home-button-icon">??</span>
+                        <span class="home-button-text">�� �������</span>
+                    </button>
+
+                    <h1 class="hero-title">��� ������ ��������������</h1>
+                    <p class="hero-subtitle">���� �� ������ �� ������ � ��������� ���������</p>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="partner-info-section">
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">??</span>
+                            <span>������ �������</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            �������� ��� �� <span class="partner-info-highlight">trdgood00@gmail.com</span>.
+                            ���������� � ����, ����� ����� � �����. �� ������� � ������� 24-48 �����.
+                        </p>
+                    </div>
+
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">??</span>
+                            <span>����� �������������</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            ����� ������������ ������ ���������� <span class="partner-info-highlight">������ �������������</span>,
+                            ��� �� ��������� ������� �������������� � ��������� �������� �������������.
+                        </p>
+                    </div>
+
+                    <div class="partner-info-card">
+                        <div class="partner-info-card-title">
+                            <span class="partner-info-card-icon">?</span>
+                            <span>������������</span>
+                        </div>
+                        <p class="partner-info-card-description">
+                            <span class="partner-info-highlight">������������ �� ����������� ����������</span>
+                            ����������� �������� ����� �� ��������� � ��������� ������ �� ������� ��������������.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Cooperation Map -->
+                <div class="partner-rewards-section">
+                    <h2 class="section-title">
+                        <span class="icon">???</span>
+                        ������������� ����� ��������
+                    </h2>
+
+                    <!-- Map Controls -->
+                    <div class="partner-rewards-controls">
+                        <button class="partner-rewards-btn" id="cooperationZoomIn" title="����������">
+                            <span class="icon">??</span> +
+                        </button>
+                        <button class="partner-rewards-btn" id="cooperationZoomOut" title="��������">
+                            <span class="icon">??</span> ?
+                        </button>
+                        <button class="partner-rewards-btn" id="cooperationReset" title="�������� ���">
+                            <span class="icon">??</span> �����
+                        </button>
+                        <button class="partner-rewards-btn" id="cooperationCenter" title="������������">
+                            <span class="icon">??</span> �����
+                        </button>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div class="partner-rewards-container" id="cooperationContainer">
+                        <svg id="cooperationSvg" class="partner-rewards-svg">
+                            <defs>
+                                <marker id="cooperation-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00d4ff" />
+                                </marker>
+                                <marker id="cooperation-arrow-success" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#00ff88" />
+                                </marker>
+                                <marker id="cooperation-arrow-fail" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#ff4444" />
+                                </marker>
+                                <filter id="cooperation-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g id="cooperationContent"></g>
+                        </svg>
+                        <div class="partner-rewards-legend">
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);"></span>
+                                <span>����� ��������</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);"></span>
+                                <span>�������� ���������</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);"></span>
+                                <span>�����</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);"></span>
+                                <span>����� (������������)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Usage Info -->
+                    <div class="mindmap-info">
+                        <h3>��� ������������ �����:</h3>
+                        <ul>
+                            <li><strong>��������������:</strong> ������� � ����������� ���� ��� ��������� ������������</li>
+                            <li><strong>���������������:</strong> ����������� ������ +/? ��� �������� ����</li>
+                            <li><strong>���������:</strong> �������� ������ �� ���� ��� ��������� �������</li>
+                            <li><strong>��������� ������:</strong> ����������� ����� ��������������� ��� ������� ���������</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Success Path Details -->
+                <div class="partner-explanation">
+                    <h3>? ��� �������� ����������� �������������</h3>
+                    <div class="partner-explanation-content">
+                        <div class="partner-level-block level-1">
+                            <div class="partner-level-title">������ � ��������</div>
+                            <div class="partner-level-description">
+                                �� ��������� ������ � ���������������� �������� ��������: <strong>MEV-�����</strong>,
+                                <strong>����������� �����</strong> � <strong>�������� �����</strong>. ��������� ������������ ����� ����� ��������� �������.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-2">
+                            <div class="partner-level-title">����� � �������</div>
+                            <div class="partner-level-description">
+                                ��� ���������� � <strong>����������� �������</strong>, ��� �� ��������� ���������,
+                                �������� � ������ � ������������ ��������. ��������� � ������� ��������������.
+                            </div>
+                        </div>
+
+                        <div class="partner-level-block level-3">
+                            <div class="partner-level-title">����� ������� ���� �������</div>
+                            <div class="partner-level-description">
+                                ��������� ����������� <strong>�������� ����������� �������</strong> � ���������� ���������.
+                                ������������� �� ���� ������� ����������� ���� (3% > 2% > 5%).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Notice -->
+                <div class="partner-explanation" style="margin-top: var(--spacing-xl);">
+                    <h3 style="color: var(--text-secondary);">?? ������ �����������</h3>
+                    <div class="partner-explanation-content">
+                        <div style="padding: var(--spacing-lg); background: rgba(255, 68, 68, 0.1); border-radius: var(--radius-md); border-left: 4px solid #ff4444;">
+                            <p style="color: var(--text-secondary); line-height: var(--leading-relaxed); margin: 0;">
+                                <strong style="color: #ff4444;">SigmaTrade ��������� �� ����� ����� �������� � �������������� ��� ���������� ������ ������ ������������.</strong>
+                                ��� ���������� ��� ����������� �������� ������ ������������ � �������� ������ � ����� �������� ����������.
+                                �� ����� ������ ������, �� ��������� ������ ���, ��� ������������� ����� ����������.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Mind Map -->
+        <div class="page" id="page-mindmap">
+            <div class="container">
+                <div class="hero-section">
+                    <button class="home-button" data-page="exchange" title="��������� �� �������">
+                        <span class="home-button-icon">??</span>
+                        <span class="home-button-text">�� �������</span>
+                    </button>
+
+                    <h1 class="hero-title">������������� ����� �����</h1>
+                    <p class="hero-subtitle">������������ ���� ��������� �������������� � ���������� SigmaTrade</p>
+                </div>
+
+                <!-- Mind Map Controls -->
+                <div class="mindmap-controls">
+                    <button class="mindmap-btn" id="mindmapZoomIn" title="����������">
+                        <span class="icon">??</span> +
+                    </button>
+                    <button class="mindmap-btn" id="mindmapZoomOut" title="��������">
+                        <span class="icon">??</span> ?
+                    </button>
+                    <button class="mindmap-btn" id="mindmapReset" title="�������� ���">
+                        <span class="icon">??</span> �����
+                    </button>
+                    <button class="mindmap-btn" id="mindmapCenter" title="������������">
+                        <span class="icon">??</span> �����
+                    </button>
+                </div>
+
+                <!-- Mind Map Canvas -->
+                <div class="mindmap-container" id="mindmapContainer">
+                    <svg id="mindmapSvg" class="mindmap-svg">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#4a9eff" />
+                            </marker>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <g id="mindmapContent"></g>
+                    </svg>
+                    <div class="mindmap-legend">
+                        <div class="legend-item">
+                            <span class="legend-color legend-core"></span>
+                            <span>������� ��������</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-page"></span>
+                            <span>�������� �����</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-feature"></span>
+                            <span>�������</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-data"></span>
+                            <span>������</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mind Map Info -->
+                <div class="mindmap-info">
+                    <h3>��� ������������ �����:</h3>
+                    <ul>
+                        <li><strong>��������������:</strong> ������� � ����������� ���� ��� ��������� ������������</li>
+                        <li><strong>���������������:</strong> ����������� ������ +/? ��� �������� ����</li>
+                        <li><strong>���� �� ����:</strong> ������� �� ���� ��� �������� �� ��������������� ��������</li>
+                        <li><strong>���������:</strong> �������� ������ �� ���� ��� ��������� ������</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Footer Widgets Navigation -->
+            <div class="footer-widgets">
+                <!-- ������� 1: �������� ������� -->
+                <div class="footer-widget-group">
+                    <div class="footer-widget-group-header">
+                        <span class="footer-widget-group-icon">??</span>
+                        <span class="footer-widget-group-title">�������� �������</span>
+                    </div>
+                    <div class="footer-widget-items">
+                        <!-- ���-�������� -->
+                        <button class="footer-widget" data-page="exchange" data-status="active">
+                            <div class="footer-widget-icon-container">
+                                <span>??</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">���-��������</div>
+                                <div class="footer-widget-subtitle">��������� 24/7</div>
+                            </div>
+                            <div class="footer-widget-status status-active">
+                                <span class="footer-widget-status-dot"></span>
+                                <span>��������</span>
+                            </div>
+                        </button>
+                        <!-- ���-��� -->
+                        <button class="footer-widget" data-page="mev" data-status="coming-soon">
+                            <div class="footer-widget-icon-container">
+                                <span>??</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">���-���</div>
+                                <div class="footer-widget-subtitle">���������� MEV</div>
+                            </div>
+                            <div class="footer-widget-status status-soon">
+                                <span class="footer-widget-status-dot"></span>
+                                <span>�����</span>
+                            </div>
+                        </button>
+                        <!-- ����������� ��� -->
+                        <button class="footer-widget" data-page="arbitrage" data-status="coming-soon">
+                            <div class="footer-widget-icon-container">
+                                <span>??</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">����������� ���</div>
+                                <div class="footer-widget-subtitle">����������� ��������</div>
+                            </div>
+                            <div class="footer-widget-status status-soon">
+                                <span class="footer-widget-status-dot"></span>
+                                <span>�����</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ������� 2: ���������� -->
+                <div class="footer-widget-group">
+                    <div class="footer-widget-group-header">
+                        <span class="footer-widget-group-icon">??</span>
+                        <span class="footer-widget-group-title">����������</span>
+                    </div>
+                    <div class="footer-widget-items">
+                        <!-- ����������� ��������� -->
+                        <button class="footer-widget" data-page="partner-rewards" data-status="active">
+                            <div class="footer-widget-icon-container">
+                                <span>??</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">����������� ���������</div>
+                                <div class="footer-widget-subtitle">��������� �� ���������</div>
+                            </div>
+                            <div class="footer-widget-badge">3 ������</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ������� 3: ���������� -->
+                <div class="footer-widget-group">
+                    <div class="footer-widget-group-header">
+                        <span class="footer-widget-group-icon">??</span>
+                        <span class="footer-widget-group-title">����������</span>
+                    </div>
+                    <div class="footer-widget-items">
+                        <!-- ��� ������ -->
+                        <button class="footer-widget" data-page="cooperation">
+                            <div class="footer-widget-icon-container">
+                                <span>??</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">��� ������</div>
+                                <div class="footer-widget-subtitle">������� ��������������</div>
+                            </div>
+                        </button>
+                        <!-- ����� ����� -->
+                        <button class="footer-widget" data-page="mindmap" data-highlight="true">
+                            <div class="footer-widget-icon-container">
+                                <span>???</span>
+                            </div>
+                            <div class="footer-widget-text">
+                                <div class="footer-widget-name">����� �����</div>
+                                <div class="footer-widget-subtitle">��������� ���������</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Content -->
+            <div class="footer-content">
+                <div class="footer-about">
+                    <p class="footer-slogan">&copy; 2025 SigmaTrade. ���������� �������� ����������</p>
+                    <p class="footer-message">
+                        �� �� �������� ����������� ���������, �� �� ������� � ��������������.
+                        ����� ����� ������������� �������� ������������� �� ������������ ���, ��� � ���� ��� ��������.
+                        ��� �������� ����, ������.
+                    </p>
+                </div>
+
+                <div class="footer-contact">
+                    <h3 class="footer-contact-title">��������</h3>
+                    <div class="footer-email-wrapper">
+                        <span class="footer-label">
+                            <svg class="label-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 8L10.89 13.26C11.5 13.67 12.5 13.67 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Email
+                        </span>
+                        <div class="footer-email">
+                            <a href="mailto:trdgood00@gmail.com" class="email-link">
+                                <span class="email-gradient">trdgood00@gmail.com</span>
+                            </a>
+                            <button class="copy-email-btn footer-copy" data-email="trdgood00@gmail.com" title="���������� email">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-version">v12.0.0</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="config.js?v=11.1.5"></script>
+    <script src="db.js?v=11.1.5"></script>
+    <script src="virtual-scroll.js?v=11.1.5"></script>
+    <script src="toast.js?v=11.1.5"></script>
     <script src="site-interactions.js?v=1.0.0"></script>
     <script src="premium-nav.js?v=1.0.0"></script>
     <script src="particle-effects.js?v=1.0.0"></script>
