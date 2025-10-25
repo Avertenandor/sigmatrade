@@ -69,6 +69,8 @@
   font-size: 28px;
   line-height: 1;
   transition: transform 0.3s ease;
+  /* Ensure emoji glyphs render correctly in header logo */
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', 'Segoe UI Symbol', inherit;
 }
 
 .site-logo-text {
@@ -296,6 +298,8 @@
 
 .language-icon {
   font-size: 16px;
+  /* Explicit emoji-capable fonts to avoid tofu on Windows */
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', 'Segoe UI Symbol', inherit;
 }
 
 #languageCode {
