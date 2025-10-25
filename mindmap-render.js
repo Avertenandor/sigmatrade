@@ -98,9 +98,12 @@ const MindMapRender = {
 
         // Touch support
         group.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.onNodeDragStart(core, e.touches[0], node, group);
-        });
+            // Don't prevent default on touchstart to allow other touch interactions
+            // Only handle single touch for node dragging
+            if (e.touches.length === 1) {
+                this.onNodeDragStart(core, e.touches[0], node, group);
+            }
+        }, { passive: true });
 
         core.contentGroup.appendChild(group);
     },
@@ -154,9 +157,9 @@ const MindMapRender = {
         core.isDragging = true;
         core.draggedNode = { node, group };
 
-        // Get mouse/touch position
-        const clientX = event.clientX || event.touches?.[0]?.clientX;
-        const clientY = event.clientY || event.touches?.[0]?.clientY;
+        // Get mouse/touch position (with proper touch event handling)
+        const clientX = event.clientX !== undefined ? event.clientX : (event.touches && event.touches.length > 0 ? event.touches[0].clientX : 0);
+        const clientY = event.clientY !== undefined ? event.clientY : (event.touches && event.touches.length > 0 ? event.touches[0].clientY : 0);
 
         // Convert to SVG coordinates
         const pt = core.svg.createSVGPoint();
@@ -177,8 +180,9 @@ const MindMapRender = {
     onMouseMove(core, event) {
         if (!core.isDragging && !core.isPanning) return;
 
-        const clientX = event.clientX || event.touches?.[0]?.clientX;
-        const clientY = event.clientY || event.touches?.[0]?.clientY;
+        // Get mouse/touch position (with proper touch event handling)
+        const clientX = event.clientX !== undefined ? event.clientX : (event.touches && event.touches.length > 0 ? event.touches[0].clientX : 0);
+        const clientY = event.clientY !== undefined ? event.clientY : (event.touches && event.touches.length > 0 ? event.touches[0].clientY : 0);
 
         if (core.isDragging && core.draggedNode) {
             // Node dragging
@@ -280,16 +284,23 @@ const MindMapRender = {
         document.addEventListener('mousemove', (e) => this.onMouseMove(core, e));
         document.addEventListener('mouseup', () => this.onMouseUp(core));
 
-        // Touch events
+        // Touch events for panning and dragging
         document.addEventListener('touchmove', (e) => {
-            if (core.isDragging || core.isPanning) {
+            if (core.isPinching) {
+                e.preventDefault();
+                this.onTouchMove(core, e);
+            } else if (core.isDragging || core.isPanning) {
                 e.preventDefault();
                 this.onMouseMove(core, e);
             }
         }, { passive: false });
-        document.addEventListener('touchend', () => this.onMouseUp(core));
 
-        // Pan on SVG background
+        document.addEventListener('touchend', (e) => {
+            this.onTouchEnd(core, e);
+            this.onMouseUp(core);
+        });
+
+        // Pan on SVG background (mouse)
         core.svg.addEventListener('mousedown', (e) => {
             if (e.target === core.svg || e.target.closest('#mindmapContent') === core.contentGroup) {
                 core.isPanning = true;
@@ -304,6 +315,11 @@ const MindMapRender = {
         core.svg.addEventListener('mouseup', () => {
             core.svg.style.cursor = 'default';
         });
+
+        // Touch events for SVG (panning and pinch-to-zoom)
+        core.svg.addEventListener('touchstart', (e) => {
+            this.onTouchStart(core, e);
+        }, { passive: false });
     },
 
     /**
@@ -320,6 +336,75 @@ const MindMapRender = {
 
         const delta = event.deltaY > 0 ? 0.9 : 1.1;
         core.smoothZoom(delta);
+    },
+
+    /**
+     * Handle touch start for pinch-to-zoom and panning
+     */
+    onTouchStart(core, event) {
+        const touches = event.touches;
+
+        if (touches.length === 2) {
+            // Two-finger touch = pinch-to-zoom
+            event.preventDefault();
+            core.isPinching = true;
+            core.touches = Array.from(touches);
+
+            // Calculate initial distance between two fingers
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            core.lastPinchDistance = Math.sqrt(dx * dx + dy * dy);
+        } else if (touches.length === 1) {
+            // Single touch = pan
+            if (event.target === core.svg || event.target.closest('#mindmapContent') === core.contentGroup) {
+                core.isPanning = true;
+                core.panStartX = touches[0].clientX;
+                core.panStartY = touches[0].clientY;
+                core.panStartOffsetX = core.currentX;
+                core.panStartOffsetY = core.currentY;
+            }
+        }
+    },
+
+    /**
+     * Handle touch move for pinch-to-zoom
+     */
+    onTouchMove(core, event) {
+        if (!core.isPinching || event.touches.length !== 2) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const touches = event.touches;
+
+        // Calculate current distance between two fingers
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        const currentDistance = Math.sqrt(dx * dx + dy * dy);
+
+        // Calculate zoom factor based on distance change
+        if (core.lastPinchDistance > 0) {
+            const scale = currentDistance / core.lastPinchDistance;
+            core.smoothZoom(scale);
+        }
+
+        core.lastPinchDistance = currentDistance;
+    },
+
+    /**
+     * Handle touch end
+     */
+    onTouchEnd(core, event) {
+        if (event.touches.length < 2) {
+            core.isPinching = false;
+            core.lastPinchDistance = 0;
+            core.touches = [];
+        }
+
+        if (event.touches.length === 0) {
+            core.isPanning = false;
+        }
     }
 };
 

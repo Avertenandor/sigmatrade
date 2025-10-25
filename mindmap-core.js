@@ -37,6 +37,11 @@ class MindMapCore {
         this.lastWheelTime = 0;
         this.wheelThrottle = 16; // ~60fps
 
+        // Touch/pinch state for mobile
+        this.touches = [];
+        this.lastPinchDistance = 0;
+        this.isPinching = false;
+
         this.initialized = false;
     }
 
