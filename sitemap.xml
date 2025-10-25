@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://sigmatrade.org/</loc>
-        <lastmod>2025-10-05</lastmod>
+        <lastmod>2025-10-25</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://sigmatrade.org/og-images/home.png</image:loc>
+            <image:title>SigmaTrade - Мониторинг семейства торговых ботов</image:title>
+            <image:caption>Профессиональный мониторинг торговых ботов на Binance Smart Chain</image:caption>
+        </image:image>
     </url>
 </urlset>
