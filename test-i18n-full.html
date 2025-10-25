@@ -385,21 +385,23 @@
                 );
             }
 
-            // Тест 4: Проверка переключателя языков
-            const langSwitcher = document.querySelector('[data-lang-switcher]');
-            if (langSwitcher) {
-                const select = langSwitcher.querySelector('select');
+            // Тест 4: Проверка переключателя языков (теперь только в шапке)
+            const headerHolder = document.getElementById('languageSelector');
+            if (!headerHolder) {
+                addTestResult(
+                    'Переключатель языков',
+                    'Нет контейнера #languageSelector в разметке страницы',
+                    'warning'
+                );
+            } else {
+                // Даём времени скрипту lang-switcher.js смонтировать select
+                await new Promise(r => setTimeout(r, 300));
+                const select = headerHolder.querySelector('select.header-lang-select');
                 const options = select ? select.querySelectorAll('option') : [];
                 addTestResult(
                     'Переключатель языков',
-                    `Найден переключатель с ${options.length} опциями`,
-                    options.length > 0 ? 'success' : 'warning'
-                );
-            } else {
-                addTestResult(
-                    'Переключатель языков',
-                    'ПРЕДУПРЕЖДЕНИЕ: Переключатель не найден на странице',
-                    'warning'
+                    select ? `Найден в шапке, опций: ${options.length}` : 'Контейнер есть, но select не смонтирован',
+                    select && options.length > 0 ? 'success' : 'warning'
                 );
             }
 
