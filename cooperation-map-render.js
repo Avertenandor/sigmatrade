@@ -87,6 +87,7 @@ const CooperationMapRender = {
         icon.setAttribute('dy', '0.35em');
         icon.setAttribute('class', 'node-icon');
         icon.setAttribute('font-size', '28');
+        icon.setAttribute('fill', '#fff');
         icon.textContent = node.icon;
         icon.setAttribute('pointer-events', 'none');
         group.appendChild(icon);
@@ -98,6 +99,7 @@ const CooperationMapRender = {
         label.setAttribute('class', 'node-label');
         label.setAttribute('font-size', core.isMobile ? '11' : '13');
         label.setAttribute('font-weight', 'bold');
+        label.setAttribute('fill', '#fff');
         label.textContent = node.label;
         label.setAttribute('pointer-events', 'none');
         group.appendChild(label);
@@ -108,6 +110,7 @@ const CooperationMapRender = {
         desc.setAttribute('dy', this.getNodeRadius(node.type) + 35);
         desc.setAttribute('class', 'node-description');
         desc.setAttribute('font-size', '11');
+        desc.setAttribute('fill', '#aaa');
         desc.textContent = node.description;
         desc.setAttribute('pointer-events', 'none');
         group.appendChild(desc);
@@ -119,6 +122,7 @@ const CooperationMapRender = {
         detail.setAttribute('class', 'node-detail');
         detail.setAttribute('font-size', '10');
         detail.setAttribute('font-style', 'italic');
+        detail.setAttribute('fill', '#999');
         detail.textContent = node.detail;
         detail.setAttribute('pointer-events', 'none');
         group.appendChild(detail);
