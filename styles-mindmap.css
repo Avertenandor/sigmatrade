@@ -235,18 +235,17 @@
 }
 
 .mindmap-legend {
-    position: absolute;
-    bottom: var(--spacing-lg);
-    left: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
     background: rgba(10, 10, 10, 0.9);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-md);
     padding: var(--spacing-md);
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
     backdrop-filter: blur(10px);
-    z-index: 10;
+    justify-content: center;
 }
 
 .legend-item {
@@ -328,6 +327,21 @@
 }
 
 @media (max-width: 768px) {
+    .mindmap-legend {
+        margin-top: var(--spacing-md);
+        padding: var(--spacing-sm);
+        gap: var(--spacing-sm);
+    }
+
+    .legend-item {
+        font-size: 0.75rem;
+    }
+
+    .legend-color {
+        width: 16px;
+        height: 16px;
+    }
+
     .mindmap-info {
         padding: var(--spacing-lg);
     }
@@ -342,6 +356,21 @@
 }
 
 @media (max-width: 480px) {
+    .mindmap-legend {
+        flex-direction: column;
+        padding: var(--spacing-xs);
+        gap: var(--spacing-xs);
+    }
+
+    .legend-item {
+        font-size: 0.7rem;
+    }
+
+    .legend-color {
+        width: 14px;
+        height: 14px;
+    }
+
     .mindmap-info {
         padding: var(--spacing-md);
     }
