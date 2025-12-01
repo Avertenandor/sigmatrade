@@ -1,5 +1,5 @@
 /* ========================================
-   SigmaTrade v12.1.0 - Partners Styles
+   SigmaTrade v12.3.1 - Partners Styles
    Our Partners Section
    ======================================== */
 
@@ -14,7 +14,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--spacing-xl); /* Reduced gap for tighter layout */
+    gap: var(--spacing-xl);
     align-items: center;
     margin-top: var(--spacing-xl);
 }
@@ -24,8 +24,8 @@
     border: 1px solid var(--border-secondary);
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
-    width: 160px; /* Slightly smaller width */
-    height: 100px; /* Reduced height */
+    width: 160px;
+    height: 110px; /* Increased height slightly */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,35 +40,37 @@
     transform: translateY(-5px);
     border-color: var(--accent-primary);
     box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
-    background: rgba(255, 255, 255, 0.03); /* Slight light background on hover */
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .partner-icon {
-    width: 40px;
-    height: 40px;
+    width: auto; /* Allow natural width */
+    height: 48px; /* Fixed height for consistency */
+    max-width: 80%;
     margin-bottom: var(--spacing-sm);
     object-fit: contain;
-    filter: grayscale(100%) brightness(1.5); /* Make icons brighter/whiter */
-    transition: filter var(--transition-base);
-    opacity: 0.7; /* Slightly dim when inactive */
+    /* Removed grayscale filter to show official brand colors */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    transition: all var(--transition-base);
+    opacity: 0.9;
 }
 
 .partner-card:hover .partner-icon {
-    filter: grayscale(0%) brightness(1); /* Restore color on hover */
+    transform: scale(1.1);
     opacity: 1;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
 
 .partner-name {
     color: var(--text-secondary);
-    font-size: var(--font-xs); /* Smaller text */
+    font-size: var(--font-xs);
     font-weight: 600;
     transition: color var(--transition-base);
-    opacity: 0.8;
+    margin-top: auto; /* Push to bottom if image is small */
 }
 
 .partner-card:hover .partner-name {
     color: var(--text-primary);
-    opacity: 1;
 }
 
 /* Mobile Responsive */
@@ -78,13 +80,12 @@
     }
     
     .partner-card {
-        width: 130px;
-        height: 90px;
+        width: 140px;
+        height: 100px;
         padding: var(--spacing-md);
     }
     
     .partner-icon {
-        width: 32px;
-        height: 32px;
+        height: 40px;
     }
 }
