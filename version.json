@@ -1,9 +1,20 @@
 {
-  "version": "12.0.2",
+  "version": "12.1.0",
   "name": "SigmaTrade",
-  "description": "Full Telegram Integration",
+  "description": "Partners Section & Telegram Integration",
   "lastUpdate": "2025-12-01",
   "changes": [
+    {
+      "version": "12.1.0",
+      "date": "2025-12-01",
+      "changes": [
+        "🤝 NEW PARTNERS SECTION:",
+        "• Добавлен раздел 'Наши партнёры' на главной странице",
+        "• Интеграция логотипов: Binance, Bitget, Trust Wallet, SafePal, PancakeSwap",
+        "• Прямые ссылки на официальные ресурсы партнеров",
+        "• Адаптивный дизайн карточек партнеров с hover-эффектами"
+      ]
+    },
     {
       "version": "12.0.2",
       "date": "2025-12-01",

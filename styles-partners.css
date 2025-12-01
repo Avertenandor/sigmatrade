@@ -1,0 +1,86 @@
+/* ========================================
+   SigmaTrade v12.1.0 - Partners Styles
+   Our Partners Section
+   ======================================== */
+
+.partners-section {
+    padding: var(--spacing-3xl) 0;
+    text-align: center;
+    background: transparent;
+    margin-bottom: var(--spacing-3xl);
+}
+
+.partners-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-2xl);
+    align-items: center;
+    margin-top: var(--spacing-xl);
+}
+
+.partner-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    width: 180px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.partner-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+}
+
+.partner-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--spacing-md);
+    object-fit: contain;
+    filter: grayscale(100%);
+    transition: filter var(--transition-base);
+}
+
+.partner-card:hover .partner-icon {
+    filter: grayscale(0%);
+}
+
+.partner-name {
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    transition: color var(--transition-base);
+}
+
+.partner-card:hover .partner-name {
+    color: var(--text-primary);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .partners-grid {
+        gap: var(--spacing-lg);
+    }
+    
+    .partner-card {
+        width: 140px;
+        height: 100px;
+        padding: var(--spacing-lg);
+    }
+    
+    .partner-icon {
+        width: 32px;
+        height: 32px;
+    }
+}
+

@@ -36,6 +36,9 @@
 /* Partner Rewards - Multi-level referral system */
 @import url('styles-partner-rewards.css');
 
+/* Partners - Our Partners Section */
+@import url('styles-partners.css');
+
 /* Responsive - Mobile-first responsive styles & accessibility */
 @import url('styles-responsive.css');
 
