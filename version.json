@@ -1,9 +1,19 @@
 {
-  "version": "12.3.1",
+  "version": "12.3.2",
   "name": "SigmaTrade",
-  "description": "Official Partners Branding",
+  "description": "Stable Partners Images",
   "lastUpdate": "2025-12-01",
   "changes": [
+    {
+      "version": "12.3.2",
+      "date": "2025-12-01",
+      "changes": [
+        "🖼️ PARTNERS IMAGES FIX:",
+        "• Заменены URL логотипов на надежные источники (CoinGecko, CoinMarketCap)",
+        "• Гарантированная загрузка изображений без блокировок CDN",
+        "• Проверка загрузки всех изображений через browser_evaluate"
+      ]
+    },
     {
       "version": "12.3.1",
       "date": "2025-12-01",
