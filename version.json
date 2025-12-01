@@ -1,9 +1,19 @@
 {
-  "version": "12.1.0",
+  "version": "12.2.0",
   "name": "SigmaTrade",
-  "description": "Partners Section & Telegram Integration",
+  "description": "Community Channel Integration",
   "lastUpdate": "2025-12-01",
   "changes": [
+    {
+      "version": "12.2.0",
+      "date": "2025-12-01",
+      "changes": [
+        "📢 COMMUNITY UPDATE:",
+        "• Добавлен официальный Telegram канал 'Доход' в раздел 'Сообщество'",
+        "• Ссылка интегрирована в главное меню (Premium Nav)",
+        "• Ссылка добавлена в футер сайта"
+      ]
+    },
     {
       "version": "12.1.0",
       "date": "2025-12-01",
