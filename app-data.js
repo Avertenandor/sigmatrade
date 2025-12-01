@@ -1,4 +1,4 @@
-// SigmaTrade Data Module - v10.1.0
+// SigmaTrade Data Module - v12.3.0
 // Handles: Data Fetching, Balances, Transactions, Caching, API Calls
 
 const SigmaTradeData = {
@@ -225,7 +225,8 @@ const SigmaTradeData = {
             const wallet = app.getCurrentWallet();
             if (!wallet.address) return 0;
 
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?module=account&action=${action}&address=${wallet.address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc`;
+            // HARDCODED API URL TO BYPASS CONFIG CACHE
+            let url = `https://api.bscscan.com/api?module=account&action=${action}&address=${wallet.address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc`;
 
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -307,14 +308,20 @@ const SigmaTradeData = {
                 return;
             }
 
-            const [regular, token] = await Promise.all([
+            // Parallel fetch: Regular via BscScan, Token via Node (Recent) + BscScan (History)
+            const [regular, token, nodeToken] = await Promise.all([
                 this.fetchRegularTransactions(app, page),
-                this.fetchTokenTransactions(app, page)
+                this.fetchTokenTransactions(app, page),
+                page === 1 ? this.fetchTokenTransactionsNode(app) : Promise.resolve([])
             ]);
+
+            // Merge Node results with API results, deduplicating by hash
+            const allTokenTx = [...nodeToken, ...token];
+            const uniqueTokenTx = Array.from(new Map(allTokenTx.map(item => [item.hash, item])).values());
 
             const newTransactions = [
                 ...regular.map(tx => ({...tx, txType: 'regular'})),
-                ...token.map(tx => ({...tx, txType: 'token'}))
+                ...uniqueTokenTx.map(tx => ({...tx, txType: 'token'}))
             ];
 
             newTransactions.sort((a, b) => b.timeStamp - a.timeStamp);
@@ -355,7 +362,8 @@ const SigmaTradeData = {
 
             const offset = CONFIG.PAGINATION.PAGE_SIZE;
 
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?module=account&action=txlist&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
+            // HARDCODED API URL TO BYPASS CONFIG CACHE
+            let url = `https://api.bscscan.com/api?module=account&action=txlist&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
 
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -383,7 +391,8 @@ const SigmaTradeData = {
 
             const offset = CONFIG.PAGINATION.PAGE_SIZE;
 
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?module=account&action=tokentx&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
+            // HARDCODED API URL TO BYPASS CONFIG CACHE
+            let url = `https://api.bscscan.com/api?module=account&action=tokentx&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
 
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -402,6 +411,147 @@ const SigmaTradeData = {
         return [];
     },
 
+    // 🆕 HYBRID NODE FETCHING (Recent Token Transfers)
+    async fetchTokenTransactionsNode(app) {
+        try {
+            const wallet = app.getCurrentWallet();
+            if (!wallet.address) return [];
+
+            app.log('Fetching recent token transfers via NODE...', 'optimize');
+
+            // Topic0 for Transfer event: keccak256("Transfer(address,address,uint256)")
+            const transferTopic = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+            const addressTopic = '0x000000000000000000000000' + wallet.address.slice(2).toLowerCase();
+
+            // Look back ~2 hours (2400 blocks @ 3s/block)
+            // QuickNode free tier has stricter limits on block range
+            const blockRange = 2400;
+            const latestBlock = await this.getLatestBlockNumber();
+            const fromBlock = Math.max(0, latestBlock - blockRange);
+
+            const batchRequests = [];
+            const tokensOfInterest = [CONFIG.TOKENS.USDT.address, CONFIG.TOKENS.BUSD.address, CONFIG.TOKENS.CAKE.address];
+
+            // Construct batch request for logs
+            // We need two requests: Incoming (Topic2) and Outgoing (Topic1)
+            
+            // 1. Incoming Transfers (to: wallet)
+            batchRequests.push({
+                jsonrpc: '2.0',
+                method: 'eth_getLogs',
+                params: [{
+                    fromBlock: '0x' + fromBlock.toString(16),
+                    toBlock: 'latest',
+                    address: tokensOfInterest,
+                    topics: [transferTopic, null, addressTopic]
+                }],
+                id: 1
+            });
+
+            // 2. Outgoing Transfers (from: wallet)
+            batchRequests.push({
+                jsonrpc: '2.0',
+                method: 'eth_getLogs',
+                params: [{
+                    fromBlock: '0x' + fromBlock.toString(16),
+                    toBlock: 'latest',
+                    address: tokensOfInterest,
+                    topics: [transferTopic, addressTopic]
+                }],
+                id: 2
+            });
+
+            const response = await fetch(CONFIG.QUICKNODE.HTTP, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(batchRequests)
+            });
+
+            const results = await response.json();
+            const logs = [];
+
+            if (results && Array.isArray(results)) {
+                results.forEach(res => {
+                    if (res.result && Array.isArray(res.result)) {
+                        logs.push(...res.result);
+                    }
+                });
+            }
+
+            // Process logs into transaction format compatible with UI
+            const transactions = await Promise.all(logs.map(async log => {
+                const tokenSymbol = this.getTokenSymbolByAddress(log.address);
+                const decimals = this.getTokenDecimalsByAddress(log.address);
+                const value = BigInt(log.data).toString();
+                
+                // We need timestamp, but eth_getLogs doesn't return it.
+                // We'll use current time for very recent, or estimate based on block number
+                // Ideally we'd fetch block details, but that's expensive.
+                // For now, we use an estimation: (currentBlock - logBlock) * 3s ago
+                const ageSeconds = (latestBlock - parseInt(log.blockNumber, 16)) * 3;
+                const timeStamp = Math.floor(Date.now() / 1000) - ageSeconds;
+
+                return {
+                    blockNumber: parseInt(log.blockNumber, 16).toString(),
+                    timeStamp: timeStamp.toString(),
+                    hash: log.transactionHash,
+                    from: '0x' + log.topics[1].slice(26),
+                    to: '0x' + log.topics[2].slice(26),
+                    value: value,
+                    tokenName: tokenSymbol, // Simplified
+                    tokenSymbol: tokenSymbol,
+                    tokenDecimal: decimals.toString(),
+                    gasUsed: "0", // Not available in log
+                    confirmations: (latestBlock - parseInt(log.blockNumber, 16)).toString()
+                };
+            }));
+
+            app.log(`✅ Found ${transactions.length} recent token transfers via Node`, 'success');
+            return transactions;
+
+        } catch (error) {
+            app.log(`Error fetching from Node: ${error.message}`, 'error');
+            return [];
+        }
+    },
+
+    async getLatestBlockNumber() {
+        try {
+            const response = await fetch(CONFIG.QUICKNODE.HTTP, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'eth_blockNumber',
+                    params: [],
+                    id: 1
+                })
+            });
+            const data = await response.json();
+            return parseInt(data.result, 16);
+        } catch (e) {
+            return 0;
+        }
+    },
+
+    getTokenSymbolByAddress(address) {
+        for (const key in CONFIG.TOKENS) {
+            if (CONFIG.TOKENS[key].address && CONFIG.TOKENS[key].address.toLowerCase() === address.toLowerCase()) {
+                return CONFIG.TOKENS[key].symbol;
+            }
+        }
+        return 'Unknown';
+    },
+
+    getTokenDecimalsByAddress(address) {
+        for (const key in CONFIG.TOKENS) {
+            if (CONFIG.TOKENS[key].address && CONFIG.TOKENS[key].address.toLowerCase() === address.toLowerCase()) {
+                return CONFIG.TOKENS[key].decimals;
+            }
+        }
+        return 18;
+    },
+
     async rateLimitedFetch(app, url) {
         const now = Date.now();
         const timeSinceLastCall = now - app.lastApiCall;
@@ -413,7 +563,8 @@ const SigmaTradeData = {
         }
 
         app.lastApiCall = Date.now();
-        return fetch(url);
+        // Add cache: no-store to prevent browser caching of API responses
+        return fetch(url, { cache: "no-store" });
     },
 
     updateStats(app) {

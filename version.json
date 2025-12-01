@@ -1,9 +1,19 @@
 {
-  "version": "12.2.3",
+  "version": "12.3.0",
   "name": "SigmaTrade",
-  "description": "Cache Busting Update",
+  "description": "Hybrid Node Architecture",
   "lastUpdate": "2025-12-01",
   "changes": [
+    {
+      "version": "12.3.0",
+      "date": "2025-12-01",
+      "changes": [
+        "🏗️ HYBRID ARCHITECTURE UPGRADE:",
+        "• Принудительная установка API BscScan (Bypass Config Cache)",
+        "• Внедрение гибридного режима: Свежие токен-транзакции через QuickNode",
+        "• Частичный отказ от зависимости Etherscan для повышения стабильности"
+      ]
+    },
     {
       "version": "12.2.3",
       "date": "2025-12-01",
