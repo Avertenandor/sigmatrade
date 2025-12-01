@@ -1,9 +1,19 @@
 {
-  "version": "12.0.0",
+  "version": "12.0.1",
   "name": "SigmaTrade",
-  "description": "Footer Navigation - Interactive Widgets for All Pages",
-  "lastUpdate": "2025-10-25",
+  "description": "Added Telegram Bot Integration",
+  "lastUpdate": "2025-12-01",
   "changes": [
+    {
+      "version": "12.0.1",
+      "date": "2025-12-01",
+      "changes": [
+        "🤖 TELEGRAM BOT INTEGRATION:",
+        "• Добавлены ссылки на Telegram бот в хедер и футер",
+        "• Кнопка 'Telegram Бот' на странице входа",
+        "• Прямые ссылки с реферальным кодом"
+      ]
+    },
     {
       "version": "12.0.0",
       "date": "2025-10-25",
