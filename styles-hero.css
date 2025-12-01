@@ -86,6 +86,37 @@
     font-weight: 400;
 }
 
+/* ========== HERO CTA BUTTON (TELEGRAM) ========== */
+.hero-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: var(--spacing-xl);
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #0088cc, #005f8d); /* Telegram colors */
+    color: white;
+    font-size: var(--font-lg);
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+.hero-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 136, 204, 0.5);
+    background: linear-gradient(135deg, #0099e6, #006da3);
+    color: white;
+}
+
+.hero-cta-btn .btn-icon {
+    font-size: 24px;
+}
+
 /* ========== SECTION TITLES - CONSISTENT HIERARCHY ========== */
 .section-title {
     display: flex;
@@ -120,6 +151,9 @@
     transition: all var(--transition-slow);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .info-card::before {
