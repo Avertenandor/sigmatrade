@@ -37,9 +37,9 @@ const CONFIG = {
         WSS: 'wss://old-patient-butterfly.bsc.quiknode.pro/4f481d121ed69acf769b858f6db52d8ce1805020'
     },
     
-    // Etherscan V2 API (for BSC)
+    // BscScan API (Standard)
     ETHERSCAN: {
-        BASE_URL: 'https://api.etherscan.io/v2/api',
+        BASE_URL: 'https://api.bscscan.com/api',
         CHAIN_ID: 56, // BSC
         API_KEY: 'RF1Q8SCFHFD1EVAP5A4WCMIM4DREA7UNUH'
     },

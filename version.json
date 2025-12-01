@@ -1,9 +1,19 @@
 {
-  "version": "12.2.1",
+  "version": "12.2.2",
   "name": "SigmaTrade",
-  "description": "Polished Partners Section",
+  "description": "Critical API Fix",
   "lastUpdate": "2025-12-01",
   "changes": [
+    {
+      "version": "12.2.2",
+      "date": "2025-12-01",
+      "changes": [
+        "🚑 HOTFIX: API ENDPOINT RESTORED:",
+        "• Восстановлено отображение транзакций (Fix Etherscan V2 -> BscScan)",
+        "• Исправлена ошибка 'Free API access not supported'",
+        "• Оптимизированы запросы к API для стабильной работы"
+      ]
+    },
     {
       "version": "12.2.1",
       "date": "2025-12-01",

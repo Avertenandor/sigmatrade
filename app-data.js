@@ -225,7 +225,7 @@ const SigmaTradeData = {
             const wallet = app.getCurrentWallet();
             if (!wallet.address) return 0;
 
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=${action}&address=${wallet.address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc`;
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?module=account&action=${action}&address=${wallet.address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc`;
 
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -355,7 +355,7 @@ const SigmaTradeData = {
 
             const offset = CONFIG.PAGINATION.PAGE_SIZE;
 
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=txlist&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?module=account&action=txlist&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
 
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
@@ -383,7 +383,7 @@ const SigmaTradeData = {
 
             const offset = CONFIG.PAGINATION.PAGE_SIZE;
 
-            let url = `${CONFIG.ETHERSCAN.BASE_URL}?chainid=${CONFIG.ETHERSCAN.CHAIN_ID}&module=account&action=tokentx&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
+            let url = `${CONFIG.ETHERSCAN.BASE_URL}?module=account&action=tokentx&address=${wallet.address}&startblock=0&endblock=99999999&page=${page}&offset=${offset}&sort=desc`;
 
             if (CONFIG.ETHERSCAN.API_KEY) {
                 url += `&apikey=${CONFIG.ETHERSCAN.API_KEY}`;
